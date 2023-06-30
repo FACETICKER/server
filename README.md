@@ -1,1 +1,1 @@
-#Node.js Project FACESTICKER
+# Node.js Proejct FACESTICKER
