@@ -7,7 +7,7 @@ export const handleKakaoCallback = async(req,res)=>{
             grant_type: 'authorization_code',
             client: '19072abcbc9713f319c65dd8ae5de354',
             redirect_uri: '/auth/kakao/callback',
-            code: code,
+            code: code, 
         });
         const accessToken = accessTokenresponse.data.accessToken;
         const userInfoResponse = await axios.get('https://kapi.kakao.com/v2/user/me',{
