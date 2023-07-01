@@ -4,7 +4,7 @@ import authRouter from "./src/app/auth/authRoute.js";
 dotenv.config();
 
 
-app.use('/',authRouter);
+app.use('/auth',authRouter);
 app.listen(process.env.SERVER_PORT, ()=>{
     console.log("server is ready");
 });
