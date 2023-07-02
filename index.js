@@ -1,10 +1,10 @@
 import dotenv from "dotenv";
 import app from "./config/express.js";
-import authRouter from "./src/app/auth/authRoute.js";
+import userRouter from "./src/app/user/userRoute.js";
 dotenv.config();
 
 
-app.use('/auth',authRouter);
+app.use('/',userRouter);
 app.listen(process.env.SERVER_PORT, ()=>{
     console.log("server is ready");
 });
