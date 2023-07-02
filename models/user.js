@@ -3,8 +3,13 @@ import { Sequelize } from "sequelize";
 class User extends Sequelize.Model{
     static initiate(sequelize){
         User.init({
-            user_id:{
-                type: Sequelize.STRING(20),
+            user_id: {
+                type: Sequelize.INTEGER,
+                primaryKey: true,
+                autoIncrement: true,
+            },
+            user_email:{
+                type: Sequelize.STRING(30),
                 allowNull: false,
             },
             user_name:{
