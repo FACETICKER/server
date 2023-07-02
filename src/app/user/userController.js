@@ -1,12 +1,12 @@
 import axios from "axios";
-
+import {createUser} from "./userService.js";
 
 export const handleKakaoCallback = async(req,res)=>{ 
     const code = req.query.code;
     try{
         const accessTokenresponse = await axios.post('https://kauth.kakao.com/oauth/token',{ //accessToken 받기
-            grant_type: 'authorization_code',
-            client: '19072abcbc9713f319c65dd8ae5de354',
+            grant_type: '#####',
+            client: '#####',
             redirect_uri: '/auth/kakao/callback',
             code: code, 
         });
@@ -16,7 +16,9 @@ export const handleKakaoCallback = async(req,res)=>{
                 Authorization:`Bearer${accessToken}`,
             },
         });
-        const userInfo = userInfoResponse.data;
+        const userInfo = userInfoResponse.data; 
+        const Result = createUser(userInfo);
+
         res.json(userInfo);
     }catch{
         console.error('Failed to process Kakao callback:', error.response.data);
