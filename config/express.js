@@ -3,6 +3,7 @@ import compression from "compression";
 import methodOverride from "method-override";
 import cors from "cors";
 import {sequelize} from "../models/index.js";
+import userRouter from "../src/app/user/userRoute.js";
 
 const app = express();
 
@@ -18,6 +19,6 @@ app.use(express.json());
 app.use(express.urlencoded({extended:true}));
 app.use(methodOverride());
 app.use(cors());
-
+app.use('/',userRouter);
 
 export default app;
