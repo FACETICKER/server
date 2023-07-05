@@ -12,25 +12,9 @@ class User extends Sequelize.Model{
                 type: Sequelize.STRING(30),
                 allowNull: false,
             },
-            user_name:{
-                type: Sequelize.STRING(20),
-                allowNull: false,
-            },
-            user_image:{
-                type: Sequelize.TEXT,
-                allowNull: false,
-            },
             provider:{
                 type: Sequelize.STRING(10),
                 allowNull: false,
-            },
-            birthday:{
-                type: Sequelize.DATE,
-                allowNull: false,
-            },
-            join_date:{
-                type: Sequelize.DATE,
-                defaultVale: new Date(),
             },
         },{
             sequelize,
