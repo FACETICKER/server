@@ -41,3 +41,35 @@ export const kakaoLogin = async(userInfo, provider) =>{
         return errResponse(baseResponse.DB_ERROR);
     }
 };
+
+export const googleLogin = async(userInfo, provider) =>{
+    try{
+        const userInfoParams = {
+            email : `${userInfo.email}`,
+            provider: `${provider}`,
+        };
+        const exUser = await findUser(userInfoParams);
+        if(exUser){
+            let token = jwt.sign({
+                user_email: userInfo.email,
+            },process.env.JWT_SECRET,{
+                expiresIn: "1h",
+            });
+            return response(baseResponse.SIGNUP_GOOGLE_EXUSER,{'jwt':token});
+        }
+        else{
+            const newUser = await createUser(userInfoParams);
+            if(newUser){
+                let token = jwt.sign({
+                    user_email: userInfo.email,
+                },process.env.JWT_SECRET,{
+                    expiresIn: "1h",
+                });
+                return response(baseResponse.SIGNUP_GOOGLE_NEWUSER,{'jwt':token});
+            };
+        };
+    }catch(err){
+        console.error(err);
+        return errResponse(baseResponse.DB_ERROR);
+    }
+};
