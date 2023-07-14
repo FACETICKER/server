@@ -2,7 +2,7 @@ import  express  from "express";
 import compression from "compression";
 import methodOverride from "method-override";
 import cors from "cors";
-import userRouter from "../src/app/User/userRoute";
+import userRouter from "../src/app/user/userRoute.js";
 
 const app = express();
 
