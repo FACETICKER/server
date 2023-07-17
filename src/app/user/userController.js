@@ -1,7 +1,10 @@
 import axios from "axios";
-import {kakaoLogin, googleLogin} from "./userService.js";
 import dotenv from "dotenv";
 dotenv.config();
+import { response,errResponse } from "../../../config/response";
+import baseResponse from "../../../config/baseResponse";
+import {kakaoLogin, googleLogin} from "./userService.js";
+import { retrieveVisitorSticker} from "./userProvider";
 
 export const handleKakaoCallback = async(req,res)=>{ 
     const code = req.query.code;
@@ -72,4 +75,30 @@ export const handleGoogleCallback = async(req,res)=>{
         console.error(err);
         return res.status(500).json({ error: 'Failed to process Kakao callback' });
     }
+};
+
+/**
+ * API Name: 방문자 기록 상세 조회
+ * GET: /visitor/{visitor_sticker_id}
+ */
+export const getVisitorStickerById = async(req,res)=>{
+    
+    /**
+     * Path Parameters: visitor_sticker_id
+     */
+        const {params:{visitor_sticker_id}} = req;
+        
+        try {
+            const visitorStickerById = await retrieveVisitorSticker(visitor_sticker_id);
+          
+            if (visitorStickerById) {
+              return res.status(200).json(response(baseResponse.SUCCESS, visitorStickerById));
+            } else {
+              return res.status(404).json(errResponse(baseResponse.STICKER_STICKERID_NOT_EXIST));
+            }
+
+        } catch (error) {
+            return res.status(500).json(errResponse(baseResponse.SERVER_ERROR));
+        }
+        
 };

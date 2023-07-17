@@ -1,4 +1,4 @@
-import User from "../../../models/user.js";
+//import User from "../../../models/user.js";
 
 export const findUser = async(userInfoParams)=>{
     const findUserResponse = await User.findOne({
@@ -16,4 +16,14 @@ export const createUser = async(userInfoParams) =>{
         provider : `${userInfoParams.provider}`,
     });
     return createUserResponse;
+}
+
+export const selectVisitorStickerId = async(connection, visitor_sticker_id)=>{
+    const selectVisitorStickerIdQuery = `
+        SELECT final_image_id, name, message
+        FROM visitor_sticker
+        WHERE visitor_sticker_id = ?;
+    `;
+    const [userRow] = await connection.query(selectVisitorStickerIdQuery, visitor_sticker_id);
+    return userRow;
 }
