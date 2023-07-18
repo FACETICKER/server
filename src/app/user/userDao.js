@@ -17,4 +17,13 @@ export const createUser = async(connection,userInfoParams) =>{ //사용자 등�
     `
     const createUserRow = await connection.query(createUserQuery,userInfoParams);
     return createUserRow[0];
-}
+};
+export const selectVisitorStickerId = async(connection, visitor_sticker_id)=>{
+    const selectVisitorStickerIdQuery = `
+        SELECT final_image_id, name, message
+        FROM visitor_sticker
+        WHERE visitor_sticker_id = ?;
+    `;
+    const [userRow] = await connection.query(selectVisitorStickerIdQuery, visitor_sticker_id);
+    return userRow;
+};
