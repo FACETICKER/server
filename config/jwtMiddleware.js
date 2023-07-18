@@ -18,16 +18,12 @@ export const jwtMiddleware = (req,res,next)=>{
     });
 
     const onError = (error) => { //에러가 발생했으면 에러 메세지 반환
-        return res.send(errResponse(baseResponse.TOKEN_VERIFICATION_FAILURE))
+        return res.send(errResponse(baseResponse.TOKEN_VERIFICATION_FAILURE));
     };
     
     p.then((verifiedToken)=>{
         req.verifiedToken = verifiedToken;
         next();
     }).catch(onError);
-
-
-
-
 
 }

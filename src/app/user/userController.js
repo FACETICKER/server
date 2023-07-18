@@ -4,7 +4,7 @@ dotenv.config();
 import { response,errResponse } from "../../../config/response";
 import baseResponse from "../../../config/baseResponse";
 import {kakaoLogin, googleLogin} from "./userService.js";
-import { retrieveVisitorSticker} from "./userProvider";
+import { retrieveVisitorSticker, retrieveStickerCollections} from "./userProvider";
 
 export const handleKakaoCallback = async(req,res)=>{ 
     const code = req.query.code;
@@ -90,11 +90,10 @@ export const getVisitorStickerById = async(req,res)=>{
         
         try {
             const visitorStickerById = await retrieveVisitorSticker(visitor_sticker_id);
-          
             if (visitorStickerById) {
-              return res.status(200).json(response(baseResponse.SUCCESS, visitorStickerById));
+                return res.status(200).json(response(baseResponse.SUCCESS, visitorStickerById));
             } else {
-              return res.status(404).json(errResponse(baseResponse.STICKER_STICKERID_NOT_EXIST));
+                return res.status(404).json(errResponse(baseResponse.STICKER_STICKERID_NOT_EXIST));
             }
 
         } catch (error) {
@@ -102,3 +101,13 @@ export const getVisitorStickerById = async(req,res)=>{
         }
         
 };
+
+export const getAllStickers = async (req,res)=>{
+    try{
+        const userId = req.params.userid;
+        const getAllStickersResult = await retrieveStickerCollections(userId);
+        return res.send(response(baseResponse.SUCCESS, getAllStickersResult));
+    }catch(err){
+        return res.status(500).json(err);
+    }
+}

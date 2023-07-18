@@ -13,9 +13,15 @@ const baseResponse = {
     //유저 관련 오류
     USER_USERID_EMPTY : { "isSuccess": false, "code": 2012, "message": "user_id를 입력해주세요." },
     USER_USERID_NOT_EXIST : { "isSuccess": false, "code": 2013, "message": "해당 유저가 존재하지 않습니다." },
+    USER_USERID_NOT_MATCH : {"isSuccess":false, "code":2014, "message":"user_id 값을 확인해주세요."},
 
     //스티커 관련 오류
     STICKER_STICKERID_NOT_EXIST : { "isSuccess": false, "code": 3012, "message": "해당 스티커가 존재하지 않습니다." },
+
+    //토큰
+    TOKEN_EMPTY : { "isSuccess": false, "code": 4000, "message":"JWT 토큰을 입력해주세요." },
+    TOKEN_VERIFICATION_FAILURE : { "isSuccess": false, "code": 4001, "message":"JWT 토큰 검증 실패" },
+    TOKEN_VERIFICATION_SUCCESS : { "isSuccess": true, "code": 1001, "message":"JWT 토큰 검증 성공" }, // ?
     
     //Connection, Transaction 등의 서버 오류
     DB_ERROR : { "isSuccess": false, "code": 4000, "message": "데이터 베이스 에러"},
