@@ -5,6 +5,7 @@ import { response,errResponse } from "../../../config/response";
 import baseResponse from "../../../config/baseResponse";
 import {kakaoLogin, googleLogin} from "./userService.js";
 import { retrieveVisitorSticker} from "./userProvider";
+import { useInflection } from "sequelize";
 
 export const handleKakaoCallback = async(req,res)=>{ 
     const code = req.query.code;
@@ -31,7 +32,7 @@ export const handleKakaoCallback = async(req,res)=>{
                 'content-type': 'application/x-www-form-urlencoded'
             }
         })
-        const userInfo = userInfoResponse.data;
+        const userInfo = userInfoResponse.data.kakao_account;
         const provider = 'kakao';
         const Result = await kakaoLogin(userInfo,provider); //새로운 사용자 생성 
         return res.status(200).send(Result);

@@ -15,7 +15,8 @@ export const kakaoLogin = async(userInfo, provider) =>{
         if(exUser){
             //토큰 발급
             let token = jwt.sign({
-                user_email : userInfo.kakao_account.email,
+                user_id : exUser.user_id,
+                user_email : userInfo.email,
             },
             process.env.JWT_SECRET,{
                 expiresIn: "1h",
@@ -29,6 +30,7 @@ export const kakaoLogin = async(userInfo, provider) =>{
             //토큰 발급
             if(newUserResponse.affectedRows === 1){ //성공적으로 DB에 추가됐으면 토큰 발급
                 let token = jwt.sign({
+                    user_id : newUserResponse.insertId,
                     user_email: userInfo.email,
                 },process.env.JWT_SECRET,{
                     expiresIn: "1h",
@@ -48,6 +50,7 @@ export const googleLogin = async(userInfo, provider) =>{
         const exUser = await userCheck(userInfoParams); //기존의 사용자인지 확인
         if(exUser){ //기존의 사용자면 토큰 발급
             let token = jwt.sign({
+                user_id : exUser.user_id,
                 user_email: userInfo.email,
             },process.env.JWT_SECRET,{
                 expiresIn: "1h",
@@ -60,6 +63,7 @@ export const googleLogin = async(userInfo, provider) =>{
             connection.release();
             if(newUserResponse.affectedRows === 1){ //성공적으로 DB에 추가됐으면 토큰 발급
                 let token = jwt.sign({
+                    user_id : newUserResponse.insertId,
                     user_email: userInfo.email,
                 },process.env.JWT_SECRET,{
                     expiresIn: "1h",
