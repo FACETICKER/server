@@ -1,6 +1,6 @@
 import {response, errResponse} from "../../../config/response.js";
 import baseResponse from "../../../config/baseResponse.js";
-import { userCheck } from "./userProvider.js";
+import { userCheck, retrieveUserId, retrieveStickerCollections } from "./userProvider.js";
 import {createUser } from "./userDao.js";
 import pool from "../../../config/database.js";
 import jwt from "jsonwebtoken";
@@ -74,5 +74,19 @@ export const googleLogin = async(userInfo, provider) =>{
     }catch(err){
         console.error(err);
         return errResponse(baseResponse.DB_ERROR);
+    }
+};
+
+export const getStickersByType = async(params) =>{
+    try{
+        const userId = await retrieveUserId(params.nickname);
+        const stickerCollections = await retrieveStickerCollections(userId);
+        if(params.userIdFromJWT === userId){
+            return response(baseResponse.HOST,stickerCollections);
+        }else{
+            return response(baseResponse.VISITOR,stickerCollections);
+        }
+    }catch(err){
+        console.error(err);
     }
 };

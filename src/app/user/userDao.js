@@ -48,4 +48,15 @@ export const selectVisitorStickers = async(connection, user_id) =>{
     `
     const [selectVisitorStickersRow] = await connection.query(selectVisitorStickersQuery,user_id);
     return selectVisitorStickersRow;
+};
+
+export const getIdByNickname = async(connection, nickname) =>{
+    const getIdByNicknameQuery = `
+        SELECT user_id
+        FROM user_poster
+        WHERE nickname = ?;
+    `
+    const [getIdByNicknameRow] = await connection.query(getIdByNicknameQuery,nickname);
+    return getIdByNicknameRow[0];
 }
+
