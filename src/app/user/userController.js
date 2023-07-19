@@ -3,9 +3,9 @@ import dotenv from "dotenv";
 dotenv.config();
 import { response,errResponse } from "../../../config/response";
 import baseResponse from "../../../config/baseResponse";
-import {kakaoLogin, googleLogin} from "./userService.js";
-import { retrieveVisitorSticker} from "./userProvider";
-import { useInflection } from "sequelize";
+import {kakaoLogin, googleLogin, getStickersByType} from "./userService.js";
+import {retrieveVisitorSticker} from "./userProvider";
+
 
 export const handleKakaoCallback = async(req,res)=>{ 
     const code = req.query.code;
@@ -91,11 +91,10 @@ export const getVisitorStickerById = async(req,res)=>{
         
         try {
             const visitorStickerById = await retrieveVisitorSticker(visitor_sticker_id);
-          
             if (visitorStickerById) {
-              return res.status(200).json(response(baseResponse.SUCCESS, visitorStickerById));
+                return res.status(200).json(response(baseResponse.SUCCESS, visitorStickerById));
             } else {
-              return res.status(404).json(errResponse(baseResponse.STICKER_STICKERID_NOT_EXIST));
+                return res.status(404).json(errResponse(baseResponse.STICKER_STICKERID_NOT_EXIST));
             }
 
         } catch (error) {
@@ -103,3 +102,19 @@ export const getVisitorStickerById = async(req,res)=>{
         }
         
 };
+
+export const getStickers = async (req,res)=>{ //해당 호스트의 전체 스티커를 반환
+    try{
+        const userIdFromJWT = req.verifiedToken ? req.verifiedToken.user_id : null; // 토큰이 있을 때만 user_id를 가져오도록 수정
+        const nickname = req.params.nickname;
+        const params = {
+            userIdFromJWT: userIdFromJWT,
+            nickname : nickname,
+        };
+        const stickersResult = await getStickersByType(params); //호스트와 방문자를 구분해주기 위해
+        return res.send(stickersResult);
+
+    }catch(err){
+        return res.status(500).json(err);
+    }
+}

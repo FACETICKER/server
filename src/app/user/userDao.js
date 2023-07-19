@@ -27,3 +27,36 @@ export const selectVisitorStickerId = async(connection, visitor_sticker_id)=>{
     const [userRow] = await connection.query(selectVisitorStickerIdQuery, visitor_sticker_id);
     return userRow;
 };
+
+export const selectUserSticker = async(connection,user_id) =>{
+    const selectUserStickerQuery = `
+        SELECT user_id, image_url
+        FROM final_image
+        JOIN user_sticker ON final_image.final_image_id = user_sticker.final_image_id
+        WHERE user_sticker.user_id = ?;
+    `
+    const [selectUserStickerRow] = await connection.query(selectUserStickerQuery,user_id);
+    return selectUserStickerRow[0];
+};
+
+export const selectVisitorStickers = async(connection, user_id) =>{
+    const selectVisitorStickersQuery = `
+        SELECT visitor_id, image_url, seen, location_x, location_y
+        FROM final_image
+        JOIN visitor_sticker on final_image.final_image_id = visitor_sticker.final_image_id
+        WHERE visitor_sticker.host_id = ?;
+    `
+    const [selectVisitorStickersRow] = await connection.query(selectVisitorStickersQuery,user_id);
+    return selectVisitorStickersRow;
+};
+
+export const getIdByNickname = async(connection, nickname) =>{
+    const getIdByNicknameQuery = `
+        SELECT user_id
+        FROM user_poster
+        WHERE nickname = ?;
+    `
+    const [getIdByNicknameRow] = await connection.query(getIdByNicknameQuery,nickname);
+    return getIdByNicknameRow[0];
+}
+
