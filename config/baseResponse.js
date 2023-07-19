@@ -1,6 +1,8 @@
 const baseResponse = {
     //Success
     SUCCESS : {"isSuccess": true,"code":1000, "message":"성공"},
+    HOST: {"isSuccess": true, "code":1001, "message":"호스트입니다"},
+    VISITOR: {"isSuccess":true, "code":1002, "message":"방문자입니다"},
 
     //Social KAKAO
     SIGNUP_KAKAO_EXUSER : {"isSuccess":true, "code":2000, "message":"이미 가입된 사용자입니다"},
