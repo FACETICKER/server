@@ -21,7 +21,7 @@ export const createUser = async(connection,userInfoParams) =>{ //사용자 등�
 
 export const selectVisitorStickerById = async(connection, visitor_sticker_id)=>{
     const selectVisitorStickerIdQuery = `
-        SELECT final_image.image_url, visitor_sticker.name, visitor_sticker.message
+        SELECT final_image.image_url, visitor_sticker.name, visitor_sticker.message, visitor_sticker.visitor_id
         FROM visitor_sticker
         INNER JOIN final_image
         ON visitor_sticker.final_image_id = final_image.final_image_id
