@@ -20,6 +20,10 @@ const baseResponse = {
     //스티커 관련 오류
     STICKER_STICKERID_NOT_EXIST : { "isSuccess": false, "code": 3012, "message": "해당 스티커가 존재하지 않습니다." },
 
+    //질문 관련 오류
+    DEFAULTQ_DEFAULTQID_NOT_EXIST : { "isSuccess": false, "code": 3101, "message": "default 질문이 존재하지 않습니다." },
+
+
     //토큰
     TOKEN_EMPTY : { "isSuccess": false, "code": 4000, "message":"JWT 토큰을 입력해주세요." },
     TOKEN_VERIFICATION_FAILURE : { "isSuccess": false, "code": 4001, "message":"JWT 토큰 검증 실패" },

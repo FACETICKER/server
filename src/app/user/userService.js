@@ -1,7 +1,7 @@
 import {response, errResponse} from "../../../config/response.js";
 import baseResponse from "../../../config/baseResponse.js";
 import { userCheck, retrieveUserId, retrieveStickerCollections } from "./userProvider.js";
-import {createUser } from "./userDao.js";
+import {createUser,insertDefaultQuestion } from "./userDao.js";
 import pool from "../../../config/database.js";
 import jwt from "jsonwebtoken";
 import dotenv from "dotenv";
@@ -88,5 +88,22 @@ export const getStickersByType = async(params) =>{
         }
     }catch(err){
         console.error(err);
+    }
+};
+
+export const createDefaultQuestion = async(default_q_id,user_id) =>{
+    try{
+        const insertDefaultQuestionParams =[default_q_id,user_id]; 
+    
+        const connection = await pool.getConnection(async conn => conn);
+        const createDefaultQuestionResult = await insertDefaultQuestion(connection,insertDefaultQuestionParams);
+        console.log(`추가된 default 질문 : ${createDefaultQuestionResult[0]}`);
+
+        connection.release();
+        
+        return response(baseResponse.SUCCESS);
+    }
+    catch(error){
+        return errResponse(baseResponse.DB_ERROR)
     }
 };

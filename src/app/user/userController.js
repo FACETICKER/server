@@ -3,8 +3,8 @@ import dotenv from "dotenv";
 dotenv.config();
 import { response,errResponse } from "../../../config/response";
 import baseResponse from "../../../config/baseResponse";
-import {kakaoLogin, googleLogin, getStickersByType} from "./userService.js";
-import {retrieveVisitorSticker} from "./userProvider";
+import {kakaoLogin, googleLogin, getStickersByType, createDefaultQuestion} from "./userService.js";
+import {retrieveVisitorSticker, retrieveDefaultQuestions} from "./userProvider";
 
 
 export const handleKakaoCallback = async(req,res)=>{ 
@@ -92,7 +92,7 @@ export const getVisitorStickerById = async(req,res)=>{
         try {
             const visitorStickerById = await retrieveVisitorSticker(visitor_sticker_id);
             if (visitorStickerById) {
-                return res.status(200).json(response(baseResponse.SUCCESS, visitorStickerById));
+                return res.status(200).json(response(baseResponse.SUCCESS,visitorStickerById));
             } else {
                 return res.status(404).json(errResponse(baseResponse.STICKER_STICKERID_NOT_EXIST));
             }
@@ -101,6 +101,43 @@ export const getVisitorStickerById = async(req,res)=>{
             return res.status(500).json(errResponse(baseResponse.SERVER_ERROR));
         }
         
+};
+
+/**
+ * API Name: default 질문 전체 조회
+ * GET: /default_q
+ */
+export const getDefaultQuestions = async(req,res)=>{
+        
+        try {
+            const defaultQuestions = await retrieveDefaultQuestions();
+
+            return res.status(200).json(response(baseResponse.SUCCESS, defaultQuestions));
+            
+        } catch (error) {
+            return res.status(500).json(errResponse(baseResponse.SERVER_ERROR));
+        }
+        
+};
+
+/**
+ * API Name: 호스트 default 질문 등록
+ * POST: /host/{user_id}/default_q
+ */
+export const postDefaultQuestion = async(req,res) => {
+   
+    const {default_q_id} = req.body;
+    const {user_id} = req.params;
+    const defaultQuestion = await retrieveDefaultQuestion(default_q_id);
+
+    try{
+        const postDefaultQuestionResult = await createDefaultQuestion(default_q_id,user_id,defaultQuestion);
+        
+        return res.status(200).json(response(baseResponse.SUCCESS, postDefaultQuestionResult));
+    }
+    catch(error){
+        return res.status(500).json(errResponse(baseResponse.SERVER_ERROR));
+    }
 };
 
 export const getStickers = async (req,res)=>{ //해당 호스트의 전체 스티커를 반환
