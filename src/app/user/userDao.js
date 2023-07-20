@@ -18,10 +18,12 @@ export const createUser = async(connection,userInfoParams) =>{ //사용자 등�
     const createUserRow = await connection.query(createUserQuery,userInfoParams);
     return createUserRow[0];
 };
-export const selectVisitorStickerId = async(connection, visitor_sticker_id)=>{
+export const selectVisitorStickerById = async(connection, visitor_sticker_id)=>{
     const selectVisitorStickerIdQuery = `
-        SELECT final_image_id, name, message
+        SELECT final_image.image_url, visitor_sticker.name, visitor_sticker.message
         FROM visitor_sticker
+        INNER JOIN final_image
+        ON visitor_sticker.final_image_id = final_image.final_image_id
         WHERE visitor_sticker_id = ?;
     `;
     const [userRow] = await connection.query(selectVisitorStickerIdQuery, visitor_sticker_id);

@@ -82,7 +82,7 @@ export const handleGoogleCallback = async(req,res)=>{
  * API Name: 방문자 기록 상세 조회
  * GET: /visitor/{visitor_sticker_id}
  */
-export const getVisitorStickerById = async(req,res)=>{
+export const getVisitorStickerById = async(req,res)=>{ //호스트가 방문자의 기록(페이스티커, 캐릭터 네임, 메세지)을 상세 조회
     
     /**
      * Path Parameters: visitor_sticker_id
