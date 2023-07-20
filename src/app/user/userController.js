@@ -104,34 +104,36 @@ export const getVisitorStickerById = async(req,res)=>{
 };
 
 /**
- * API Name: default 질문 전체 조회
+ * API Name: default 질문 조회 (전체 조회 + 개별 조회)
  * GET: /default_q
  */
 export const getDefaultQuestions = async(req,res)=>{
         
-        try {
-            const defaultQuestions = await retrieveDefaultQuestions();
+        const {default_q_id} = req.body; // 일단 body 요청으로 deafult_q_id를 받아옴. null일 수도 있음.
 
+        try {
+            const defaultQuestions = await retrieveDefaultQuestions(default_q_id);
+ 
             return res.status(200).json(response(baseResponse.SUCCESS, defaultQuestions));
-            
+              
         } catch (error) {
             return res.status(500).json(errResponse(baseResponse.SERVER_ERROR));
         }
-        
 };
 
 /**
- * API Name: 호스트 default 질문 등록
+ * API Name: default 질문 등록
  * POST: /host/{user_id}/default_q
  */
 export const postDefaultQuestion = async(req,res) => {
    
     const {default_q_id} = req.body;
     const {user_id} = req.params;
-    const defaultQuestion = await retrieveDefaultQuestion(default_q_id);
+    const defaultQuestion = await retrieveDefaultQuestions(default_q_id); // default_q_id로 default 질문 개별 조회
+    const onlyDefaultQuestion = defaultQuestion[0].question // defaultQuestion 객체의 question값만 가져오기
 
     try{
-        const postDefaultQuestionResult = await createDefaultQuestion(default_q_id,user_id,defaultQuestion);
+        const postDefaultQuestionResult = await createDefaultQuestion(user_id,onlyDefaultQuestion);
         
         return res.status(200).json(response(baseResponse.SUCCESS, postDefaultQuestionResult));
     }

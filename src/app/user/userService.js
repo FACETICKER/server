@@ -91,14 +91,13 @@ export const getStickersByType = async(params) =>{
     }
 };
 
-export const createDefaultQuestion = async(default_q_id,user_id) =>{
+export const createDefaultQuestion = async(user_id,onlyDefaultQuestion) =>{
     try{
-        const insertDefaultQuestionParams =[default_q_id,user_id]; 
+        const insertDefaultQuestionParams =[user_id,onlyDefaultQuestion]; 
     
         const connection = await pool.getConnection(async conn => conn);
         const createDefaultQuestionResult = await insertDefaultQuestion(connection,insertDefaultQuestionParams);
-        console.log(`추가된 default 질문 : ${createDefaultQuestionResult[0]}`);
-
+        
         connection.release();
         
         return response(baseResponse.SUCCESS);

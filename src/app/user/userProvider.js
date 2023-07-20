@@ -21,13 +21,21 @@ export const retrieveVisitorSticker = async(visitor_sticker_id) =>{ //방문자 
     return visitorStickerResult[0];
 };
 
-export const retrieveDefaultQuestions = async() =>{ //default 질문 전체 조회
+export const retrieveDefaultQuestions = async(default_q_id) =>{ //default 질문 조회 (전체 조회 + 개별 조회)
     const connection = await pool.getConnection(async conn => conn);
-    const DefaultQuestionsResult = await selectDefaultQuestions(connection);
 
-    connection.release();
+    if(default_q_id == null){ //default_q_id가 null이라면 질문 전체 조회
+        const DefaultQuestionsResult = await selectDefaultQuestions(connection);
+        connection.release();
 
-    return DefaultQuestionsResult;
+        return DefaultQuestionsResult;
+    }
+    else{ //default_q_id로 default 질문 개별 조회
+        const DefaultQuestionsResult = await selectDefaultQuestions(connection,default_q_id);
+        connection.release();
+
+        return DefaultQuestionsResult;
+    }
 };
 
 export const retrieveStickerCollections = async(user_id) =>{ //회원 번호로 전체 스티커 조회
