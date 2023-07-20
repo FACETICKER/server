@@ -12,7 +12,7 @@ export const userCheck = async(userInfoParams) =>{ // 사용자 정보를 조회
     }
 };
 
-export const retrieveVisitorSticker = async(visitor_sticker_id) =>{
+export const retrieveVisitorStickerById = async(visitor_sticker_id) =>{
     const connection = await pool.getConnection(async conn => conn);
     const visitorStickerResult = await selectVisitorStickerById(connection,visitor_sticker_id);
 

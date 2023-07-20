@@ -4,7 +4,7 @@ dotenv.config();
 import { response,errResponse } from "../../../config/response";
 import baseResponse from "../../../config/baseResponse";
 import {kakaoLogin, googleLogin, getStickersByType} from "./userService.js";
-import {retrieveVisitorSticker} from "./userProvider";
+import {retrieveVisitorStickerById} from "./userProvider";
 
 
 export const handleKakaoCallback = async(req,res)=>{ 
@@ -90,7 +90,7 @@ export const getVisitorStickerById = async(req,res)=>{ //호스트가 방문자�
         const {params:{visitor_sticker_id}} = req;
         
         try {
-            const visitorStickerById = await retrieveVisitorSticker(visitor_sticker_id);
+            const visitorStickerById = await retrieveVisitorStickerById(visitor_sticker_id);
             if (visitorStickerById) {
                 return res.status(200).json(response(baseResponse.SUCCESS, visitorStickerById));
             } else {
