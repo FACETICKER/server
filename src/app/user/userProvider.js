@@ -1,5 +1,5 @@
 import pool from "../../../config/database.js";
-import {findUser,selectVisitorStickerId, selectUserSticker, selectVisitorStickers,getIdByNickname,selectDefaultQuestions } from "./userDao.js";
+import {findUser,selectVisitorStickerById, selectUserSticker, selectVisitorStickers,getIdByNickname,selectDefaultQuestions } from "./userDao.js";
 
 export const userCheck = async(userInfoParams) =>{ // 사용자 정보를 조회
     try{
@@ -12,9 +12,10 @@ export const userCheck = async(userInfoParams) =>{ // 사용자 정보를 조회
     }
 };
 
-export const retrieveVisitorSticker = async(visitor_sticker_id) =>{ //방문자 스티커 id로 방문 상세 기록 조회
+
+export const retrieveVisitorStickerById = async(visitor_sticker_id) =>{
     const connection = await pool.getConnection(async conn => conn);
-    const visitorStickerResult = await selectVisitorStickerId(connection,visitor_sticker_id);
+    const visitorStickerResult = await selectVisitorStickerById(connection,visitor_sticker_id);
 
     connection.release();
 

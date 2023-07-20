@@ -4,8 +4,7 @@ dotenv.config();
 import { response,errResponse } from "../../../config/response";
 import baseResponse from "../../../config/baseResponse";
 import {kakaoLogin, googleLogin, getStickersByType, createDefaultQuestion} from "./userService.js";
-import {retrieveVisitorSticker, retrieveDefaultQuestions} from "./userProvider";
-
+import {retrieveVisitorStickerById, retrieveDefaultQuestions} from "./userProvider";
 
 export const handleKakaoCallback = async(req,res)=>{ 
     const code = req.query.code;
@@ -82,7 +81,7 @@ export const handleGoogleCallback = async(req,res)=>{
  * API Name: 방문자 기록 상세 조회
  * GET: /visitor/{visitor_sticker_id}
  */
-export const getVisitorStickerById = async(req,res)=>{
+export const getVisitorStickerById = async(req,res)=>{ //호스트가 방문자의 기록(페이스티커, 캐릭터 네임, 메세지)을 상세 조회
     
     /**
      * Path Parameters: visitor_sticker_id
@@ -90,7 +89,7 @@ export const getVisitorStickerById = async(req,res)=>{
         const {params:{visitor_sticker_id}} = req;
         
         try {
-            const visitorStickerById = await retrieveVisitorSticker(visitor_sticker_id);
+            const visitorStickerById = await retrieveVisitorStickerById(visitor_sticker_id);
             if (visitorStickerById) {
                 return res.status(200).json(response(baseResponse.SUCCESS,visitorStickerById));
             } else {
