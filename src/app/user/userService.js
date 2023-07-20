@@ -1,7 +1,7 @@
 import {response, errResponse} from "../../../config/response.js";
 import baseResponse from "../../../config/baseResponse.js";
 import { userCheck, retrieveUserId, retrieveStickerCollections } from "./userProvider.js";
-import {createUser } from "./userDao.js";
+import {createUser, createUserSticker } from "./userDao.js";
 import pool from "../../../config/database.js";
 import jwt from "jsonwebtoken";
 import dotenv from "dotenv";
@@ -79,9 +79,9 @@ export const googleLogin = async(userInfo, provider) =>{
 
 export const getStickersByType = async(params) =>{
     try{
-        const userId = await retrieveUserId(params.nickname);
-        const stickerCollections = await retrieveStickerCollections(userId);
-        if(params.userIdFromJWT === userId){
+        const userId = await retrieveUserId(params.nickname); //해당 페이지의 호스트 회원 번호를 조회
+        const stickerCollections = await retrieveStickerCollections(userId); //해당 페이지의 모든 스티커를 조회
+        if(params.userIdFromJWT === userId){ //만약 토큰이 있을 경우 회원 번호가 같으면 호스트 아니면 방문자
             return response(baseResponse.HOST,stickerCollections);
         }else{
             return response(baseResponse.VISITOR,stickerCollections);
@@ -90,3 +90,45 @@ export const getStickersByType = async(params) =>{
         console.error(err);
     }
 };
+
+export const insertUserSticker = async(params) =>{ //호스트 스티커 등록
+    try{
+        const connection = await pool.getConnection(async conn=> conn);
+        const createUserStickerResult = await createUserSticker(connection,params);
+        connection.release();
+        console.log(createUserStickerResult);
+        if(createUserStickerResult.affectedRows === 1){
+            return response(baseResponse.SUCCESS);
+        }else{
+            return response(baseResponse.DB_ERROR);
+        }
+    }catch(err){
+        console.error(err);
+    }
+}
+
+//final_image 생성 -> 
+// const compositeImage = async(params) =>{
+//     try{
+//         const images = await Promise.all(Object.values(params).map(url => sharp(url).toBuffer()));
+//         const combinedImage = await sharp({
+//             create: {
+//                 width: 800, // 합성된 이미지의 가로 크기
+//                 height: 600, // 합성된 이미지의 세로 크기
+//                 channels: 4, // RGBA 채널 사용
+//                 background: { r: 255, g: 255, b: 255, alpha: 0 }, // 배경 색상 (투명)
+//             }
+//         })
+//         .composite([
+//             { input: images.faceShape, top: 0, left: 0 }, // 얼굴형 이미지
+//             { input: images.eyes, top: 200, left: 100 }, // 눈 이미지
+//             { input: images.nose, top: 300, left: 200 }, // 코 이미지
+//             { input: images.mouth, top: 400, left: 200 }, // 입 이미지
+//             { input: images.ears, top: 100, left: 500 }, // 귀 이미지
+//         ])
+//         .toBuffer();
+//         return combinedImage;
+//     }catch(err){
+//         console.error(err);
+//     }
+// };

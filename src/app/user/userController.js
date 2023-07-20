@@ -3,7 +3,7 @@ import dotenv from "dotenv";
 dotenv.config();
 import { response,errResponse } from "../../../config/response";
 import baseResponse from "../../../config/baseResponse";
-import {kakaoLogin, googleLogin, getStickersByType} from "./userService.js";
+import {kakaoLogin, googleLogin, getStickersByType, insertUserSticker} from "./userService.js";
 import {retrieveVisitorSticker} from "./userProvider";
 
 
@@ -117,4 +117,17 @@ export const getStickers = async (req,res)=>{ //해당 호스트의 전체 스�
     }catch(err){
         return res.status(500).json(err);
     }
+};
+
+
+export const postSticker = async(req,res)=>{ //스티커 등록
+    try{
+        const params = [req.params.id, req.body.face, req.body.nose, req.body.eyes, req.body.mouth,
+                        req.body.arm,req.body.foot,req.body.accessory,];
+        const postStickerResult = await insertUserSticker(params);
+        return res.send(postStickerResult);
+    }catch(err){
+        return res.status(500).send(err);
+    }
+
 }

@@ -60,3 +60,11 @@ export const getIdByNickname = async(connection, nickname) =>{
     return getIdByNicknameRow[0];
 }
 
+export const createUserSticker = async(connection, params) =>{ //호스트 스티커 등록
+    const insertUserStickerQuery = `
+        INSERT INTO user_sticker(user_id, face_id, nose_id, eyes_id, mouth_id, arm_id, foot_id, accessory_id)
+        VALUES(?,?,?,?,?,?,?,?);
+    `
+    const [insertUserStickerRow] = await connection.query(insertUserStickerQuery,params);
+    return insertUserStickerRow;
+}
