@@ -63,3 +63,35 @@ export const getIdByNickname = async(connection, nickname) =>{
     return getIdByNicknameRow[0];
 }
 
+export const selectDefaultQuestions = async(connection, default_q_id)=>{ // default 질문 조회 (전체 조회 + 개별 조회)
+
+    if(default_q_id == null){ // default 질문 전체 조회
+        const selectDefaultQuestionsQuery = `
+            SELECT default_q_id, question
+            FROM default_q;
+        `;
+        const [DefaultQuestionsRow] = await connection.query(selectDefaultQuestionsQuery);
+
+        return DefaultQuestionsRow;
+    }
+    else{ // default 질문 default_q_id로 개별 조회
+        const selectDefaultQuestionsQuery = `
+            SELECT default_q_id, question
+            FROM default_q
+            WHERE default_q_id = ?;
+        `;
+        const [DefaultQuestionsRow] = await connection.query(selectDefaultQuestionsQuery,default_q_id);
+
+        return DefaultQuestionsRow;
+    }
+};
+
+export const insertDefaultQuestion = async(connection, insertDefaultQuestionParams) => {
+    const postDefaultQuestionQuery = `
+        INSERT INTO nQnA(user_id, question, question_type) 
+        VALUES (?,?,0);
+
+    `;
+    const insertDefaultQuestionRow = await connection.query(postDefaultQuestionQuery, insertDefaultQuestionParams);
+    return insertDefaultQuestionRow;
+};
