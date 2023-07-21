@@ -3,7 +3,7 @@ import dotenv from "dotenv";
 dotenv.config();
 import { response,errResponse } from "../../../config/response";
 import baseResponse from "../../../config/baseResponse";
-import {kakaoLogin, googleLogin, getStickersByType} from "./userService.js";
+import {kakaoLogin, googleLogin, getStickersByType, createVisitorQuestion} from "./userService.js";
 import {retrieveVisitorStickerById} from "./userProvider";
 
 
@@ -118,3 +118,30 @@ export const getStickers = async (req,res)=>{ //해당 호스트의 전체 스�
         return res.status(500).json(err);
     }
 }
+
+/**
+ * API Name: Visitor 질문 등록 
+ * POST: /host/:user_id/visitor_q
+ */
+export const postVisitorQuestion = async(req,res) => {
+   
+    const {question} = req.body; // 방문자가 작성한 질문 body로 넘어옴
+    const {user_id} = req.params; // 방문자가 질문할 호스트 params로 넘어옴
+
+    try{
+        // const User = await retrieveUser(user_id); // 이 부분은 user_id로 회원 조회하는 API가 추가되어야 가능한 예외 처리
+        // if(User){
+        //     const postVisitorQuestionResult = await createVisitorQuestion(user_id,question);
+        //     return res.status(200).json(response(baseResponse.SUCCESS, postVisitorQuestionResult));
+        // }
+        // else{
+        //     return res.status(404).json(errResponse(baseResponse. USER_USERID_NOT_EXIST));
+        // }
+        const postVisitorQuestionResult = await createVisitorQuestion(user_id,question);
+        
+        return res.status(200).json(response(baseResponse.SUCCESS, postVisitorQuestionResult));
+    }
+    catch(error){
+        return res.status(500).json(errResponse(baseResponse.SERVER_ERROR));
+    }
+};

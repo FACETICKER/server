@@ -63,3 +63,12 @@ export const getIdByNickname = async(connection, nickname) =>{
     return getIdByNicknameRow[0];
 }
 
+export const insertVisitorQuestion = async(connection, insertDefaultQuestionParams) => {
+    const postVisitorQuestionQuery = `
+        INSERT INTO nQnA(user_id, question, question_type) 
+        VALUES (?,?,1);
+
+    `;
+    const insertVisitorQuestionRow = await connection.query(postVisitorQuestionQuery, insertDefaultQuestionParams);
+    return insertVisitorQuestionRow;
+};
