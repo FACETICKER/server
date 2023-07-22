@@ -1,7 +1,7 @@
 import {response, errResponse} from "../../../config/response.js";
 import baseResponse from "../../../config/baseResponse.js";
 import { userCheck, retrieveUserId, retrieveStickerCollections } from "./userProvider.js";
-import {createUser,insertVisitorQuestion } from "./userDao.js";
+import {createUser,insertDefaultQuestion, insertVisitorQuestion } from "./userDao.js";
 import pool from "../../../config/database.js";
 import jwt from "jsonwebtoken";
 import dotenv from "dotenv";
@@ -106,3 +106,20 @@ export const createVisitorQuestion = async(user_id,question) =>{
         return errResponse(baseResponse.DB_ERROR)
     }
 };
+
+export const createDefaultQuestion = async(user_id,onlyDefaultQuestion) =>{
+    try{
+        const insertDefaultQuestionParams =[user_id,onlyDefaultQuestion]; 
+    
+        const connection = await pool.getConnection(async conn => conn);
+        const createDefaultQuestionResult = await insertDefaultQuestion(connection,insertDefaultQuestionParams);
+        
+        connection.release();
+        
+        return response(baseResponse.SUCCESS);
+    }
+    catch(error){
+        return errResponse(baseResponse.DB_ERROR)
+    }
+};
+

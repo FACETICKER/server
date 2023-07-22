@@ -1,5 +1,6 @@
 import express from "express";
-import { handleKakaoCallback, handleGoogleCallback, getVisitorStickerById, getStickers,postVisitorQuestion } from "./userController";
+import { handleKakaoCallback, handleGoogleCallback, getVisitorStickerById, getStickers, getDefaultQuestions,postDefaultQuestion,postVisitorQuestion } from "./userController";
+
 import { jwtMiddleware } from "../../../config/jwtMiddleware.js";
 
 const userRouter = express.Router();
@@ -11,6 +12,9 @@ userRouter.post('/host/:user_id/visitor_q',postVisitorQuestion); //Visitor 질�
 
 
 
+
+userRouter.get('/default_q',getDefaultQuestions); //default 질문 전체 조회 API (전체 조회 + 개별 조회)
+userRouter.post('/host/:user_id/default_q',postDefaultQuestion); //default 질문 등록 API
 
 userRouter.get("/:nickname/stickers",jwtMiddleware,getStickers); //방문자 기록 페이지 조회
 
