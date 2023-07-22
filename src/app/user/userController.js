@@ -3,7 +3,7 @@ import dotenv from "dotenv";
 dotenv.config();
 import { response,errResponse } from "../../../config/response";
 import baseResponse from "../../../config/baseResponse";
-import {kakaoLogin, googleLogin, getStickersByType, createDefaultQuestion} from "./userService.js";
+import {kakaoLogin, googleLogin, getStickersByType, createDefaultQuestion, createAnswer} from "./userService.js";
 import {retrieveVisitorStickerById, retrieveDefaultQuestions} from "./userProvider";
 
 export const handleKakaoCallback = async(req,res)=>{ 
@@ -156,3 +156,38 @@ export const getStickers = async (req,res)=>{ //해당 호스트의 전체 스�
         return res.status(500).json(err);
     }
 }
+
+/**
+ * API Name: Host 답변 등록
+ * patch: /host/{user_id}/answer/{nQnA_id}
+ */
+export const postAnswer = async(req,res) => {
+   
+    const {answer} = req.body;
+    const {user_id, nQnA_id} = req.params;
+    /*
+    const User = await retrieveUser(user_id); // 이 부분은 각각 user_id, nQnA_id로 회원 조회, 질문 조회하는 API가 추가되어야 가능한 예외 처리
+        if(User){
+            const nQnA = await retrieveNQnA(nQnA_id);
+            if(nQnA){
+                const postAnswerResult = await createAnswer(answer, user_id,nQnA_id);
+                return res.status(200).json(response(baseResponse.SUCCESS, postAnswerResult));
+            }
+            else{
+                return res.status(404).json(errResponse(baseResponse. NQNA_NQNAID_NOT_EXIST));
+            }
+        }
+        else{
+        return res.status(404).json(errResponse(baseResponse. USER_USERID_NOT_EXIST));
+        }
+    */
+
+    try{
+        const postAnswerResult = await createAnswer(answer,user_id,nQnA_id);
+
+        return res.status(200).json(response(baseResponse.SUCCESS, postAnswerResult));
+    }
+    catch(error){
+        return res.status(500).json(errResponse(baseResponse.SERVER_ERROR));
+    }
+};

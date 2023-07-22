@@ -95,3 +95,13 @@ export const insertDefaultQuestion = async(connection, insertDefaultQuestionPara
     const insertDefaultQuestionRow = await connection.query(postDefaultQuestionQuery, insertDefaultQuestionParams);
     return insertDefaultQuestionRow;
 };
+
+export const insertAnswer = async(connection, insertAnswerParams) => {
+    const postAnswerQuery = `
+        UPDATE nQnA 
+        SET answer= ?
+        WHERE user_id = ? AND nQnA_id =?;
+    `;
+    const insertAnswerRow = await connection.query(postAnswerQuery, insertAnswerParams);
+    return insertAnswerRow;
+};
