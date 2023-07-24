@@ -125,6 +125,18 @@ export const stickerController = {
             return res.status(500).send(err);
         }
     },
+    postMessage : async(req,res)=>{
+        const userIdFromJWT = req.verifiedToken ? req.verifiedToken.user_id : null;
+        console.log(userIdFromJWT);
+        const type = req.query.type;
+        const message = req.body.message;
+        if(type === 'host'){
+            const result = await stickerService.insertUserMessage(userIdFromJWT,message);
+            return res.send(result);
+        }else if(type === 'visitor'){
+            
+        }
+    }
 };
 
 export const nqnaController = {

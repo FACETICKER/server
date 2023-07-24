@@ -13,6 +13,7 @@ userRouter.post('/:id/sticker',stickerController.postSticker); //Host 스티커 
 userRouter.get('/default_q',nqnaController.getDefaultQuestions); //default 질문 전체 조회 API (전체 조회 + 개별 조회)
 userRouter.post('/host/:user_id/default_q',nqnaController.postDefaultQuestion); //default 질문 등록 API
 
+userRouter.patch('/:nickname/message',jwtMiddleware,stickerController.postMessage);
 
 
 

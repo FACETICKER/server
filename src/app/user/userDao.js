@@ -70,6 +70,15 @@ export const stickerDao = {
         const [insertUserStickerRow] = await connection.query(insertUserStickerQuery,params);
         return insertUserStickerRow;
     },
+    insertUserMessage : async(connection,userId, message) =>{
+        const insertUserMessageQuery = `
+            UPDATE user_sticker
+            SET message = ?
+            WHERE user_id = ?;
+        `
+        const [insertUserMessageRow] = await connection.query(insertUserMessageQuery,[message,userId]);
+        return insertUserMessageRow;
+    }
     
 }
 
