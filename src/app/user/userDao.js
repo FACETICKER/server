@@ -50,7 +50,7 @@ export const stickerDao = {
             WHERE user_sticker.user_id = ?;
         `
         const [selectUserStickerRow] = await connection.query(selectUserStickerQuery,user_id);
-        return selectUserStickerRow[0];
+        return selectUserStickerRow;
     },
     selectVisitorStickers : async(connection, user_id) =>{
         const selectVisitorStickersQuery = `
@@ -70,6 +70,14 @@ export const stickerDao = {
         const [insertUserStickerRow] = await connection.query(insertUserStickerQuery,params);
         return insertUserStickerRow;
     },
+    createVisitorSticker : async(connection,params) =>{
+        const insertVisitorStickerQuery = `
+            INSERT INTO visitor_sticker(host_id, visitor_id, face_id, nose_id, eyes_id, mouth_id, arm_id, foot_id, accessory_id)
+            VALUES(?,?,?,?,?,?,?,?,?);
+        `
+        const [insertVisitorStickerRow] = await connection.query(insertVisitorStickerQuery,params);
+        return insertVisitorStickerRow;
+    }
     
 }
 
