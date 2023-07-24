@@ -1,6 +1,6 @@
 import {response, errResponse} from "../../../config/response.js";
 import baseResponse from "../../../config/baseResponse.js";
-import { userCheck, retrieveUserId,stickerProvicer } from "./userProvider.js";
+import { userCheck, retrieveUserId,stickerProvider } from "./userProvider.js";
 import {loginDao,nqnaDao, stickerDao } from "./userDao.js";
 import pool from "../../../config/database.js";
 import jwt from "jsonwebtoken";
@@ -82,7 +82,7 @@ export const stickerService = {
     getStickersByType : async(params) =>{
     try{
         const userId = await retrieveUserId(params.nickname); //해당 페이지의 호스트 회원 번호를 조회
-        const stickerCollections = await stickerProvicer.StickerCollections(userId); //해당 페이지의 모든 스티커를 조회
+        const stickerCollections = await stickerProvider.StickerCollections(userId); //해당 페이지의 모든 스티커를 조회
         if(params.userIdFromJWT === userId){ //만약 토큰이 있을 경우 회원 번호가 같으면 호스트 아니면 방문자
             return response(baseResponse.HOST,stickerCollections);
         }else{
@@ -107,7 +107,18 @@ export const stickerService = {
             console.error(err);
         }
     },
-
+    insertVisitorSticker : async(params) =>{
+        try{
+            const connection = await pool.getConnection(async conn => conn);
+            const createVisitorStickerResult = await stickerDao.createVisitorSticker(connection,params);
+            connection.release();
+            if(createVisitorStickerResult.affectedRows === 1){
+                return response(baseResponse.SUCCESS);
+            }else return response(baseResponse.DB_ERROR);
+        }catch(err){
+            console.error(err);
+        }
+    }
 };
 
 export const nqnaService = {

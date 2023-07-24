@@ -3,7 +3,7 @@ import dotenv from "dotenv";
 import { response,errResponse } from "../../../config/response";
 import baseResponse from "../../../config/baseResponse";
 import {loginService, stickerService, nqnaService} from "./userService.js";
-import {stickerProvider, nqnaProvider} from "./userProvider";
+import {stickerProvider, nqnaProvider, retrieveUserId} from "./userProvider";
 dotenv.config();
 export const loginController = {
     kakao : async(req,res)=>{ 
@@ -115,16 +115,27 @@ export const stickerController = {
             return res.status(500).json(err);
         }
     },
-    postSticker : async(req,res)=>{ //스티커 등록
+    postSticker : async (req,res)=>{ 
         try{
-            const params = [req.params.id, req.body.face, req.body.nose, req.body.eyes, req.body.mouth,
-                            req.body.arm,req.body.foot,req.body.accessory,];
-            const postStickerResult = await stickerService.insertUserSticker(params);
-            return res.send(postStickerResult);
+            const type = req.query.type;
+            const userIdFromJWT = req.verifiedToken ? req.verifiedToken.user_id : null;
+            const {face, nose, eyes, mouth, arm, foot, accessory} = req.body;
+            const nickname = req.params.nickname;
+            if(type === 'host'){
+                const params = [userIdFromJWT, face, nose, eyes, mouth, arm, foot, accessory];
+                console.log(params);
+                const insertResult = await stickerService.insertUserSticker(params);
+                return res.send(insertResult);
+            }else if(type === 'visitor'){
+                const hostId = await retrieveUserId(nickname);
+                const params = [hostId, userIdFromJWT, face, nose, eyes, mouth, arm, foot, accessory];
+                const insertResult = await stickerService.insertVisitorSticker(params);
+                return res.send(insertResult);
+            }
         }catch(err){
             return res.status(500).send(err);
         }
-    },
+    }
 };
 
 export const nqnaController = {
