@@ -3,7 +3,7 @@ import dotenv from "dotenv";
 import { response,errResponse } from "../../../config/response";
 import baseResponse from "../../../config/baseResponse";
 import {loginService, stickerService, nqnaService} from "./userService.js";
-import {stickerProvider, nqnaProvider} from "./userProvider";
+import {stickerProvider, nqnaProvider, retrieveUserId} from "./userProvider";
 dotenv.config();
 export const loginController = {
     kakao : async(req,res)=>{ 
@@ -115,26 +115,41 @@ export const stickerController = {
             return res.status(500).json(err);
         }
     },
-    postSticker : async(req,res)=>{ //스티커 등록
-        try{
-            const params = [req.params.id, req.body.face, req.body.nose, req.body.eyes, req.body.mouth,
-                            req.body.arm,req.body.foot,req.body.accessory,];
-            const postStickerResult = await stickerService.insertUserSticker(params);
-            return res.send(postStickerResult);
+    postSticker : async (req,res)=>{  //스티커 등록
+        try{ 
+            const type = req.query.type; //type으로 Host, visitor 구분
+            const userIdFromJWT = req.verifiedToken ? req.verifiedToken.user_id : null;
+            const {face, nose, eyes, mouth, arm, foot, accessory} = req.body;
+            const nickname = req.params.nickname;
+            if(type === 'host'){ //호스트 스티커 등록
+                const params = [userIdFromJWT, face, nose, eyes, mouth, arm, foot, accessory];
+                const insertResult = await stickerService.insertUserSticker(params);
+                return res.send(insertResult);
+            }else if(type === 'visitor'){ //방문자 스티커 등록
+                const hostId = await retrieveUserId(nickname);
+                const params = [hostId, userIdFromJWT, face, nose, eyes, mouth, arm, foot, accessory];
+                const insertResult = await stickerService.insertVisitorSticker(params);
+                return res.send(insertResult);
+            }
         }catch(err){
             return res.status(500).send(err);
         }
     },
     postMessage : async(req,res)=>{
-        const userIdFromJWT = req.verifiedToken ? req.verifiedToken.user_id : null;
-        console.log(userIdFromJWT);
-        const type = req.query.type;
-        const message = req.body.message;
-        if(type === 'host'){
-            const result = await stickerService.insertUserMessage(userIdFromJWT,message);
-            return res.send(result);
-        }else if(type === 'visitor'){
-            
+        try{
+            const userIdFromJWT = req.verifiedToken ? req.verifiedToken.user_id : null;
+            const message = req.body.message;
+            const type = req.query.type;
+            if(type === 'host'){
+                const result = await stickerService.insertUserMessage(userIdFromJWT,message);
+                return res.send(result);
+            }else if(type ==='visitor'){
+                const sticker_id = req.query.id;
+                const result = await stickerService.insertVisitorMessage(sticker_id,message);
+                return res.send(result);
+            }
+        }catch(err){
+            return res.status(500).send(err);
         }
     }
 };

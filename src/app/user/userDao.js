@@ -50,7 +50,7 @@ export const stickerDao = {
             WHERE user_sticker.user_id = ?;
         `
         const [selectUserStickerRow] = await connection.query(selectUserStickerQuery,user_id);
-        return selectUserStickerRow[0];
+        return selectUserStickerRow;
     },
     selectVisitorStickers : async(connection, user_id) =>{
         const selectVisitorStickersQuery = `
@@ -70,6 +70,14 @@ export const stickerDao = {
         const [insertUserStickerRow] = await connection.query(insertUserStickerQuery,params);
         return insertUserStickerRow;
     },
+    createVisitorSticker : async(connection,params) =>{ //방문자 스티커 등록
+        const insertVisitorStickerQuery = `
+            INSERT INTO visitor_sticker(host_id, visitor_id, face_id, nose_id, eyes_id, mouth_id, arm_id, foot_id, accessory_id)
+            VALUES(?,?,?,?,?,?,?,?,?);
+        `
+        const [insertVisitorStickerRow] = await connection.query(insertVisitorStickerQuery,params);
+        return insertVisitorStickerRow;
+    },
     insertUserMessage : async(connection,userId, message) =>{
         const insertUserMessageQuery = `
             UPDATE user_sticker
@@ -78,6 +86,15 @@ export const stickerDao = {
         `
         const [insertUserMessageRow] = await connection.query(insertUserMessageQuery,[message,userId]);
         return insertUserMessageRow;
+    },
+    insertVisitorMessage : async(connection,stickerId, message)=>{
+        const insertVisitorMessageQuery = `
+            UPDATE visitor_sticker
+            SET message = ?
+            WHERE visitor_sticker_id = ?;
+        `
+        const [insertVisitorMessageRow] = await connection.query(insertVisitorMessageQuery,[message,stickerId]);
+        return insertVisitorMessageRow;
     }
     
 }
