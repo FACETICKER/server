@@ -1,4 +1,4 @@
-export const getIdByNickname = async(connection, nickname) =>{
+export const getIdByNickname = async(connection, nickname) =>{ //닉네임으로 회원 번호 조회
     const getIdByNicknameQuery = `
         SELECT user_id
         FROM user_poster
@@ -6,6 +6,16 @@ export const getIdByNickname = async(connection, nickname) =>{
     `
     const [getIdByNicknameRow] = await connection.query(getIdByNicknameQuery,nickname);
     return getIdByNicknameRow[0];
+}
+export const getNicknameById = async(connection, user_id) =>{
+    console.log(user_id);
+    const getNicknameByIdQuery = `
+        SELECT nickname
+        FROM user_poster
+        WHERE user_id = ?;
+    `
+    const [getNicknameByIdRow] = await connection.query(getNicknameByIdQuery,user_id);
+    return getNicknameByIdRow;
 }
 
 export const loginDao = {
@@ -31,7 +41,7 @@ export const loginDao = {
 }
 
 export const stickerDao = {
-    selectVisitorStickerById : async(connection, visitor_sticker_id)=>{
+    selectVisitorStickerById : async(connection, visitor_sticker_id)=>{ //방문자 스티커 개별 조회
         const selectVisitorStickerIdQuery = `
             SELECT final_image.image_url, visitor_sticker.name, visitor_sticker.message, visitor_sticker.visitor_id
             FROM visitor_sticker
@@ -42,7 +52,7 @@ export const stickerDao = {
         const [userRow] = await connection.query(selectVisitorStickerIdQuery, visitor_sticker_id);
         return userRow;
     },
-    selectUserSticker : async(connection,user_id) =>{
+    selectUserSticker : async(connection,user_id) =>{ //호스트 스티커 조회
         const selectUserStickerQuery = `
             SELECT user_id, image_url
             FROM final_image
@@ -52,7 +62,7 @@ export const stickerDao = {
         const [selectUserStickerRow] = await connection.query(selectUserStickerQuery,user_id);
         return selectUserStickerRow;
     },
-    selectVisitorStickers : async(connection, user_id) =>{
+    selectVisitorStickers : async(connection, user_id) =>{ //모든 방문자 스티커 조회
         const selectVisitorStickersQuery = `
             SELECT visitor_sticker_id, image_url, seen, location_x, location_y
             FROM final_image
@@ -70,15 +80,24 @@ export const stickerDao = {
         const [insertUserStickerRow] = await connection.query(insertUserStickerQuery,params);
         return insertUserStickerRow;
     },
-    createVisitorSticker : async(connection,params) =>{
+    createVisitorSticker : async(connection,params) =>{ //방문자 스티커 등록
         const insertVisitorStickerQuery = `
             INSERT INTO visitor_sticker(host_id, visitor_id, face_id, nose_id, eyes_id, mouth_id, arm_id, foot_id, accessory_id)
             VALUES(?,?,?,?,?,?,?,?,?);
         `
         const [insertVisitorStickerRow] = await connection.query(insertVisitorStickerQuery,params);
         return insertVisitorStickerRow;
-    }
-    
+    },
+    selectNewSticker : async(connection,user_id)=>{ //새로운 스티커 수 조회
+        const selectNewStickerQuery = `
+            SELECT COUNT(*) as count
+            FROM visitor_sticker
+            WHERE seen = false
+            AND host_id = ?;
+        `
+        const [selectNewStickerRow] = await connection.query(selectNewStickerQuery,user_id);
+        return selectNewStickerRow;
+    },
 }
 
 export const nqnaDao = {
@@ -116,6 +135,17 @@ export const nqnaDao = {
     },
 }
 
+export const posterDao = {
+    selectPoster : async(connection,user_id)=>{ //포스터 정보 조회
+        const selectPosterQuery = `
+            SELECT *
+            FROM user_poster
+            WHERE user_id = ?;
+        `
+        const [selectPosterRow] = await connection.query(selectPosterQuery,user_id);
+        return selectPosterRow;
+    }
+}
 
 
 

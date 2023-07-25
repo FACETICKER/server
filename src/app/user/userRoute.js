@@ -1,5 +1,5 @@
 import express from "express";
-import { loginController, stickerController, nqnaController  } from "./userController";
+import { loginController, stickerController, nqnaController, mainController  } from "./userController";
 import { jwtMiddleware } from "../../../config/jwtMiddleware.js";
 
 const userRouter = express.Router();
@@ -16,7 +16,7 @@ userRouter.post('/:nickname/sticker',jwtMiddleware,stickerController.postSticker
 userRouter.get('/default_q',nqnaController.getDefaultQuestions); //default 질문 전체 조회 API (전체 조회 + 개별 조회)
 userRouter.post('/host/:user_id/default_q',nqnaController.postDefaultQuestion); //default 질문 등록 API
 
-
+userRouter.get('/:nickname',jwtMiddleware,mainController.getAll); //메인 페이지 조회
 
 
 export default userRouter;

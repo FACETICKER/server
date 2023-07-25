@@ -2,8 +2,8 @@ import axios from "axios";
 import dotenv from "dotenv";
 import { response,errResponse } from "../../../config/response";
 import baseResponse from "../../../config/baseResponse";
-import {loginService, stickerService, nqnaService} from "./userService.js";
-import {stickerProvider, nqnaProvider, retrieveUserId} from "./userProvider";
+import {loginService, stickerService, nqnaService, mainpageService} from "./userService.js";
+import {stickerProvider, nqnaProvider, retrieveUserId, posterProvider} from "./userProvider";
 dotenv.config();
 export const loginController = {
     kakao : async(req,res)=>{ 
@@ -171,4 +171,13 @@ export const nqnaController = {
             return res.status(500).json(errResponse(baseResponse.SERVER_ERROR));
         }
         },
+};
+
+export const mainController = {
+    getAll : async(req,res) =>{
+        const userIdFromJWT = req.verifiedToken ? req.verifiedToken.user_id : null; // 토큰이 있을 때만 user_id를 가져오도록 수정
+        const nickname = req.params.nickname;
+        const result = await mainpageService(userIdFromJWT,nickname);
+        return res.send(result);
+    }
 };
