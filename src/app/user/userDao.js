@@ -107,7 +107,7 @@ export const stickerDao = {
         const [insertUserMessageRow] = await connection.query(insertUserMessageQuery,[message,userId]);
         return insertUserMessageRow;
     },
-    insertVisitorMessage : async(connection,stickerId, message)=>{ //방문자 메세지 등록
+    insertVisitorMessage : async(connection,params)=>{ //방문자 메세지 등록
         const insertVisitorMessageQuery = `
             UPDATE visitor_sticker
             SET name = ? , message = ?
