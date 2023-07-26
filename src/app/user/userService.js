@@ -130,10 +130,11 @@ export const stickerService = { //스티커 관련 서비스
             console.error(err);
         }
     },
-    insertVisitorMessage : async(visitorId, message) =>{
+    insertVisitorMessage : async(visitorId,name, message) =>{
         try{
             const connection = await pool.getConnection(async conn => conn);
-            const insertVisitorMessageResult = await stickerDao.insertVisitorMessage(connection,visitorId,message);
+            const params = [name,visitorId,message];
+            const insertVisitorMessageResult = await stickerDao.insertVisitorMessage(connection,params);
             connection.release();
             if(insertVisitorMessageResult.changedRows === 1 && insertVisitorMessageResult.affectedRows===1){
                 return response(baseResponse.SUCCESS);

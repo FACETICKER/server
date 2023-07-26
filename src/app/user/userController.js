@@ -145,7 +145,8 @@ export const stickerController = {
                 return res.send(result);
             }else if(type ==='visitor'){
                 const sticker_id = req.query.id;
-                const result = await stickerService.insertVisitorMessage(sticker_id,message);
+                const sticker_name = req.body.name;
+                const result = await stickerService.insertVisitorMessage(sticker_id,sticker_name,message);
                 return res.send(result);
             }
         }catch(err){

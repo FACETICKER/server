@@ -107,13 +107,13 @@ export const stickerDao = {
         const [insertUserMessageRow] = await connection.query(insertUserMessageQuery,[message,userId]);
         return insertUserMessageRow;
     },
-    insertVisitorMessage : async(connection,stickerId, message)=>{ //
+    insertVisitorMessage : async(connection,params)=>{ //
         const insertVisitorMessageQuery = `
             UPDATE visitor_sticker
-            SET message = ?
+            SET name = ? , message = ?
             WHERE visitor_sticker_id = ?;
         `
-        const [insertVisitorMessageRow] = await connection.query(insertVisitorMessageQuery,[message,stickerId]);
+        const [insertVisitorMessageRow] = await connection.query(insertVisitorMessageQuery,params);
         return insertVisitorMessageRow;
     }
     
