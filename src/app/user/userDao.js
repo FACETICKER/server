@@ -89,7 +89,7 @@ export const selectDefaultQuestions = async(connection, default_q_id)=>{ // defa
 export const insertDefaultQuestion = async(connection, insertDefaultQuestionParams) => {
     const postDefaultQuestionQuery = `
         INSERT INTO nQnA(user_id, question, question_type) 
-        VALUES (?,?,0);
+        VALUES (?,?,"default");
 
     `;
     const insertDefaultQuestionRow = await connection.query(postDefaultQuestionQuery, insertDefaultQuestionParams);
