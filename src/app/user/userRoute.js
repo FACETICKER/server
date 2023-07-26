@@ -18,5 +18,7 @@ userRouter.post('/host/:user_id/default_q',nqnaController.postDefaultQuestion); 
 
 userRouter.get('/:nickname',jwtMiddleware,mainController.getAll); //메인 페이지 조회
 userRouter.patch('/:nickname/message',jwtMiddleware,stickerController.postMessage); //메세지 등록(Host, Visitor)
+userRouter.patch('/:nickname/sticker',jwtMiddleware,stickerController.attachSticker); //스티커 부착, 스티머 위치 수정도 같은 API 호출
+
 
 export default userRouter;
