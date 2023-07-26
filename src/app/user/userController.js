@@ -134,7 +134,7 @@ export const stickerController = {
             return res.status(500).send(err);
         }
     },
-    postMessage : async(req,res)=>{ 
+    postMessage : async(req,res)=>{ //메세지 등록(Host, Visitor)
         try{
             const userIdFromJWT = req.verifiedToken ? req.verifiedToken.user_id : null;
             const message = req.body.message;
@@ -144,11 +144,24 @@ export const stickerController = {
                 return res.send(result);
             }else if(type ==='visitor'){
                 const sticker_id = req.query.id;
-                const result = await stickerService.insertVisitorMessage(sticker_id,message);
+                const sticker_name = req.body.name;
+                const result = await stickerService.insertVisitorMessage(sticker_id,sticker_name,message);
                 return res.send(result);
             }
         }catch(err){
             return res.status(500).send(err);
+        }
+    },
+    attachSticker : async(req,res)=>{ //스티커 위치 저장
+        try{
+            const {x,y} = req.body;
+            const id = req.query.id;
+            const params = [x,y,id];
+            console.log(params);
+            const result = await stickerService.insertStickerLocation(params);
+            return res.send(result);
+        }catch(err){
+            return res.send(err);
         }
     }
 };
