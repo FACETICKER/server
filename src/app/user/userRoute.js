@@ -17,6 +17,6 @@ userRouter.get('/default_q',nqnaController.getDefaultQuestions); //default 질�
 userRouter.post('/host/:user_id/default_q',nqnaController.postDefaultQuestion); //default 질문 등록 API
 
 userRouter.get('/:nickname',jwtMiddleware,mainController.getAll); //메인 페이지 조회
-
+userRouter.patch('/:nickname/message',jwtMiddleware,stickerController.postMessage); //메세지 등록(Host, Visitor)
 
 export default userRouter;

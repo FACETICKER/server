@@ -95,10 +95,10 @@ export const stickerService = { //스티커 관련 서비스
     insertUserSticker : async(params) =>{ //호스트 스티커 등록
         try{
             const connection = await pool.getConnection(async conn=> conn);
-            const createUserStickerResult = await stickerDao.createUserSticker(connection,params);
+            const insertUserStickerResult = await stickerDao.createUserSticker(connection,params);
             connection.release();
-            console.log(createUserStickerResult);
-            if(createUserStickerResult.affectedRows === 1){
+            console.log(insertUserStickerResult);
+            if(insertUserStickerResult.affectedRows === 1){
                 return response(baseResponse.SUCCESS);
             }else{
                 return response(baseResponse.DB_ERROR);
@@ -113,6 +113,29 @@ export const stickerService = { //스티커 관련 서비스
             const createVisitorStickerResult = await stickerDao.createVisitorSticker(connection,params);
             connection.release();
             if(createVisitorStickerResult.affectedRows === 1){
+                return response(baseResponse.SUCCESS,{'visitor_id':createVisitorStickerResult.insertId});
+            }else return response(baseResponse.DB_ERROR);
+        }catch(err){
+            console.error(err);
+        }
+    },
+    insertUserMessage : async(userId, message) =>{
+        try{
+            const connection = await pool.getConnection(async conn => conn);
+            const insertUserMessageResult = await stickerDao.insertUserMessage(connection,userId,message);
+            if(insertUserMessageResult.changedRows === 1 && insertUserMessageResult.affectedRows === 1){
+                return response(baseResponse.SUCCESS);
+            }else return response(baseResponse.DB_ERROR);
+        }catch(err){
+            console.error(err);
+        }
+    },
+    insertVisitorMessage : async(visitorId, message) =>{
+        try{
+            const connection = await pool.getConnection(async conn => conn);
+            const insertVisitorMessageResult = await stickerDao.insertVisitorMessage(connection,visitorId,message);
+            connection.release();
+            if(insertVisitorMessageResult.changedRows === 1 && insertVisitorMessageResult.affectedRows===1){
                 return response(baseResponse.SUCCESS);
             }else return response(baseResponse.DB_ERROR);
         }catch(err){

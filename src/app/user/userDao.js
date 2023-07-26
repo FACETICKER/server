@@ -98,6 +98,25 @@ export const stickerDao = {
         const [selectNewStickerRow] = await connection.query(selectNewStickerQuery,user_id);
         return selectNewStickerRow;
     },
+    insertUserMessage : async(connection,userId, message) =>{ //방문자에게 보여줄 한 마디 등록
+        const insertUserMessageQuery = `
+            UPDATE user_sticker
+            SET message = ?
+            WHERE user_id = ?;
+        `
+        const [insertUserMessageRow] = await connection.query(insertUserMessageQuery,[message,userId]);
+        return insertUserMessageRow;
+    },
+    insertVisitorMessage : async(connection,stickerId, message)=>{ //
+        const insertVisitorMessageQuery = `
+            UPDATE visitor_sticker
+            SET message = ?
+            WHERE visitor_sticker_id = ?;
+        `
+        const [insertVisitorMessageRow] = await connection.query(insertVisitorMessageQuery,[message,stickerId]);
+        return insertVisitorMessageRow;
+    }
+    
 }
 
 export const nqnaDao = {
