@@ -1,7 +1,7 @@
 import {response, errResponse} from "../../../config/response.js";
 import baseResponse from "../../../config/baseResponse.js";
 import { userCheck, retrieveUserId,stickerProvider, posterProvider, retrieveUserName } from "./userProvider.js";
-import {loginDao,nqnaDao, stickerDao } from "./userDao.js";
+import {loginDao,nqnaDao, posterDao, stickerDao } from "./userDao.js";
 import pool from "../../../config/database.js";
 import jwt from "jsonwebtoken";
 import dotenv from "dotenv";
@@ -200,3 +200,16 @@ export const mainpageService = async(userIdFromJWT,nickname) =>{
     }
 }
 
+export const posterService = {
+    insertPoster : async(params) =>{
+        const connection = await pool.getConnection(async conn => conn);
+        const insertPosterResult = await posterDao.insertPoster(connection,params);
+        connection.release();
+        console.log(insertPosterResult);
+        if(insertPosterResult.affectedRows===1){
+            return response(baseResponse.SUCCESS);
+        }else if(insertPosterResult.errno === 1062){
+            return response(baseResponse.USER_NICKNAME_DUPLICATED);
+        }else return response(baseResponse.DB_ERROR);
+    }
+}

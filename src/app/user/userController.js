@@ -2,7 +2,7 @@ import axios from "axios";
 import dotenv from "dotenv";
 import { response,errResponse } from "../../../config/response";
 import baseResponse from "../../../config/baseResponse";
-import {loginService, stickerService, nqnaService, mainpageService} from "./userService.js";
+import {loginService, stickerService, nqnaService, mainpageService, posterService} from "./userService.js";
 import {stickerProvider, nqnaProvider, retrieveUserId, posterProvider} from "./userProvider";
 dotenv.config();
 export const loginController = {
@@ -209,3 +209,34 @@ export const mainController = {
         return res.send(result);
     }
 };
+
+export const posterController = {
+    postPoster : async(req,res)=>{
+        try{
+            const userIdFromJWT = req.verifiedToken ? req.verifiedToken.user_id : null; // 토큰이 있을 때만 user_id를 가져오도록 수정
+            const {nickname, season, number, date, important} = req.body;
+            const [month, day] = date.split(' ');
+            const year = new Date().getFullYear();
+            const monthMap = {
+                'January': '01',
+                'February': '02',
+                'March': '03',
+                'April': '04',
+                'May': '05',
+                'June': '06',
+                'July': '07',
+                'August': '08',
+                'September': '09',
+                'October': '10',
+                'November': '11',
+                'December': '12',
+            };
+            const formattedDate = `${year}-${monthMap[month]}-${day}`;
+            const params = [userIdFromJWT, nickname,season,number,formattedDate,important];
+            const result = await posterService.insertPoster(params);
+            return res.send(result);
+        }catch(err){
+            return res.send(err);
+        }
+    }
+}

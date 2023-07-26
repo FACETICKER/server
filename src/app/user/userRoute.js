@@ -1,5 +1,5 @@
 import express from "express";
-import { loginController, stickerController, nqnaController, mainController  } from "./userController";
+import { loginController, stickerController, nqnaController, mainController,posterController  } from "./userController";
 import { jwtMiddleware } from "../../../config/jwtMiddleware.js";
 
 const userRouter = express.Router();
@@ -11,7 +11,7 @@ userRouter.get("/:nickname/sticker",jwtMiddleware,stickerController.getStickers)
 // userRouter.post('/:nickname/sticker',stickerController.hostSticker); //Host 스티커 등록
 // userRouter.post('/:nickname/stickers/new',jwtMiddleware,stickerController.visitorSticker); //Visitor 스티커 등록
 userRouter.post('/:nickname/sticker',jwtMiddleware,stickerController.postSticker); //스티커 등록(Host,Visitor)
-
+userRouter.post("/poster",jwtMiddleware,posterController.postPoster); //포스터 등록
 
 userRouter.get('/default_q',nqnaController.getDefaultQuestions); //default 질문 전체 조회 API (전체 조회 + 개별 조회)
 userRouter.post('/host/:user_id/default_q',nqnaController.postDefaultQuestion); //default 질문 등록 API
