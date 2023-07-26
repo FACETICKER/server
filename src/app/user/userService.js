@@ -191,3 +191,27 @@ export const nqnaService = { //n문n답 관련 서비스
         }
     }
 };
+
+export const mainpageService = async(userIdFromJWT,nickname) =>{
+    const hostId = await retrieveUserId(nickname);
+    const poster = await posterProvider.poster(hostId);
+        const sticker = await stickerProvider.userSticker(hostId);
+        const newSticker = await stickerProvider.newStickers(hostId);
+    if(userIdFromJWT === hostId){ //사용자가 본인 페이지에 들어갔을 경우
+        const result = {
+            poster:poster,
+            sticker:sticker,
+            newSticker:newSticker,
+        };
+        return response(baseResponse.HOST,result); 
+    }else{ //방문자가 다른 사용자 페이지에 방문했을 경우
+        const userNickname = userIdFromJWT ? await retrieveUserName(userIdFromJWT) : null; //토큰이 존재하면 토큰 값으로 nickname 값 조회. 없으면 null
+        const result = {
+            userNickname: userNickname, //본인 프로필으로 돌아갈 경우를 위해
+            hostPoster: poster,
+            hostSticker:sticker,
+            hostnewSticer : newSticker
+        };
+        return response(baseResponse.VISITOR,result);
+    }
+}
