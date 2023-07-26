@@ -1,5 +1,5 @@
 import pool from "../../../config/database.js";
-import {loginDao,stickerDao,getIdByNickname,nqnaDao } from "./userDao.js";
+import {loginDao,stickerDao,getIdByNickname,nqnaDao, posterDao, getNicknameById } from "./userDao.js";
 
 export const userCheck = async(userInfoParams) =>{ // 사용자 정보를 조회
     try{
@@ -23,9 +23,15 @@ export const retrieveUserId = async(nickname) =>{ //닉네임으로 회원 번�
     }
 };
 
+export const retrieveUserName = async(user_id)=>{ //회원 번호로 닉네임 조회
+    const connection = await pool.getConnection(async conn => conn);
+    const getNicknameByIdResult = await getNicknameById(connection,user_id);
+    connection.release();
+    return getNicknameByIdResult;
+};
 
-export const stickerProvider = {
-    VisitorStickerById : async(visitor_sticker_id) =>{
+export const stickerProvider = { //스티커
+    VisitorStickerById : async(visitor_sticker_id) =>{ //개별 스티커 조회
         const connection = await pool.getConnection(async conn => conn);
         const visitorStickerResult = await stickerDao.selectVisitorStickerById(connection,visitor_sticker_id);
     
@@ -48,9 +54,21 @@ export const stickerProvider = {
             console.error(err);
         }
     },
+    userSticker : async(user_id)=>{ //호스트 스티커 조회
+        const connection = await pool.getConnection(async conn => conn);
+        const userStickerResult = await stickerDao.selectUserSticker(connection,user_id);
+        connection.release();
+        return userStickerResult;
+    },
+    newStickers : async(user_id)=>{ //새로운 스티커 수 조회
+        const connection = await pool.getConnection(async conn => conn);
+        const newStickersResult = await stickerDao.selectNewSticker(connection,user_id);
+        connection.release();
+        return newStickersResult;
+    }
 };
 
-export const nqnaProvider = {
+export const nqnaProvider = { //n문n답
     DefaultQuestions : async(default_q_id) =>{ //default 질문 조회 (전체 조회 + 개별 조회)
         const connection = await pool.getConnection(async conn => conn);
     
@@ -68,3 +86,13 @@ export const nqnaProvider = {
         }
     },
 };
+
+export const posterProvider = { //포스터
+    poster: async(user_id)=>{
+        const connection = await pool.getConnection(async conn => conn);
+        const posterResult = await posterDao.selectPoster(connection,user_id);
+        connection.release();
+        return posterResult;
+    }
+
+}
