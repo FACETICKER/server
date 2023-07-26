@@ -156,32 +156,16 @@ export const stickerController = {
 export const nqnaController = {
 
     /**
-     * API Name: default 질문 조회 (전체 조회 + 개별 조회)
-    * GET: /default_q
-    */
-    getDefaultQuestions : async(req,res)=>{
-        
-        const {default_q_id} = req.body; // 일단 body 요청으로 deafult_q_id를 받아옴. null일 수도 있음.
-
-        try {
-            const defaultQuestions = await nqnaProvider.DefaultQuestions(default_q_id);
-            return res.status(200).json(response(baseResponse.SUCCESS, defaultQuestions));
-        } catch (error) {
-            return res.status(500).json(errResponse(baseResponse.SERVER_ERROR));
-        }
-    },
-
-    /**
     * API Name: default 질문 등록
-    * POST: /host/{user_id}/default_q
+    * POST: /host/{nickname}/default_q
     */
     postDefaultQuestion : async(req,res) => {
-        const {default_q_id} = req.body;
-        const {user_id} = req.params;
-        const defaultQuestion = await nqnaProvider.DefaultQuestions(default_q_id); // default_q_id로 default 질문 개별 조회
-        const onlyDefaultQuestion = defaultQuestion[0].question // defaultQuestion 객체의 question값만 가져오기
+
+        const {question} = req.body;
+        const {nickname} = req.params;
+        const hostId = await retrieveUserId(nickname);
         try{
-            const postDefaultQuestionResult = await nqnaService.createDefaultQuestion(user_id,onlyDefaultQuestion);
+            const postDefaultQuestionResult = await nqnaService.createDefaultQuestion(hostId,question);
             return res.status(200).json(response(baseResponse.SUCCESS, postDefaultQuestionResult));
         }catch(error){
             return res.status(500).json(errResponse(baseResponse.SERVER_ERROR));
@@ -190,18 +174,19 @@ export const nqnaController = {
 
     /**
      * API Name: Host 답변 등록
-     * patch: /host/{user_id}/answer/{nQnA_id}
+     * patch: /host/{nickname}/answer/{nQnA_id}
      */
     postAnswer : async(req,res) => {
    
         const {answer} = req.body;
-        const {user_id, nQnA_id} = req.params;
+        const {nickname, nQnA_id} = req.params;
+        const hostId = await retrieveUserId(nickname);
         /*
-        const User = await retrieveUser(user_id); // 이 부분은 각각 user_id, nQnA_id로 회원 조회, 질문 조회하는 API가 추가되어야 가능한 예외 처리
+        const User = await retrieveUser(nickname); // 이 부분은 각각 nickname, nQnA_id로 회원 조회, 질문 조회하는 API가 추가되어야 가능한 예외 처리
             if(User){
                 const nQnA = await retrieveNQnA(nQnA_id);
                 if(nQnA){
-                    const postAnswerResult = await nqnaService.createAnswer(answer, user_id,nQnA_id);
+                    const postAnswerResult = await nqnaService.createAnswer(answer, hostId,nQnA_id);
                     return res.status(200).json(response(baseResponse.SUCCESS, postAnswerResult));
                 }
                 else{
@@ -214,7 +199,7 @@ export const nqnaController = {
         */
 
         try{
-            const postAnswerResult = await nqnaService.createAnswer(answer,user_id,nQnA_id);
+            const postAnswerResult = await nqnaService.createAnswer(answer,hostId,nQnA_id);
 
             return res.status(200).json(response(baseResponse.SUCCESS, postAnswerResult));
         }

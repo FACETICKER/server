@@ -21,9 +21,8 @@ userRouter.post('/:nickname/sticker',jwtMiddleware,stickerController.postSticker
 
 
 // nQnA 관련
-userRouter.get('/default_q',nqnaController.getDefaultQuestions); //default 질문 전체 조회 API (전체 조회 + 개별 조회)
-userRouter.post('/host/:user_id/default_q',nqnaController.postDefaultQuestion); //default 질문 등록 API
-userRouter.patch('/host/:user_id/answer/:nQnA_id',nqnaController.postAnswer); //Host 답변 등록 API
+userRouter.post('/host/:nickname/default_q',nqnaController.postDefaultQuestion); //default 질문 등록 API
+userRouter.patch('/host/:nickname/answer/:nQnA_id',nqnaController.postAnswer); //Host 답변 등록 API
 
 
 
