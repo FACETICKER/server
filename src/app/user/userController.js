@@ -135,7 +135,7 @@ export const stickerController = {
             return res.status(500).send(err);
         }
     },
-    postMessage : async(req,res)=>{
+    postMessage : async(req,res)=>{ //메세지 등록(Host, Visitor)
         try{
             const userIdFromJWT = req.verifiedToken ? req.verifiedToken.user_id : null;
             const message = req.body.message;
@@ -152,7 +152,7 @@ export const stickerController = {
             return res.status(500).send(err);
         }
     },
-    attachSticker : async(req,res)=>{
+    attachSticker : async(req,res)=>{ //스티커 위치 저장
         try{
             const {x,y} = req.body;
             const id = req.query.id;

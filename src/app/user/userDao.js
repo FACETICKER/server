@@ -31,7 +31,7 @@ export const loginDao = {
 }
 
 export const stickerDao = {
-    selectVisitorStickerById : async(connection, visitor_sticker_id)=>{
+    selectVisitorStickerById : async(connection, visitor_sticker_id)=>{ //방문자 스티커 개별 조회
         const selectVisitorStickerIdQuery = `
             SELECT final_image.image_url, visitor_sticker.name, visitor_sticker.message, visitor_sticker.visitor_id
             FROM visitor_sticker
@@ -42,7 +42,7 @@ export const stickerDao = {
         const [userRow] = await connection.query(selectVisitorStickerIdQuery, visitor_sticker_id);
         return userRow;
     },
-    selectUserSticker : async(connection,user_id) =>{
+    selectUserSticker : async(connection,user_id) =>{ //호스트 스티커 조회
         const selectUserStickerQuery = `
             SELECT user_id, image_url
             FROM final_image
@@ -52,7 +52,7 @@ export const stickerDao = {
         const [selectUserStickerRow] = await connection.query(selectUserStickerQuery,user_id);
         return selectUserStickerRow;
     },
-    selectVisitorStickers : async(connection, user_id) =>{
+    selectVisitorStickers : async(connection, user_id) =>{ //방문자 스티커 전체 조회
         const selectVisitorStickersQuery = `
             SELECT visitor_sticker_id, image_url, seen, location_x, location_y
             FROM final_image
@@ -78,7 +78,7 @@ export const stickerDao = {
         const [insertVisitorStickerRow] = await connection.query(insertVisitorStickerQuery,params);
         return insertVisitorStickerRow;
     },
-    insertUserMessage : async(connection,userId, message) =>{
+    insertUserMessage : async(connection,userId, message) =>{ //호스트 메세지 등록
         const insertUserMessageQuery = `
             UPDATE user_sticker
             SET message = ?
@@ -87,7 +87,7 @@ export const stickerDao = {
         const [insertUserMessageRow] = await connection.query(insertUserMessageQuery,[message,userId]);
         return insertUserMessageRow;
     },
-    insertVisitorMessage : async(connection,stickerId, message)=>{
+    insertVisitorMessage : async(connection,stickerId, message)=>{ //방문자 메세지 등록
         const insertVisitorMessageQuery = `
             UPDATE visitor_sticker
             SET message = ?
@@ -96,7 +96,7 @@ export const stickerDao = {
         const [insertVisitorMessageRow] = await connection.query(insertVisitorMessageQuery,[message,stickerId]);
         return insertVisitorMessageRow;
     },
-    insertStickerLocation : async(connection, params) =>{
+    insertStickerLocation : async(connection, params) =>{ //방문자 스티커 위치 등록
         const insertStickerLocationQuery = `
             UPDATE visitor_sticker
             SET location_x = ?,  location_y = ?
@@ -131,7 +131,6 @@ export const nqnaDao = {
             return DefaultQuestionsRow;
         }
     },
-    
     insertDefaultQuestion : async(connection, insertDefaultQuestionParams) => {
         const postDefaultQuestionQuery = `
             INSERT INTO nQnA(user_id, question, question_type) 

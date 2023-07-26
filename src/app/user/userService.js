@@ -119,7 +119,7 @@ export const stickerService = {
             console.error(err);
         }
     },
-    insertUserMessage : async(userId, message) =>{
+    insertUserMessage : async(userId, message) =>{ //사용자 메세지 등록
         try{
             const connection = await pool.getConnection(async conn => conn);
             const insertUserMessageResult = await stickerDao.insertUserMessage(connection,userId,message);
@@ -130,7 +130,7 @@ export const stickerService = {
             console.error(err);
         }
     },
-    insertVisitorMessage : async(visitorId, message) =>{
+    insertVisitorMessage : async(visitorId, message) =>{ //방문자 메세지 등록
         try{
             const connection = await pool.getConnection(async conn => conn);
             const insertVisitorMessageResult = await stickerDao.insertVisitorMessage(connection,visitorId,message);
@@ -142,7 +142,7 @@ export const stickerService = {
             console.error(err);
         }
     },
-    insertStickerLocation : async(params) =>{
+    insertStickerLocation : async(params) =>{ //방문자 스티커 부착 위치 등록
         try{
             const connection = await pool.getConnection(async conn => conn);
             const insertStickerLocationResult = await stickerDao.insertStickerLocation(connection,params);
