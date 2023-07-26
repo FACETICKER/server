@@ -7,7 +7,7 @@ export const getIdByNickname = async(connection, nickname) =>{ //닉네임으로
     const [getIdByNicknameRow] = await connection.query(getIdByNicknameQuery,nickname);
     return getIdByNicknameRow[0];
 }
-export const getNicknameById = async(connection, user_id) =>{
+export const getNicknameById = async(connection, user_id) =>{ //회원 번호로 닉네임 조회
     console.log(user_id);
     const getNicknameByIdQuery = `
         SELECT nickname
@@ -107,7 +107,7 @@ export const stickerDao = {
         const [insertUserMessageRow] = await connection.query(insertUserMessageQuery,[message,userId]);
         return insertUserMessageRow;
     },
-    insertVisitorMessage : async(connection,stickerId, message)=>{ //
+    insertVisitorMessage : async(connection,stickerId, message)=>{ //방문자 메세지 등록
         const insertVisitorMessageQuery = `
             UPDATE visitor_sticker
             SET message = ?
@@ -115,6 +115,15 @@ export const stickerDao = {
         `
         const [insertVisitorMessageRow] = await connection.query(insertVisitorMessageQuery,[message,stickerId]);
         return insertVisitorMessageRow;
+    },
+    insertStickerLocation : async(connection, params) =>{ //방문자 스티커 위치 등록
+        const insertStickerLocationQuery = `
+            UPDATE visitor_sticker
+            SET location_x = ?,  location_y = ?
+            WHERE visitor_sticker_id = ?;
+        `
+        const [insertStickerLocationRow] = await connection.query(insertStickerLocationQuery, params);
+        return insertStickerLocationRow;
     }
     
 }
@@ -142,7 +151,6 @@ export const nqnaDao = {
             return DefaultQuestionsRow;
         }
     },
-    
     insertDefaultQuestion : async(connection, insertDefaultQuestionParams) => {
         const postDefaultQuestionQuery = `
             INSERT INTO nQnA(user_id, question, question_type) 
