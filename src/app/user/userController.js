@@ -151,6 +151,18 @@ export const stickerController = {
         }catch(err){
             return res.status(500).send(err);
         }
+    },
+    attachSticker : async(req,res)=>{
+        try{
+            const {x,y} = req.body;
+            const id = req.query.id;
+            const params = [x,y,id];
+            console.log(params);
+            const result = await stickerService.insertStickerLocation(params);
+            return res.send(result);
+        }catch(err){
+            return res.send(err);
+        }
     }
 };
 

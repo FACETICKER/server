@@ -141,6 +141,19 @@ export const stickerService = {
         }catch(err){
             console.error(err);
         }
+    },
+    insertStickerLocation : async(params) =>{
+        try{
+            const connection = await pool.getConnection(async conn => conn);
+            const insertStickerLocationResult = await stickerDao.insertStickerLocation(connection,params);
+            connection.release();
+            console.log(insertStickerLocationResult);
+            if(insertStickerLocationResult.changedRows === 1 && insertStickerLocationResult.affectedRows===1){
+                return response(baseResponse.SUCCESS);
+            }else return response(baseResponse.DB_ERROR);
+        }catch(err){
+            console.error(err);
+        }
     }
 };
 

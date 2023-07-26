@@ -95,6 +95,15 @@ export const stickerDao = {
         `
         const [insertVisitorMessageRow] = await connection.query(insertVisitorMessageQuery,[message,stickerId]);
         return insertVisitorMessageRow;
+    },
+    insertStickerLocation : async(connection, params) =>{
+        const insertStickerLocationQuery = `
+            UPDATE visitor_sticker
+            SET location_x = ?,  location_y = ?
+            WHERE visitor_sticker_id = ?;
+        `
+        const [insertStickerLocationRow] = await connection.query(insertStickerLocationQuery, params);
+        return insertStickerLocationRow;
     }
     
 }
