@@ -139,6 +139,16 @@ export const nqnaDao = {
         return insertDefaultQuestionRow;
     },
 
+    insertVisitorQuestion : async(connection, insertDefaultQuestionParams) => {
+        const postVisitorQuestionQuery = `
+            INSERT INTO nQnA(user_id, question, question_type) 
+            VALUES (?,?,"visitor");
+    
+        `;
+        const insertVisitorQuestionRow = await connection.query(postVisitorQuestionQuery, insertDefaultQuestionParams);
+        return insertVisitorQuestionRow;
+    },
+
     insertAnswer : async(connection, insertAnswerParams) => { // 답변 생성
         const postAnswerQuery = `
             UPDATE nQnA 
@@ -149,15 +159,6 @@ export const nqnaDao = {
         return insertAnswerRow;
     },
 
-    insertVisitorQuestion : async(connection, insertDefaultQuestionParams) => {
-        const postVisitorQuestionQuery = `
-            INSERT INTO nQnA(user_id, question, question_type) 
-            VALUES (?,?,"visitor");
-    
-        `;
-        const insertVisitorQuestionRow = await connection.query(postVisitorQuestionQuery, insertDefaultQuestionParams);
-        return insertVisitorQuestionRow;
-    }
 }
 
 export const posterDao = {
