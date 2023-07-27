@@ -143,7 +143,7 @@ export const nqnaDao = {
         const postAnswerQuery = `
             UPDATE nQnA 
             SET answer= ?
-            WHERE user_id = ? AND nQnA_id =?;
+            WHERE nQnA_id =?;
         `;
         const insertAnswerRow = await connection.query(postAnswerQuery, insertAnswerParams);
         return insertAnswerRow;
