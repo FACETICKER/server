@@ -167,7 +167,6 @@ export const stickerController = {
 };
 
 export const nqnaController = {
-
     /**
     * API Name: default 질문 등록
     * POST: /host/{nickname}/default_q
@@ -177,13 +176,42 @@ export const nqnaController = {
         const {question} = req.body;
         const {nickname} = req.params;
         const hostId = await retrieveUserId(nickname);
+
         try{
             const postDefaultQuestionResult = await nqnaService.createDefaultQuestion(hostId,question);
             return res.status(200).json(response(baseResponse.SUCCESS, postDefaultQuestionResult));
         }catch(error){
             return res.status(500).json(errResponse(baseResponse.SERVER_ERROR));
         }
-        },
+    },
+
+    /**
+    * API Name: Visitor 질문 등록 
+    * POST: /host/:nickname/visitor_q
+    */
+    postVisitorQuestion : async(req,res) => {
+   
+        const {question} = req.body; 
+        const {nickname} = req.params; 
+        const hostId = await retrieveUserId(nickname);
+
+        try{
+            // const User = await retrieveUser(user_id); // 이 부분은 user_id로 회원 조회하는 API가 추가되어야 가능한 예외 처리
+            // if(User){
+            //     const postVisitorQuestionResult = await nqnaService.createVisitorQuestion(user_id,question);
+            //     return res.status(200).json(response(baseResponse.SUCCESS, postVisitorQuestionResult));
+            // }
+            // else{
+            //     return res.status(404).json(errResponse(baseResponse. USER_USERID_NOT_EXIST));
+            // }
+            const postVisitorQuestionResult = await nqnaService.createVisitorQuestion(hostId,question);
+            
+            return res.status(200).json(response(baseResponse.SUCCESS, postVisitorQuestionResult));
+        }
+        catch(error){
+            return res.status(500).json(errResponse(baseResponse.SERVER_ERROR));
+        }
+    },
 
     /**
      * API Name: Host 답변 등록

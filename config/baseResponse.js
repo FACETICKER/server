@@ -1,4 +1,5 @@
 const baseResponse = {
+    
     //Success
     SUCCESS : {"isSuccess": true,"code":1000, "message":"성공"},
     HOST: {"isSuccess": true, "code":1001, "message":"호스트입니다"},
