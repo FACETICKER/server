@@ -129,37 +129,25 @@ export const stickerDao = {
 }
 
 export const nqnaDao = {
-    selectDefaultQuestions : async(connection, default_q_id)=>{ // default 질문 조회 (전체 조회 + 개별 조회)
-
-        if(default_q_id == null){ // default 질문 전체 조회
-            const selectDefaultQuestionsQuery = `
-                SELECT default_q_id, question
-                FROM default_q;
-            `;
-            const [DefaultQuestionsRow] = await connection.query(selectDefaultQuestionsQuery);
-    
-            return DefaultQuestionsRow;
-        }
-        else{ // default 질문 default_q_id로 개별 조회
-            const selectDefaultQuestionsQuery = `
-                SELECT default_q_id, question
-                FROM default_q
-                WHERE default_q_id = ?;
-            `;
-            const [DefaultQuestionsRow] = await connection.query(selectDefaultQuestionsQuery,default_q_id);
-    
-            return DefaultQuestionsRow;
-        }
-    },
-    insertDefaultQuestion : async(connection, insertDefaultQuestionParams) => {
+    insertDefaultQuestion : async(connection, insertDefaultQuestionParams) => { // default 질문 생성
         const postDefaultQuestionQuery = `
             INSERT INTO nQnA(user_id, question, question_type) 
-            VALUES (?,?,0);
+            VALUES (?,?,"default");
     
         `;
         const insertDefaultQuestionRow = await connection.query(postDefaultQuestionQuery, insertDefaultQuestionParams);
         return insertDefaultQuestionRow;
     },
+
+    insertAnswer : async(connection, insertAnswerParams) => { // 답변 생성
+        const postAnswerQuery = `
+            UPDATE nQnA 
+            SET answer= ?
+            WHERE user_id = ? AND nQnA_id =?;
+        `;
+        const insertAnswerRow = await connection.query(postAnswerQuery, insertAnswerParams);
+        return insertAnswerRow;
+    } 
 }
 
 export const posterDao = {
@@ -173,6 +161,3 @@ export const posterDao = {
         return selectPosterRow;
     }
 }
-
-
-

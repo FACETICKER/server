@@ -159,9 +159,10 @@ export const stickerService = { //스티커 관련 서비스
 };
 
 export const nqnaService = { //n문n답 관련 서비스
-    createDefaultQuestion : async(user_id,onlyDefaultQuestion) =>{
+    createDefaultQuestion : async(hostId,question) =>{
         try{
-            const insertDefaultQuestionParams =[user_id,onlyDefaultQuestion]; 
+            
+            const insertDefaultQuestionParams =[hostId,question]; 
         
             const connection = await pool.getConnection(async conn => conn);
             const createDefaultQuestionResult = await nqnaDao.insertDefaultQuestion(connection,insertDefaultQuestionParams);
@@ -174,8 +175,22 @@ export const nqnaService = { //n문n답 관련 서비스
             return errResponse(baseResponse.DB_ERROR)
         }
     },
+    createAnswer : async(answer, hostId,nQnA_id) =>{
+        try{
+            const insertAnswerParams =[answer, hostId,nQnA_id]; 
+        
+            const connection = await pool.getConnection(async conn => conn);
+            const createAnswerResult = await nqnaDao.insertAnswer(connection,insertAnswerParams);
+            
+            connection.release();
+            
+            return response(baseResponse.SUCCESS);
+        }
+        catch(error){
+            return errResponse(baseResponse.DB_ERROR)
+        }
+    }
 };
-
 
 export const mainpageService = async(userIdFromJWT,nickname) =>{
     const hostId = await retrieveUserId(nickname);
@@ -200,4 +215,3 @@ export const mainpageService = async(userIdFromJWT,nickname) =>{
         return response(baseResponse.VISITOR,result);
     }
 }
-
