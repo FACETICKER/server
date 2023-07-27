@@ -252,8 +252,10 @@ export const nqnaController = {
 
 export const mainController = {
     getAll : async(req,res) =>{
+        console.log(req);
         const userIdFromJWT = req.verifiedToken ? req.verifiedToken.user_id : null; // 토큰이 있을 때만 user_id를 가져오도록 수정
         const nickname = req.params.nickname;
+        console.log(nickname);
         const result = await mainpageService(userIdFromJWT,nickname);
         return res.send(result);
     }

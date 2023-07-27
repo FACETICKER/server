@@ -5,6 +5,10 @@ import { jwtMiddleware } from "../../../config/jwtMiddleware.js";
 
 const userRouter = express.Router();
 
+//웹 브라우저에서 favicon.ico를 자동으로 요청해서 /favicon.ico 요청이 
+//메인 페이지 조회 API /:nickname으로 가기 때문에 이를 무시하기 위해서 아래처럼 라우팅 처리를 해줌
+userRouter.get('/favicon.ico',(req,res)=>res.status(404).end()); 
+
 // 로그인 관련
 userRouter.get('/auth/kakao/callback',loginController.kakao); //카카오 로그인 API
 userRouter.get('/auth/google/callback',loginController.google); //구글 로그인 API
