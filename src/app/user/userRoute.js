@@ -24,7 +24,9 @@ userRouter.patch('/:nickname/sticker',jwtMiddleware,stickerController.attachStic
 // nQnA 관련
 userRouter.post('/host/:nickname/default_q',nqnaController.postDefaultQuestion); //default 질문 등록 API
 userRouter.patch('/host/:nickname/answer/:nQnA_id',nqnaController.postAnswer); //Host 답변 등록 API
-
+userRouter.post('/host/:nickname/visitor_q',nqnaController.postVisitorQuestion); //Visitor 질문 등록 API
 
 
 export default userRouter;
+
+

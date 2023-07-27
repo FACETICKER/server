@@ -139,15 +139,26 @@ export const nqnaDao = {
         return insertDefaultQuestionRow;
     },
 
+    insertVisitorQuestion : async(connection, insertDefaultQuestionParams) => { // visitor 질문 생성
+        const postVisitorQuestionQuery = `
+            INSERT INTO nQnA(user_id, question, question_type) 
+            VALUES (?,?,"visitor");
+    
+        `;
+        const insertVisitorQuestionRow = await connection.query(postVisitorQuestionQuery, insertDefaultQuestionParams);
+        return insertVisitorQuestionRow;
+    },
+
     insertAnswer : async(connection, insertAnswerParams) => { // 답변 생성
         const postAnswerQuery = `
             UPDATE nQnA 
             SET answer= ?
-            WHERE user_id = ? AND nQnA_id =?;
+            WHERE nQnA_id =?;
         `;
         const insertAnswerRow = await connection.query(postAnswerQuery, insertAnswerParams);
         return insertAnswerRow;
-    } 
+
+    },
 }
 
 export const posterDao = {
