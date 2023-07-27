@@ -175,6 +175,23 @@ export const nqnaService = { //n문n답 관련 서비스
             return errResponse(baseResponse.DB_ERROR)
         }
     },
+
+    createVisitorQuestion : async(hostId,question) =>{
+        try{
+            const insertVisitorQuestionParams =[hostId,question]; 
+        
+            const connection = await pool.getConnection(async conn => conn);
+            const createVisitorQuestionResult = await nqnaDao.insertVisitorQuestion(connection,insertVisitorQuestionParams);
+
+            connection.release();
+            
+            return response(baseResponse.SUCCESS);
+        }
+        catch(error){
+            return errResponse(baseResponse.DB_ERROR)
+        }
+    },
+
     createAnswer : async(answer, hostId,nQnA_id) =>{
         try{
             const insertAnswerParams =[answer, hostId,nQnA_id]; 
@@ -190,21 +207,8 @@ export const nqnaService = { //n문n답 관련 서비스
             return errResponse(baseResponse.DB_ERROR)
         }
     },
-    createVisitorQuestion : async(hostId,question) =>{
-        try{
-            const insertVisitorQuestionParams =[hostId,question]; 
-        
-            const connection = await pool.getConnection(async conn => conn);
-            const createVisitorQuestionResult = await nqnaDao.insertVisitorQuestion(connection,insertVisitorQuestionParams);
 
-            connection.release();
-            
-            return response(baseResponse.SUCCESS);
-        }
-        catch(error){
-            return errResponse(baseResponse.DB_ERROR)
-        }
-    }
+   
 };
 
 export const mainpageService = async(userIdFromJWT,nickname) =>{

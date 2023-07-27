@@ -27,7 +27,6 @@ userRouter.patch('/host/:nickname/answer/:nQnA_id',nqnaController.postAnswer); /
 userRouter.post('/host/:nickname/visitor_q',nqnaController.postVisitorQuestion); //Visitor 질문 등록 API
 
 
-
 export default userRouter;
 
 

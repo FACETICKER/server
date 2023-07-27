@@ -139,7 +139,7 @@ export const nqnaDao = {
         return insertDefaultQuestionRow;
     },
 
-    insertVisitorQuestion : async(connection, insertDefaultQuestionParams) => {
+    insertVisitorQuestion : async(connection, insertDefaultQuestionParams) => { // visitor 질문 생성
         const postVisitorQuestionQuery = `
             INSERT INTO nQnA(user_id, question, question_type) 
             VALUES (?,?,"visitor");
@@ -153,12 +153,12 @@ export const nqnaDao = {
         const postAnswerQuery = `
             UPDATE nQnA 
             SET answer= ?
-            WHERE user_id = ? AND nQnA_id =?;
+            WHERE nQnA_id =?;
         `;
         const insertAnswerRow = await connection.query(postAnswerQuery, insertAnswerParams);
         return insertAnswerRow;
-    },
 
+    },
 }
 
 export const posterDao = {
