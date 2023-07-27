@@ -177,10 +177,16 @@ export const nqnaController = {
         const {nickname} = req.params;
         const hostId = await retrieveUserId(nickname);
 
-        try{
-            const postDefaultQuestionResult = await nqnaService.createDefaultQuestion(hostId,question);
-            return res.status(200).json(response(baseResponse.SUCCESS, postDefaultQuestionResult));
-        }catch(error){
+        try {
+            if (hostId) {
+                const postDefaultQuestionResult = await nqnaService.createDefaultQuestion(hostId,question);
+                return res.status(200).json(response(baseResponse.SUCCESS, postDefaultQuestionResult));
+            } 
+            else {
+                 return res.status(404).json(response(baseResponse.USER_USERID_NOT_EXIST));
+            }
+        }
+        catch(error){
             return res.status(500).json(errResponse(baseResponse.SERVER_ERROR));
         }
     },
@@ -193,20 +199,17 @@ export const nqnaController = {
    
         const {question} = req.body; 
         const {nickname} = req.params; 
-        const hostId = await retrieveUserId(nickname);
+        const hostId = await retrieveUserId(nickname); //user_id가 넘어옴 (ex:1,2) 
+                
+        try {
+            if (hostId) {
+                const postVisitorQuestionResult = await nqnaService.createVisitorQuestion(hostId, question);
 
-        try{
-            // const User = await retrieveUser(user_id); // 이 부분은 user_id로 회원 조회하는 API가 추가되어야 가능한 예외 처리
-            // if(User){
-            //     const postVisitorQuestionResult = await nqnaService.createVisitorQuestion(user_id,question);
-            //     return res.status(200).json(response(baseResponse.SUCCESS, postVisitorQuestionResult));
-            // }
-            // else{
-            //     return res.status(404).json(errResponse(baseResponse. USER_USERID_NOT_EXIST));
-            // }
-            const postVisitorQuestionResult = await nqnaService.createVisitorQuestion(hostId,question);
-            
-            return res.status(200).json(response(baseResponse.SUCCESS, postVisitorQuestionResult));
+                return res.status(200).json(response(baseResponse.SUCCESS, postVisitorQuestionResult));
+            } 
+            else {
+                 return res.status(404).json(response(baseResponse.USER_USERID_NOT_EXIST));
+            }
         }
         catch(error){
             return res.status(500).json(errResponse(baseResponse.SERVER_ERROR));
@@ -215,39 +218,54 @@ export const nqnaController = {
 
     /**
      * API Name: Host 답변 등록
-     * patch: /host/{nickname}/answer/{nQnA_id}
+     * PATCH: /host/{nickname}/answer/{nQnA_id}
      */
     postAnswer : async(req,res) => {
    
         const {answer} = req.body;
-        const {nickname, nQnA_id} = req.params;
-        const hostId = await retrieveUserId(nickname);
-        /*
-        const User = await retrieveUser(nickname); // 이 부분은 각각 nickname, nQnA_id로 회원 조회, 질문 조회하는 API가 추가되어야 가능한 예외 처리
-            if(User){
-                const nQnA = await retrieveNQnA(nQnA_id);
-                if(nQnA){
-                    const postAnswerResult = await nqnaService.createAnswer(answer, hostId,nQnA_id);
-                    return res.status(200).json(response(baseResponse.SUCCESS, postAnswerResult));
-                }
-                else{
-                    return res.status(404).json(errResponse(baseResponse. NQNA_NQNAID_NOT_EXIST));
-                }
-            }
-            else{
-            return res.status(404).json(errResponse(baseResponse. USER_USERID_NOT_EXIST));
-            }
-        */
+        const {nQnA_id} = req.params;
 
         try{
-            const postAnswerResult = await nqnaService.createAnswer(answer,hostId,nQnA_id);
-
-            return res.status(200).json(response(baseResponse.SUCCESS, postAnswerResult));
+            const nQnA = await nqnaProvider.retrieveNQnA(nQnA_id); // nQnA 개별 질문 조회
+            if(nQnA){
+                const postAnswerResult = await nqnaService.createAnswer(answer, nQnA_id);
+                return res.status(200).json(response(baseResponse.SUCCESS, postAnswerResult));
+            }
+            else{
+                return res.status(404).json(response(baseResponse.NQNA_NQNAID_NOT_EXIST));
+            }     
         }
         catch(error){
             return res.status(500).json(errResponse(baseResponse.SERVER_ERROR));
         }
-    }
+    },
+
+    /**
+     * API Name: N문 N답 조회 (호스트 AND 방문자 플로우)
+     * GET: /:nickname/nQnA  
+     */
+    getnQnA : async(req,res)=>{
+        
+        const {nickname} = req.params; 
+        //const type = req.query.type; //type으로 Host, visitor 구분 >>>> 일단 보류
+        const userIdFromJWT = req.verifiedToken ? req.verifiedToken.user_id : null; // 토큰이 있을 때만 user_id를 가져오도록 수정
+        const hostId = await retrieveUserId(nickname); //user_id가 넘어옴 (ex:1,2) 
+
+        try {
+            if(hostId === userIdFromJWT){ //호스트 본인의 N문 N답 페이지일 때 (호스트 플로우)
+
+                const nQnA = await nqnaProvider.retrieveHostNQnA(hostId);
+                return res.status(200).json(response(baseResponse.SUCCESS, nQnA));
+            }
+            else{ //다른 호스트의 N문 N답 페이지일 때 (방문자 플로우) 
+
+                const nQnA = await nqnaProvider.retrieveVisitorNQnA(hostId);
+                return res.status(200).json(response(baseResponse.SUCCESS, nQnA));
+            }         
+        } catch (error) {
+            return res.status(500).json(errResponse(baseResponse.SERVER_ERROR));
+        }
+    },
 };
 
 export const mainController = {

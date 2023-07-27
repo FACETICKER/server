@@ -30,6 +30,8 @@ userRouter.patch('/:nickname/sticker',jwtMiddleware,stickerController.attachStic
 userRouter.post('/host/:nickname/default_q',nqnaController.postDefaultQuestion); //default 질문 등록 API
 userRouter.patch('/host/:nickname/answer/:nQnA_id',nqnaController.postAnswer); //Host 답변 등록 API
 userRouter.post('/host/:nickname/visitor_q',nqnaController.postVisitorQuestion); //Visitor 질문 등록 API
+userRouter.get('/:nickname/nQnA',jwtMiddleware,nqnaController.getnQnA); //N문 N답 조회 API
+
 
 //포스터 관련
 userRouter.post("/poster",jwtMiddleware,posterController.postPoster); //포스터 등록
