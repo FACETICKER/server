@@ -175,9 +175,9 @@ export const nqnaService = { //n문n답 관련 서비스
             return errResponse(baseResponse.DB_ERROR)
         }
     },
-    createAnswer : async(answer, hostId,nQnA_id) =>{
+    createAnswer : async(answer,nQnA_id) =>{
         try{
-            const insertAnswerParams =[answer, hostId,nQnA_id]; 
+            const insertAnswerParams =[answer,nQnA_id]; 
         
             const connection = await pool.getConnection(async conn => conn);
             const createAnswerResult = await nqnaDao.insertAnswer(connection,insertAnswerParams);

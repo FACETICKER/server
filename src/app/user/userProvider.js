@@ -69,22 +69,18 @@ export const stickerProvider = { //스티커
 };
 
 export const nqnaProvider = { //n문n답
-    DefaultQuestions : async(default_q_id) =>{ //default 질문 조회 (전체 조회 + 개별 조회)
+    retrieveNQnA : async(nQnA_id) =>{ //nQnA 질문 조회
+    try{ 
         const connection = await pool.getConnection(async conn => conn);
-    
-        if(default_q_id == null){ //default_q_id가 null이라면 질문 전체 조회
-            const DefaultQuestionsResult = await nqnaDao.selectDefaultQuestions(connection);
-            connection.release();
-    
-            return DefaultQuestionsResult;
-        }
-        else{ //default_q_id로 default 질문 개별 조회
-            const DefaultQuestionsResult = await nqnaDao.selectDefaultQuestions(connection,default_q_id);
-            connection.release();
-    
-            return DefaultQuestionsResult;
-        }
-    },
+        const nQnAResult = await nqnaDao.selectNQnA(connection,nQnA_id);
+        connection.release();
+
+        return nQnAResult[0];
+
+    }catch(err){
+        console.error(err);
+    }
+    }
 };
 
 export const posterProvider = { //포스터
