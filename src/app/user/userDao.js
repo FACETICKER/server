@@ -139,7 +139,7 @@ export const nqnaDao = {
         return insertDefaultQuestionRow;
     },
 
-    insertVisitorQuestion : async(connection, insertDefaultQuestionParams) => {
+    insertVisitorQuestion : async(connection, insertDefaultQuestionParams) => { // visitor 질문 생성
         const postVisitorQuestionQuery = `
             INSERT INTO nQnA(user_id, question, question_type) 
             VALUES (?,?,"visitor");
@@ -159,7 +159,7 @@ export const nqnaDao = {
         return insertAnswerRow;
     },
 
-    selectNQnA : async(connection,nQnA_id)=>{ // nQnA 질문 조회
+    selectNQnA : async(connection,nQnA_id)=>{ // nQnA 개별 조회
         const selectNQnAQuery = `
             SELECT *
             FROM nQnA
@@ -167,6 +167,26 @@ export const nqnaDao = {
         `
         const [selectNQnARow] = await connection.query(selectNQnAQuery,nQnA_id);
         return selectNQnARow;
+    },
+
+    selectHostNQnA : async(connection,hostId)=>{ // 호스트 플로우 nQnA 전체 조회
+        const selectHostNQnAQuery = `
+            SELECT question, question_type, question_hidden, answer, answer_hidden, seen,created_at
+            FROM nQnA
+            WHERE user_id = ?;
+        `
+        const [selectHostNQnARow] = await connection.query(selectHostNQnAQuery,hostId);
+        return selectHostNQnARow;
+    },
+
+    selectVisitorNQnA : async(connection,hostId)=>{ // 방문자 플로우 nQnA 전체 조회
+        const selectVisitorNQnAQuery = `
+            SELECT question, question_hidden, answer, answer_hidden, created_at
+            FROM nQnA
+            WHERE user_id = ?;
+        `
+        const [selectVisitorNQnARow] = await connection.query(selectVisitorNQnAQuery,hostId);
+        return selectVisitorNQnARow;
     }
 }
 

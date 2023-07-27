@@ -227,7 +227,7 @@ export const nqnaController = {
         const {nQnA_id} = req.params;
 
         try{
-            const nQnA = await nqnaProvider.retrieveNQnA(nQnA_id); // nQnA 질문 조회
+            const nQnA = await nqnaProvider.retrieveNQnA(nQnA_id); // nQnA 개별 질문 조회
             if(nQnA){
                 const postAnswerResult = await nqnaService.createAnswer(answer, nQnA_id);
                 return res.status(200).json(response(baseResponse.SUCCESS, postAnswerResult));
@@ -242,19 +242,27 @@ export const nqnaController = {
     },
 
     /**
-     * API Name: N문 N답 조회
-     * GET: /host/:nickname/nQnA  >> 호스트인지 방문자인지 if문으로 구분해서 한 번에 구현할 예정
+     * API Name: N문 N답 조회 (호스트 AND 방문자 플로우)
+     * GET: /:nickname/nQnA  
      */
-    getnQnABy : async(req,res)=>{
+    getnQnA : async(req,res)=>{
         
-        const {nickname} = req.body; 
-        //const userIdFromJWT = req.verifiedToken ? req.verifiedToken.user_id : null; // 토큰이 있을 때만 user_id를 가져오도록 수정
-        
+        const {nickname} = req.params; 
+        //const type = req.query.type; //type으로 Host, visitor 구분 >>>> 일단 보류
+        const userIdFromJWT = req.verifiedToken ? req.verifiedToken.user_id : null; // 토큰이 있을 때만 user_id를 가져오도록 수정
+        const hostId = await retrieveUserId(nickname); //user_id가 넘어옴 (ex:1,2) 
+
         try {
-            const defaultQuestions = await retrieveDefaultQuestions(nickname);
- 
-            return res.status(200).json(response(baseResponse.SUCCESS, defaultQuestions));
-              
+            if(hostId === userIdFromJWT){ //호스트 본인의 N문 N답 페이지일 때 (호스트 플로우)
+
+                const nQnA = await nqnaProvider.retrieveHostNQnA(hostId);
+                return res.status(200).json(response(baseResponse.SUCCESS, nQnA));
+            }
+            else{ //다른 호스트의 N문 N답 페이지일 때 (방문자 플로우) 
+
+                const nQnA = await nqnaProvider.retrieveVisitorNQnA(hostId);
+                return res.status(200).json(response(baseResponse.SUCCESS, nQnA));
+            }         
         } catch (error) {
             return res.status(500).json(errResponse(baseResponse.SERVER_ERROR));
         }

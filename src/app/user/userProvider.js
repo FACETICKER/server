@@ -69,18 +69,44 @@ export const stickerProvider = { //스티커
 };
 
 export const nqnaProvider = { //n문n답
-    retrieveNQnA : async(nQnA_id) =>{ //nQnA 질문 조회
-    try{ 
-        const connection = await pool.getConnection(async conn => conn);
-        const nQnAResult = await nqnaDao.selectNQnA(connection,nQnA_id);
-        connection.release();
+    retrieveNQnA : async(nQnA_id) =>{ //nQnA 개별 조회
+        try{ 
+            const connection = await pool.getConnection(async conn => conn);
+            const nQnAResult = await nqnaDao.selectNQnA(connection,nQnA_id);
+            connection.release();
 
-        return nQnAResult[0];
+            return nQnAResult[0];
 
-    }catch(err){
-        console.error(err);
-    }
-    }
+        }catch(err){
+            return res.status(500).send(err);
+        }
+        },
+
+    retrieveHostNQnA : async(hostId) =>{ //호스트 플로우 nQnA 전체 조회
+        try{ 
+            const connection = await pool.getConnection(async conn => conn);
+            const hostNQnAResult = await nqnaDao.selectHostNQnA(connection,hostId);
+            connection.release();
+    
+            return hostNQnAResult;
+    
+        }catch(err){
+            return res.status(500).send(err);
+        }
+        },
+    
+    retrieveVisitorNQnA : async(hostId) =>{ //방문자 플로우 nQnA 전체 조회
+        try{ 
+            const connection = await pool.getConnection(async conn => conn);
+            const visitorNQnAResult = await nqnaDao.selectVisitorNQnA(connection,hostId);
+            connection.release();
+    
+            return visitorNQnAResult;
+    
+        }catch(err){
+            return res.status(500).send(err);
+        }
+        },
 };
 
 export const posterProvider = { //포스터
