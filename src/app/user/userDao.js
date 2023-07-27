@@ -188,6 +188,7 @@ export const nqnaDao = {
         const [selectVisitorNQnARow] = await connection.query(selectVisitorNQnAQuery,hostId);
         return selectVisitorNQnARow;
     }
+
 }
 
 export const posterDao = {

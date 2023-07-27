@@ -29,7 +29,6 @@ userRouter.get('/:nickname/nQnA',jwtMiddleware,nqnaController.getnQnA); //N문 N
 
 
 
-
 export default userRouter;
 
 

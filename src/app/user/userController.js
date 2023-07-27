@@ -167,7 +167,6 @@ export const stickerController = {
 };
 
 export const nqnaController = {
-
     /**
     * API Name: default 질문 등록
     * POST: /host/{nickname}/default_q
