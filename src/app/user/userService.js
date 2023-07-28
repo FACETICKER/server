@@ -1,6 +1,6 @@
 import {response, errResponse} from "../../../config/response.js";
 import baseResponse from "../../../config/baseResponse.js";
-import { userCheck, retrieveUserId,stickerProvider, posterProvider, retrieveUserName } from "./userProvider.js";
+import { userCheck, stickerProvider, posterProvider, userProvider } from "./userProvider.js";
 import {loginDao,nqnaDao, stickerDao } from "./userDao.js";
 import pool from "../../../config/database.js";
 import jwt from "jsonwebtoken";
@@ -81,9 +81,8 @@ export const loginService = { //로그인 서비스
 export const stickerService = { //스티커 관련 서비스
     getStickersByType : async(params) =>{ //스티커 조회 + 호스트/방문자 구별 
     try{
-        const userId = await retrieveUserId(params.nickname); //해당 페이지의 호스트 회원 번호를 조회
-        const stickerCollections = await stickerProvider.StickerCollections(userId); //해당 페이지의 모든 스티커를 조회
-        if(params.userIdFromJWT === userId){ //만약 토큰이 있을 경우 회원 번호가 같으면 호스트 아니면 방문자
+        const stickerCollections = await stickerProvider.StickerCollections(params.user_id); //해당 페이지의 모든 스티커를 조회
+        if(params.userIdFromJWT === params.user_id){ //만약 토큰이 있을 경우 회원 번호가 같으면 호스트 아니면 방문자
             return response(baseResponse.HOST,stickerCollections);
         }else{
             return response(baseResponse.VISITOR,stickerCollections);
@@ -212,12 +211,12 @@ export const nqnaService = { //n문n답 관련 서비스
    
 };
 
-export const mainpageService = async(userIdFromJWT,nickname) =>{
-    const hostId = await retrieveUserId(nickname);
-    const poster = await posterProvider.poster(hostId);
-        const sticker = await stickerProvider.userSticker(hostId);
-        const newSticker = await stickerProvider.newStickers(hostId);
-    if(userIdFromJWT === hostId){ //사용자가 본인 페이지에 들어갔을 경우
+export const mainpageService = async(userIdFromJWT,user_id) =>{
+
+    const poster = await posterProvider.poster(user_id);
+        const sticker = await stickerProvider.userSticker(user_id);
+        const newSticker = await stickerProvider.newStickers(user_id);
+    if(userIdFromJWT === user_id){ //사용자가 본인 페이지에 들어갔을 경우
         const result = {
             poster:poster,
             sticker:sticker,
@@ -225,7 +224,7 @@ export const mainpageService = async(userIdFromJWT,nickname) =>{
         };
         return response(baseResponse.HOST,result); 
     }else{ //방문자가 다른 사용자 페이지에 방문했을 경우
-        const userNickname = userIdFromJWT ? await retrieveUserName(userIdFromJWT) : null; //토큰이 존재하면 토큰 값으로 nickname 값 조회. 없으면 null
+        const userNickname = userIdFromJWT ? await userProvider.retrieveUserName(userIdFromJWT) : null; //토큰이 존재하면 토큰 값으로 nickname 값 조회. 없으면 null
         const result = {
             userNickname: userNickname, //본인 프로필으로 돌아갈 경우를 위해
             hostPoster: poster,
