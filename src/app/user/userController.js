@@ -253,12 +253,22 @@ export const nqnaController = {
             if(user_id === userIdFromJWT){ //호스트 본인의 N문 N답 페이지일 때 (호스트 플로우)
 
                 const nQnA = await nqnaProvider.retrieveHostNQnA(user_id);
-                return res.status(200).json(response(baseResponse.SUCCESS, nQnA));
+                return res.status(200).json({
+                    isSuccess: true,
+                    code: 1000,
+                    message: "호스트 플로우 N문 N답 조회 성공",
+                    result: nQnA
+                });
             }
             else{ //다른 호스트의 N문 N답 페이지일 때 (방문자 플로우) 
 
                 const nQnA = await nqnaProvider.retrieveVisitorNQnA(user_id);
-                return res.status(200).json(response(baseResponse.SUCCESS, nQnA));
+                return res.status(200).json({
+                    isSuccess: true,
+                    code: 1000,
+                    message: "방문자 플로우 N문 N답 조회 성공",
+                    result: nQnA
+                });
             }         
         } catch (error) {
             return res.status(500).json(errResponse(baseResponse.SERVER_ERROR));
