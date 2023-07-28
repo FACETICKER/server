@@ -158,10 +158,10 @@ export const stickerService = { //스티커 관련 서비스
 };
 
 export const nqnaService = { //n문n답 관련 서비스
-    createDefaultQuestion : async(hostId,question) =>{ // default 질문 생성
+    createDefaultQuestion : async(user_id,question) =>{ // default 질문 생성
         try{
             
-            const insertDefaultQuestionParams =[hostId,question]; 
+            const insertDefaultQuestionParams =[user_id,question]; 
         
             const connection = await pool.getConnection(async conn => conn);
             const createDefaultQuestionResult = await nqnaDao.insertDefaultQuestion(connection,insertDefaultQuestionParams);
@@ -175,9 +175,9 @@ export const nqnaService = { //n문n답 관련 서비스
         }
     },
 
-    createVisitorQuestion : async(hostId,question) =>{ // visitor 질문 생성
+    createVisitorQuestion : async(user_id,question) =>{ // visitor 질문 생성
         try{
-            const insertVisitorQuestionParams =[hostId,question]; 
+            const insertVisitorQuestionParams =[user_id,question]; 
         
             const connection = await pool.getConnection(async conn => conn);
             const createVisitorQuestionResult = await nqnaDao.insertVisitorQuestion(connection,insertVisitorQuestionParams);

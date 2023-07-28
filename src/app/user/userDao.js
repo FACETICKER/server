@@ -182,23 +182,23 @@ export const nqnaDao = {
         return selectNQnARow;
     },
 
-    selectHostNQnA : async(connection,hostId)=>{ // 호스트 플로우 nQnA 전체 조회
+    selectHostNQnA : async(connection,user_id)=>{ // 호스트 플로우 nQnA 전체 조회
         const selectHostNQnAQuery = `
             SELECT question, question_type, question_hidden, answer, answer_hidden, seen,created_at
             FROM nQnA
             WHERE user_id = ?;
         `
-        const [selectHostNQnARow] = await connection.query(selectHostNQnAQuery,hostId);
+        const [selectHostNQnARow] = await connection.query(selectHostNQnAQuery,user_id);
         return selectHostNQnARow;
     },
 
-    selectVisitorNQnA : async(connection,hostId)=>{ // 방문자 플로우 nQnA 전체 조회
+    selectVisitorNQnA : async(connection,user_id)=>{ // 방문자 플로우 nQnA 전체 조회
         const selectVisitorNQnAQuery = `
             SELECT question, question_hidden, answer, answer_hidden, created_at
             FROM nQnA
             WHERE user_id = ?;
         `
-        const [selectVisitorNQnARow] = await connection.query(selectVisitorNQnAQuery,hostId);
+        const [selectVisitorNQnARow] = await connection.query(selectVisitorNQnAQuery,user_id);
         return selectVisitorNQnARow;
     }
 
