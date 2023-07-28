@@ -1,5 +1,5 @@
 import pool from "../../../config/database.js";
-import {loginDao,stickerDao,getIdByNickname,nqnaDao, posterDao, getNicknameById } from "./userDao.js";
+import {loginDao, userDao, stickerDao, nqnaDao, posterDao} from "./userDao.js";
 
 export const userCheck = async(userInfoParams) =>{ // 사용자 정보를 조회
     try{
@@ -12,22 +12,36 @@ export const userCheck = async(userInfoParams) =>{ // 사용자 정보를 조회
     }
 };
 
-export const retrieveUserId = async(nickname) =>{ //닉네임으로 회원 번호 조회
-    try{
+export const userProvider = {
+    retrieveUser : async(user_id) =>{ //user_id로 유저 조회
+        try{ 
+            const connection = await pool.getConnection(async conn => conn);
+            const userResult = await userDao.selectUser(connection,user_id);
+            connection.release();
+    
+            return userResult;
+        }catch(err){
+           console.error(err);
+        }
+    },
+    
+    retrieveUserId : async(nickname) =>{ //닉네임으로 회원 번호 조회
+        try{
+            const connection = await pool.getConnection(async conn => conn);
+            const getIdByNicknameResult = await userDao.getIdByNickname(connection, nickname);
+            connection.release();
+            return getIdByNicknameResult.user_id;
+        }catch(err){
+            console.error(err);
+        }
+    },
+    
+    retrieveUserName : async(user_id)=>{ //회원 번호로 닉네임 조회
         const connection = await pool.getConnection(async conn => conn);
-        const getIdByNicknameResult = await getIdByNickname(connection, nickname);
+        const getNicknameByIdResult = await userDao.getNicknameById(connection,user_id);
         connection.release();
-        return getIdByNicknameResult.user_id;
-    }catch(err){
-        console.error(err);
+        return getNicknameByIdResult;
     }
-};
-
-export const retrieveUserName = async(user_id)=>{ //회원 번호로 닉네임 조회
-    const connection = await pool.getConnection(async conn => conn);
-    const getNicknameByIdResult = await getNicknameById(connection,user_id);
-    connection.release();
-    return getNicknameByIdResult;
 };
 
 export const stickerProvider = { //스티커
@@ -78,14 +92,14 @@ export const nqnaProvider = { //n문n답
             return nQnAResult[0];
 
         }catch(err){
-            return res.status(500).send(err);
+            return res.status(500).send(err); // 수정해야할 수도 있음@@@@@@@@@@@@@@@@@@@@222
         }
         },
 
-    retrieveHostNQnA : async(hostId) =>{ //호스트 플로우 nQnA 전체 조회
+    retrieveHostNQnA : async(user_id) =>{ //호스트 플로우 nQnA 전체 조회
         try{ 
             const connection = await pool.getConnection(async conn => conn);
-            const hostNQnAResult = await nqnaDao.selectHostNQnA(connection,hostId);
+            const hostNQnAResult = await nqnaDao.selectHostNQnA(connection,user_id);
             connection.release();
     
             return hostNQnAResult;
@@ -95,10 +109,10 @@ export const nqnaProvider = { //n문n답
         }
         },
     
-    retrieveVisitorNQnA : async(hostId) =>{ //방문자 플로우 nQnA 전체 조회
+    retrieveVisitorNQnA : async(user_id) =>{ //방문자 플로우 nQnA 전체 조회
         try{ 
             const connection = await pool.getConnection(async conn => conn);
-            const visitorNQnAResult = await nqnaDao.selectVisitorNQnA(connection,hostId);
+            const visitorNQnAResult = await nqnaDao.selectVisitorNQnA(connection,user_id);
             connection.release();
     
             return visitorNQnAResult;
