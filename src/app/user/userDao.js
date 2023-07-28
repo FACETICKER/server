@@ -1,35 +1,22 @@
-export const userDao = {
-    selectUser : async(connection, user_id) =>{ //user_id로 유저 조회
-        const selectUserQuery = `
-            SELECT *
-            FROM user
-            WHERE user_id = ?;
-        `
-        const [selectUserRow] = await connection.query(selectUserQuery,user_id);
-        return selectUserRow[0];
-    },
-    
-    getIdByNickname : async(connection, nickname) =>{ //닉네임으로 회원 번호 조회
-        const getIdByNicknameQuery = `
-            SELECT user_id
-            FROM user_poster
-            WHERE nickname = ?;
-        `
-        const [getIdByNicknameRow] = await connection.query(getIdByNicknameQuery,nickname);
-        return getIdByNicknameRow[0];
-    },
-
-    getNicknameById : async(connection, user_id) =>{ //회원 번호로 닉네임 조회
-        console.log(user_id);
-        const getNicknameByIdQuery = `
-            SELECT nickname
-            FROM user_poster
-            WHERE user_id = ?;
-        `
-        const [getNicknameByIdRow] = await connection.query(getNicknameByIdQuery,user_id);
-        return getNicknameByIdRow;
-    }
-};
+export const getIdByNickname = async(connection, nickname) =>{ //닉네임으로 회원 번호 조회
+    const getIdByNicknameQuery = `
+        SELECT user_id
+        FROM user_poster
+        WHERE nickname = ?;
+    `
+    const [getIdByNicknameRow] = await connection.query(getIdByNicknameQuery,nickname);
+    return getIdByNicknameRow[0];
+}
+export const getNicknameById = async(connection, user_id) =>{ //회원 번호로 닉네임 조회
+    console.log(user_id);
+    const getNicknameByIdQuery = `
+        SELECT nickname
+        FROM user_poster
+        WHERE user_id = ?;
+    `
+    const [getNicknameByIdRow] = await connection.query(getNicknameByIdQuery,user_id);
+    return getNicknameByIdRow;
+}
 
 export const loginDao = {
     findUser : async(connection, userInfoParams)=>{ //사용자 조회
