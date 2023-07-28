@@ -3,7 +3,7 @@ import dotenv from "dotenv";
 import { response,errResponse } from "../../../config/response";
 import baseResponse from "../../../config/baseResponse";
 import {loginService, stickerService, nqnaService, mainpageService} from "./userService.js";
-import {stickerProvider, nqnaProvider, retrieveUserId, posterProvider} from "./userProvider";
+import {stickerProvider, nqnaProvider, userProvider, posterProvider} from "./userProvider";
 dotenv.config();
 export const loginController = {
     kakao : async(req,res)=>{ //카카오
@@ -102,10 +102,10 @@ export const stickerController = {
     getStickers : async (req,res)=>{ //해당 호스트의 전체 스티커를 반환
         try{
             const userIdFromJWT = req.verifiedToken ? req.verifiedToken.user_id : null; // 토큰이 있을 때만 user_id를 가져오도록 수정
-            const nickname = req.params.nickname;
+            const user_id = req.params.user_id;
             const params = {
                 userIdFromJWT: userIdFromJWT,
-                nickname : nickname,
+                user_id : user_id,
             };
             const stickersResult = await stickerService.getStickersByType(params); //호스트와 방문자를 구분해주기 위해
             return res.send(stickersResult);
@@ -119,14 +119,13 @@ export const stickerController = {
             const type = req.query.type; //type으로 Host, visitor 구분
             const userIdFromJWT = req.verifiedToken ? req.verifiedToken.user_id : null;
             const {face, nose, eyes, mouth, arm, foot, accessory} = req.body;
-            const nickname = req.params.nickname;
+            const user_id = req.params.user_id;
             if(type === 'host'){ //호스트 스티커 등록
                 const params = [userIdFromJWT, face, nose, eyes, mouth, arm, foot, accessory];
                 const insertResult = await stickerService.insertUserSticker(params);
                 return res.send(insertResult);
             }else if(type === 'visitor'){ //방문자 스티커 등록
-                const hostId = await retrieveUserId(nickname);
-                const params = [hostId, userIdFromJWT, face, nose, eyes, mouth, arm, foot, accessory];
+                const params = [user_id, userIdFromJWT, face, nose, eyes, mouth, arm, foot, accessory];
                 const insertResult = await stickerService.insertVisitorSticker(params);
                 return res.send(insertResult);
             }
@@ -155,8 +154,8 @@ export const stickerController = {
     attachSticker : async(req,res)=>{ //스티커 위치 저장
         try{
             const {x,y} = req.body;
-            const id = req.query.id;
-            const params = [x,y,id];
+            const id = req.query.id; // 이 부분은 라우팅 경로가 nickname >> user_id로 바뀌어도 달라질 코드가 없는 게 맞나요?!?!?!
+            const params = [x,y,id]; 
             console.log(params);
             const result = await stickerService.insertStickerLocation(params);
             return res.send(result);
@@ -169,17 +168,17 @@ export const stickerController = {
 export const nqnaController = {
     /**
     * API Name: default 질문 등록
-    * POST: /host/{nickname}/default_q
+    * POST: /host/{user_id}/default_q
     */
     postDefaultQuestion : async(req,res) => {
 
         const {question} = req.body;
-        const {nickname} = req.params;
-        const hostId = await retrieveUserId(nickname);
+        const {user_id} = req.params;
+        const User = await userProvider.retrieveUser(user_id)
 
         try {
-            if (hostId) {
-                const postDefaultQuestionResult = await nqnaService.createDefaultQuestion(hostId,question);
+            if (User) {
+                const postDefaultQuestionResult = await nqnaService.createDefaultQuestion(user_id,question);
                 return res.status(200).json(response(baseResponse.SUCCESS, postDefaultQuestionResult));
             } 
             else {
@@ -199,7 +198,7 @@ export const nqnaController = {
    
         const {question} = req.body; 
         const {nickname} = req.params; 
-        const hostId = await retrieveUserId(nickname); //user_id가 넘어옴 (ex:1,2) 
+        const hostId = await userProvider.retrieveUserId(nickname); //user_id가 넘어옴 (ex:1,2) 
                 
         try {
             if (hostId) {
@@ -271,8 +270,8 @@ export const nqnaController = {
 export const mainController = {
     getAll : async(req,res) =>{
         const userIdFromJWT = req.verifiedToken ? req.verifiedToken.user_id : null; // 토큰이 있을 때만 user_id를 가져오도록 수정
-        const nickname = req.params.nickname;
-        const result = await mainpageService(userIdFromJWT,nickname);
+        const user_id = req.params.user_id;
+        const result = await mainpageService(userIdFromJWT,user_id);
         return res.send(result);
     }
 }
