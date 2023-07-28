@@ -1,22 +1,34 @@
-export const getIdByNickname = async(connection, nickname) =>{ //닉네임으로 회원 번호 조회
-    const getIdByNicknameQuery = `
-        SELECT user_id
-        FROM user_poster
-        WHERE nickname = ?;
-    `
-    const [getIdByNicknameRow] = await connection.query(getIdByNicknameQuery,nickname);
-    return getIdByNicknameRow[0];
-}
-export const getNicknameById = async(connection, user_id) =>{ //회원 번호로 닉네임 조회
-    console.log(user_id);
-    const getNicknameByIdQuery = `
-        SELECT nickname
-        FROM user_poster
-        WHERE user_id = ?;
-    `
-    const [getNicknameByIdRow] = await connection.query(getNicknameByIdQuery,user_id);
-    return getNicknameByIdRow;
-}
+export const userDao = {
+    selectUser : async(connection, user_id) =>{ //user_id로 유저 조회
+        const selectUserQuery = `
+            SELECT *
+            FROM user
+            WHERE user_id = ?;
+        `
+        const [selectUserRow] = await connection.query(selectUserQuery,user_id);
+        return selectUserRow[0];
+    },
+    
+    getIdByNickname : async(connection, nickname) =>{ //닉네임으로 회원 번호 조회
+        const getIdByNicknameQuery = `
+            SELECT user_id
+            FROM user_poster
+            WHERE nickname = ?;
+        `
+        const [getIdByNicknameRow] = await connection.query(getIdByNicknameQuery,nickname);
+        return getIdByNicknameRow[0];
+    },
+
+    getNicknameById : async(connection, user_id) =>{ //회원 번호로 닉네임 조회
+        const getNicknameByIdQuery = `
+            SELECT nickname
+            FROM user_poster
+            WHERE user_id = ?;
+        `
+        const [getNicknameByIdRow] = await connection.query(getNicknameByIdQuery,user_id);
+        return getNicknameByIdRow;
+    }
+};
 
 export const loginDao = {
     findUser : async(connection, userInfoParams)=>{ //사용자 조회
@@ -169,23 +181,23 @@ export const nqnaDao = {
         return selectNQnARow;
     },
 
-    selectHostNQnA : async(connection,hostId)=>{ // 호스트 플로우 nQnA 전체 조회
+    selectHostNQnA : async(connection,user_id)=>{ // 호스트 플로우 nQnA 전체 조회
         const selectHostNQnAQuery = `
             SELECT question, question_type, question_hidden, answer, answer_hidden, seen,created_at
             FROM nQnA
             WHERE user_id = ?;
         `
-        const [selectHostNQnARow] = await connection.query(selectHostNQnAQuery,hostId);
+        const [selectHostNQnARow] = await connection.query(selectHostNQnAQuery,user_id);
         return selectHostNQnARow;
     },
 
-    selectVisitorNQnA : async(connection,hostId)=>{ // 방문자 플로우 nQnA 전체 조회
+    selectVisitorNQnA : async(connection,user_id)=>{ // 방문자 플로우 nQnA 전체 조회
         const selectVisitorNQnAQuery = `
             SELECT question, question_hidden, answer, answer_hidden, created_at
             FROM nQnA
             WHERE user_id = ?;
         `
-        const [selectVisitorNQnARow] = await connection.query(selectVisitorNQnAQuery,hostId);
+        const [selectVisitorNQnARow] = await connection.query(selectVisitorNQnAQuery,user_id);
         return selectVisitorNQnARow;
     }
 
