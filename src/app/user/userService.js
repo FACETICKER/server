@@ -207,13 +207,30 @@ export const nqnaService = { //n문n답 관련 서비스
         }
     },
 
-    editnQnAHidden : async(nQnA_id, question_hidden, answer_hidden) =>{ // nQnA 공개 여부 수정 (질문 + 답변)
+    editnQuestionHidden : async(nQnA_id, question_hidden) =>{ // 질문 공개 여부 수정 
 
         try{    
-            const updatenQnAHiddenParams = {nQnA_id, question_hidden, answer_hidden};
+            const updateQuestionHiddenParams = [question_hidden, nQnA_id];
 
             const connection = await pool.getConnection(async conn => conn);
-            const editnQnAHiddenResult = await nqnaDao.updatenQnAHidden(connection,updatenQnAHiddenParams);
+            const editQuestionHiddenResult = await nqnaDao.updateQuestionHidden(connection,updateQuestionHiddenParams);
+            
+            connection.release();
+            
+            return response(baseResponse.SUCCESS);
+        }
+        catch(error){
+            return errResponse(baseResponse.DB_ERROR)
+        }
+    },
+
+    editnAnswerHidden : async(nQnA_id, answer_hidden) =>{ // 답변 공개 여부 수정 
+
+        try{    
+            const updateAnswerHiddenParams = [answer_hidden, nQnA_id];
+
+            const connection = await pool.getConnection(async conn => conn);
+            const editnAnswerHiddenResult = await nqnaDao.updateAnswerHidden(connection,updateAnswerHiddenParams);
             
             connection.release();
             

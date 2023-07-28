@@ -201,31 +201,25 @@ export const nqnaDao = {
         return selectVisitorNQnARow;
     },
 
-    updatenQnAHidden : async(connection, updatenQnAHiddenParams) => { // nQnA 공개 여부 수정 (질문 + 답변)
-        if(updatenQnAHiddenParams.answer_hidden === null){ // 질문 공개 여부 수정
-            const params = [updatenQnAHiddenParams.question_hidden, updatenQnAHiddenParams.nQnA_id];
-
-            const patchQuestionHiddenQuery = `
-                UPDATE nQnA 
-                SET question_hidden= ?
-                WHERE nQnA_id =?;
-            `
-            const updateQuestionHiddenRow = await connection.query(patchQuestionHiddenQuery, params);
-            return updateQuestionHiddenRow;
-        }
-        else if(updatenQnAHiddenParams.question_hidden === null){ // 답변 공개 여부 수정
-            const params = [updatenQnAHiddenParams.answer_hidden, updatenQnAHiddenParams.nQnA_id];
-
-            const patchAnswerHiddenQuery = `
-                UPDATE nQnA 
-                SET answer_hidden= ?
-                WHERE nQnA_id =?;
-            `
-
-            const updateAnswerHiddenRow = await connection.query(patchAnswerHiddenQuery, params);
-            return updateAnswerHiddenRow;
-        }      
+    updateQuestionHidden : async(connection, updateQuestionHiddenParams) =>{ // 질문 공개 여부 수정
+        const patchQuestionHiddenQuery = `
+            UPDATE nQnA 
+            SET question_hidden= ?
+            WHERE nQnA_id =?;
+        `
+        const updateQuestionHiddenRow = await connection.query(patchQuestionHiddenQuery, updateQuestionHiddenParams);
+        return updateQuestionHiddenRow;
     },
+
+    updateAnswerHidden : async(connection, updateAnswerHiddenParams) =>{ // 답변 공개 여부 수정
+        const patchAnswerHiddenQuery = `
+            UPDATE nQnA 
+            SET answer_hidden= ?
+            WHERE nQnA_id =?;
+        `
+        const updateAnswerHiddenRow = await connection.query(patchAnswerHiddenQuery, updateAnswerHiddenParams);
+        return updateAnswerHiddenRow;
+    }
 }
 
 export const posterDao = {
