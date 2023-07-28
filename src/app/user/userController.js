@@ -2,8 +2,8 @@ import axios from "axios";
 import dotenv from "dotenv";
 import { response,errResponse } from "../../../config/response";
 import baseResponse from "../../../config/baseResponse";
-import {loginService, stickerService, nqnaService, mainpageService} from "./userService.js";
-import {stickerProvider, nqnaProvider, userProvider, posterProvider} from "./userProvider";
+import {loginService, stickerService, nqnaService, mainpageService, posterService} from "./userService.js";
+import {stickerProvider, nqnaProvider, retrieveUserId, posterProvider} from "./userProvider";
 dotenv.config();
 export const loginController = {
     kakao : async(req,res)=>{ //카카오
@@ -278,9 +278,44 @@ export const nqnaController = {
 
 export const mainController = {
     getAll : async(req,res) =>{
-        const userIdFromJWT = req.verifiedToken ? req.verifiedToken.user_id : null; // 토큰이 있을 때만 user_id를 가져오도록 수정
-        const user_id = req.params.user_id;
-        const result = await mainpageService(userIdFromJWT,user_id);
-        return res.send(result);
+        try{
+            const userIdFromJWT = req.verifiedToken ? req.verifiedToken.user_id : null; // 토큰이 있을 때만 user_id를 가져오도록 수정
+            const userId = req.params.user_id;
+            const result = await mainpageService(userIdFromJWT,userId);
+            return res.send(result);
+        }catch(err){
+            return res.status(500).send(err);
+        }
+    }
+};
+
+export const posterController = {
+    postPoster : async(req,res)=>{
+        try{
+            const userIdFromJWT = req.verifiedToken ? req.verifiedToken.user_id : null; // 토큰이 있을 때만 user_id를 가져오도록 수정
+            const {nickname, season, number, date, important} = req.body;
+            const [month, day] = date.split(' ');
+            const year = new Date().getFullYear();
+            const monthMap = {
+                'January': '01',
+                'February': '02',
+                'March': '03',
+                'April': '04',
+                'May': '05',
+                'June': '06',
+                'July': '07',
+                'August': '08',
+                'September': '09',
+                'October': '10',
+                'November': '11',
+                'December': '12',
+            };
+            const formattedDate = `${year}-${monthMap[month]}-${day}`;
+            const params = [userIdFromJWT, nickname,season,number,formattedDate,important];
+            const result = await posterService.insertPoster(params);
+            return res.send(result);
+        }catch(err){
+            return res.send(err);
+        }
     }
 }

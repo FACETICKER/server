@@ -1,8 +1,13 @@
 import express from "express";
-import { loginController, stickerController, nqnaController, mainController} from "./userController";
+
+import { loginController, stickerController, nqnaController, mainController,posterController  } from "./userController";
 import { jwtMiddleware } from "../../../config/jwtMiddleware.js";
 
 const userRouter = express.Router();
+
+//웹 브라우저에서 favicon.ico를 자동으로 요청해서 /favicon.ico 요청이 
+//메인 페이지 조회 API /:nickname으로 가기 때문에 이를 무시하기 위해서 아래처럼 라우팅 처리를 해줌
+userRouter.get('/favicon.ico',(req,res)=>res.status(404).end()); 
 
 // 로그인 관련
 userRouter.get('/auth/kakao/callback',loginController.kakao); //카카오 로그인 API
@@ -27,6 +32,8 @@ userRouter.post('/:user_id/nQnA/visitor',nqnaController.postVisitorQuestion); //
 userRouter.patch('/:user_id/nQnA/:nQnA_id/answer',nqnaController.postAnswer); //Host 답변 등록 API
 userRouter.get('/:user_id/nQnA',jwtMiddleware,nqnaController.getnQnA); //N문 N답 조회 API
 
+//포스터 관련
+userRouter.post("/:user_id/poster",jwtMiddleware,posterController.postPoster); //포스터 등록
 
 export default userRouter;
 

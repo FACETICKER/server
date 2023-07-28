@@ -20,7 +20,6 @@ export const userDao = {
     },
 
     getNicknameById : async(connection, user_id) =>{ //회원 번호로 닉네임 조회
-        console.log(user_id);
         const getNicknameByIdQuery = `
             SELECT nickname
             FROM user_poster
@@ -213,5 +212,17 @@ export const posterDao = {
         `
         const [selectPosterRow] = await connection.query(selectPosterQuery,user_id);
         return selectPosterRow;
+    },
+    insertPoster : async(connection, params) =>{
+        try{
+            const insertPosterQuery = `
+                INSERT INTO user_poster(user_id, nickname, q_season,q_number,q_date,q_important)
+                VALUES(?,?,?,?,?,?);
+            `
+            const [insertPosterRow] = await connection.query(insertPosterQuery,params);
+            return insertPosterRow;
+        }catch(err){
+            return err;
+        }
     }
 }

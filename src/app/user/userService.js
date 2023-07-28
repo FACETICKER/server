@@ -1,7 +1,7 @@
 import {response, errResponse} from "../../../config/response.js";
 import baseResponse from "../../../config/baseResponse.js";
 import { userCheck, stickerProvider, posterProvider, userProvider } from "./userProvider.js";
-import {loginDao,nqnaDao, stickerDao } from "./userDao.js";
+import {loginDao,nqnaDao, stickerDao, posterDao } from "./userDao.js";
 import pool from "../../../config/database.js";
 import jwt from "jsonwebtoken";
 import dotenv from "dotenv";
@@ -96,7 +96,6 @@ export const stickerService = { //스티커 관련 서비스
             const connection = await pool.getConnection(async conn=> conn);
             const insertUserStickerResult = await stickerDao.createUserSticker(connection,params);
             connection.release();
-            console.log(insertUserStickerResult);
             if(insertUserStickerResult.affectedRows === 1){
                 return response(baseResponse.SUCCESS);
             }else{
@@ -207,16 +206,15 @@ export const nqnaService = { //n문n답 관련 서비스
             return errResponse(baseResponse.DB_ERROR)
         }
     },
-
-   
 };
 
 export const mainpageService = async(userIdFromJWT,user_id) =>{
-
     const poster = await posterProvider.poster(user_id);
-        const sticker = await stickerProvider.userSticker(user_id);
-        const newSticker = await stickerProvider.newStickers(user_id);
-    if(userIdFromJWT === user_id){ //사용자가 본인 페이지에 들어갔을 경우
+    const sticker = await stickerProvider.userSticker(user_id);
+    const newSticker = await stickerProvider.newStickers(user_id);
+    console.log(userIdFromJWT);
+    console.log(user_id);
+    if(userIdFromJWT == user_id){ //사용자가 본인 페이지에 들어갔을 경우
         const result = {
             poster:poster,
             sticker:sticker,
@@ -224,13 +222,24 @@ export const mainpageService = async(userIdFromJWT,user_id) =>{
         };
         return response(baseResponse.HOST,result); 
     }else{ //방문자가 다른 사용자 페이지에 방문했을 경우
-        const userNickname = userIdFromJWT ? await userProvider.retrieveUserName(userIdFromJWT) : null; //토큰이 존재하면 토큰 값으로 nickname 값 조회. 없으면 null
         const result = {
-            userNickname: userNickname, //본인 프로필으로 돌아갈 경우를 위해
+            userId: userIdFromJWT, //본인 프로필으로 돌아갈 경우를 위해
             hostPoster: poster,
             hostSticker:sticker,
             hostnewSticer : newSticker
         };
         return response(baseResponse.VISITOR,result);
     }
-}
+};
+
+export const posterService = {
+    insertPoster : async(params) =>{
+        const connection = await pool.getConnection(async conn => conn);
+        const insertPosterResult = await posterDao.insertPoster(connection,params);
+        connection.release();
+        if(insertPosterResult.affectedRows===1){
+            return response(baseResponse.SUCCESS);
+        }else return response(baseResponse.DB_ERROR);
+    }
+};
+

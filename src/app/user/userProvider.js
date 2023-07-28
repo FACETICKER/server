@@ -130,5 +130,4 @@ export const posterProvider = { //포스터
         connection.release();
         return posterResult;
     }
-
 }
