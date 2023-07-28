@@ -208,8 +208,6 @@ export const nqnaService = { //n문n답 관련 서비스
             return errResponse(baseResponse.DB_ERROR)
         }
     },
-
-   
 };
 
 export const mainpageService = async(userIdFromJWT,nickname) =>{
@@ -234,7 +232,7 @@ export const mainpageService = async(userIdFromJWT,nickname) =>{
         };
         return response(baseResponse.VISITOR,result);
     }
-}
+};
 
 export const posterService = {
     insertPoster : async(params) =>{
@@ -248,5 +246,5 @@ export const posterService = {
             return response(baseResponse.USER_NICKNAME_DUPLICATED);
         }else return response(baseResponse.DB_ERROR);
     }
-}
+};
 
