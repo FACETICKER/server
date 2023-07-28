@@ -231,7 +231,7 @@ export const nqnaController = {
                 return res.status(200).json(response(baseResponse.SUCCESS, postAnswerResult));
             }
             else{
-                return res.status(404).json(response(baseResponse.NQNA_NQNAID_NOT_EXIST));
+                return res.status(404).json(response(baseResponse.NQ_NQID_NOT_EXIST));
             }     
         }
         catch(error){
