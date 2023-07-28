@@ -29,8 +29,11 @@ userRouter.patch('/:user_id/sticker/attach',jwtMiddleware,stickerController.atta
 // nQnA 관련
 userRouter.post('/:user_id/nQnA/default',nqnaController.postDefaultQuestion); //default 질문 등록 API
 userRouter.post('/:user_id/nQnA/visitor',nqnaController.postVisitorQuestion); //visitor 질문 등록 API
-userRouter.patch('/:user_id/nQnA/:nQnA_id/answer',nqnaController.postAnswer); //Host 답변 등록 API
+userRouter.patch('/:user_id/nQnA/:nQnA_id/answer',nqnaController.postAnswer); //Host 답변 등록 + 수정 API
 userRouter.get('/:user_id/nQnA',jwtMiddleware,nqnaController.getnQnA); //N문 N답 조회 API
+userRouter.patch('/:user_id/nQnA/:nQnA_id/hidden',jwtMiddleware,nqnaController.patchnQnAHidden); //(질문 + 답변) 공개 여부 수정 API
+
+
 
 //포스터 관련
 userRouter.post("/:user_id/poster",jwtMiddleware,posterController.postPoster); //포스터 등록

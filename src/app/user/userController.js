@@ -81,7 +81,7 @@ export const stickerController = {
 
     /**
      * API Name: 방문자 기록 상세 조회
-     * GET: /visitor/{visitor_sticker_id}
+     * GET: /:user_id/sticker/visitor/:visitor_sticker_id
      */
     getSticker : async(req,res)=>{ //호스트가 방문자의 기록(페이스티커, 캐릭터 네임, 메세지)을 상세 조회
     
@@ -168,7 +168,7 @@ export const stickerController = {
 export const nqnaController = {
     /**
     * API Name: default 질문 등록
-    * POST: /host/{user_id}/default_q
+    * POST: /:user_id/nQnA/default
     */
     postDefaultQuestion : async(req,res) => {
 
@@ -192,7 +192,7 @@ export const nqnaController = {
 
     /**
     * API Name: Visitor 질문 등록 
-    * POST: /host/{user_id}/visitor_q
+    * POST: /:user_id/nQnA/visitor
     */
     postVisitorQuestion : async(req,res) => {
    
@@ -216,8 +216,8 @@ export const nqnaController = {
     },
 
     /**
-     * API Name: Host 답변 등록
-     * PATCH: /host/{user_id}/answer/{nQnA_id}
+     * API Name: Host 답변 등록 + 수정
+     * PATCH: /:user_id/nQnA/:nQnA_id/answer
      */
     postAnswer : async(req,res) => {
    
@@ -231,7 +231,7 @@ export const nqnaController = {
                 return res.status(200).json(response(baseResponse.SUCCESS, postAnswerResult));
             }
             else{
-                return res.status(404).json(response(baseResponse.NQNA_NQNAID_NOT_EXIST));
+                return res.status(404).json(response(baseResponse.NQ_NQID_NOT_EXIST));
             }     
         }
         catch(error){
@@ -271,6 +271,30 @@ export const nqnaController = {
                 });
             }         
         } catch (error) {
+            return res.status(500).json(errResponse(baseResponse.SERVER_ERROR));
+        }
+    },
+
+    /**
+     * API Name: nQnA 공개 여부 수정 (질문 + 답변)
+     * GET: /{user_id}/nQnA/{nQnA_id}/hidden
+     */
+    patchnQnAHidden : async(req,res) => {
+   
+        const {nQnA_id} = req.params;
+        const {question_hidden, answer_hidden} = req.body;
+
+        try{
+            const nQnA = await nqnaProvider.retrieveNQnA(nQnA_id); // nQnA 개별 질문 조회
+            if(nQnA){
+                const patchnQnAHiddenResult = await nqnaService.editnQnAHidden(nQnA_id, question_hidden, answer_hidden);
+                return res.status(200).json(response(baseResponse.SUCCESS, patchnQnAHiddenResult));
+            }
+            else{
+                return res.status(404).json(response(baseResponse.NQ_NQID_NOT_EXIST));
+            }     
+        }
+        catch(error){
             return res.status(500).json(errResponse(baseResponse.SERVER_ERROR));
         }
     },

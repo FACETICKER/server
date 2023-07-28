@@ -21,7 +21,8 @@ const baseResponse = {
     STICKER_STICKERID_NOT_EXIST : { "isSuccess": false, "code": 4000, "message": "해당 스티커가 존재하지 않습니다." },
 
     //질문 관련 오류 5000번
-    NQNA_NQNAID_NOT_EXIST : { "isSuccess": false, "code": 5000, "message": "질문이 존재하지 않습니다." },
+    NQ_NQID_NOT_EXIST : { "isSuccess": false, "code": 5000, "message": "질문이 존재하지 않습니다." },
+    NA_NAID_NOT_EXIST : { "isSuccess": false, "code": 5001, "message": "답변이 존재하지 않습니다." },
 
 
     //토큰 6000번

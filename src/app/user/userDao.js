@@ -161,7 +161,7 @@ export const nqnaDao = {
         return insertVisitorQuestionRow;
     },
 
-    insertAnswer : async(connection, insertAnswerParams) => { // 답변 생성
+    insertAnswer : async(connection, insertAnswerParams) => { // 답변 생성 + 수정
         const postAnswerQuery = `
             UPDATE nQnA 
             SET answer= ?
@@ -199,8 +199,33 @@ export const nqnaDao = {
         `
         const [selectVisitorNQnARow] = await connection.query(selectVisitorNQnAQuery,user_id);
         return selectVisitorNQnARow;
-    }
+    },
 
+    updatenQnAHidden : async(connection, updatenQnAHiddenParams) => { // nQnA 공개 여부 수정 (질문 + 답변)
+        if(updatenQnAHiddenParams.answer_hidden === null){ // 질문 공개 여부 수정
+            const params = [updatenQnAHiddenParams.question_hidden, updatenQnAHiddenParams.nQnA_id];
+
+            const patchQuestionHiddenQuery = `
+                UPDATE nQnA 
+                SET question_hidden= ?
+                WHERE nQnA_id =?;
+            `
+            const updateQuestionHiddenRow = await connection.query(patchQuestionHiddenQuery, params);
+            return updateQuestionHiddenRow;
+        }
+        else if(updatenQnAHiddenParams.question_hidden === null){ // 답변 공개 여부 수정
+            const params = [updatenQnAHiddenParams.answer_hidden, updatenQnAHiddenParams.nQnA_id];
+
+            const patchAnswerHiddenQuery = `
+                UPDATE nQnA 
+                SET answer_hidden= ?
+                WHERE nQnA_id =?;
+            `
+
+            const updateAnswerHiddenRow = await connection.query(patchAnswerHiddenQuery, params);
+            return updateAnswerHiddenRow;
+        }      
+    },
 }
 
 export const posterDao = {

@@ -190,13 +190,30 @@ export const nqnaService = { //n문n답 관련 서비스
         }
     },
 
-    createAnswer : async(answer,nQnA_id) =>{ // 답변 등록
+    createAnswer : async(answer,nQnA_id) =>{ // 답변 등록 + 수정
 
         try{
             const insertAnswerParams =[answer,nQnA_id]; 
         
             const connection = await pool.getConnection(async conn => conn);
             const createAnswerResult = await nqnaDao.insertAnswer(connection,insertAnswerParams);
+            
+            connection.release();
+            
+            return response(baseResponse.SUCCESS);
+        }
+        catch(error){
+            return errResponse(baseResponse.DB_ERROR)
+        }
+    },
+
+    editnQnAHidden : async(nQnA_id, question_hidden, answer_hidden) =>{ // nQnA 공개 여부 수정 (질문 + 답변)
+
+        try{    
+            const updatenQnAHiddenParams = {nQnA_id, question_hidden, answer_hidden};
+
+            const connection = await pool.getConnection(async conn => conn);
+            const editnQnAHiddenResult = await nqnaDao.updatenQnAHidden(connection,updatenQnAHiddenParams);
             
             connection.release();
             
