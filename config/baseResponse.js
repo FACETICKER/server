@@ -15,12 +15,14 @@ const baseResponse = {
     USER_USERID_EMPTY : { "isSuccess": false, "code": 3000, "message": "user_id를 입력해주세요." },
     USER_USERID_NOT_EXIST : { "isSuccess": false, "code": 3001, "message": "해당 유저가 존재하지 않습니다." },
     USER_USERID_NOT_MATCH : {"isSuccess":false, "code":3002, "message":"user_id 값을 확인해주세요."},
+    USER_NICKNAME_DUPLICATED : {"isSuccess":false, "code":3003, "message":"닉네임이 이미 존재합니다"},
 
     //스티커 관련 오류 4000번
     STICKER_STICKERID_NOT_EXIST : { "isSuccess": false, "code": 4000, "message": "해당 스티커가 존재하지 않습니다." },
 
     //질문 관련 오류 5000번
-    NQNA_NQNAID_NOT_EXIST : { "isSuccess": false, "code": 5000, "message": "질문이 존재하지 않습니다." },
+    NQ_NQID_NOT_EXIST : { "isSuccess": false, "code": 5000, "message": "질문이 존재하지 않습니다." },
+    NA_NAID_NOT_EXIST : { "isSuccess": false, "code": 5001, "message": "답변이 존재하지 않습니다." },
 
 
     //토큰 6000번

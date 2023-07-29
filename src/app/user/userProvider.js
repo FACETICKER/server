@@ -110,9 +110,10 @@ export const nqnaProvider = { //n문n답
         try{ 
             const connection = await pool.getConnection(async conn => conn);
             const nQnAResult = await nqnaDao.selectNQnA(connection,nQnA_id);
+            //console.log(nQnAResult[0].answer); >> answer 내용 출력됨
             connection.release();
 
-            return nQnAResult[0];
+            return nQnAResult[0]; // {객체}로 넘어감 
 
         }catch(err){
             return res.status(500).send(err); // 수정해야할 수도 있음@@@@@@@@@@@@@@@@@@@@222
@@ -153,5 +154,4 @@ export const posterProvider = { //포스터
         connection.release();
         return posterResult;
     }
-
 }

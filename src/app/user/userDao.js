@@ -20,7 +20,6 @@ export const userDao = {
     },
 
     getNicknameById : async(connection, user_id) =>{ //회원 번호로 닉네임 조회
-        console.log(user_id);
         const getNicknameByIdQuery = `
             SELECT nickname
             FROM user_poster
@@ -211,7 +210,7 @@ export const nqnaDao = {
         return insertVisitorQuestionRow;
     },
 
-    insertAnswer : async(connection, insertAnswerParams) => { // 답변 생성
+    insertAnswer : async(connection, insertAnswerParams) => { // 답변 생성 + 수정
         const postAnswerQuery = `
             UPDATE nQnA 
             SET answer= ?
@@ -249,8 +248,27 @@ export const nqnaDao = {
         `
         const [selectVisitorNQnARow] = await connection.query(selectVisitorNQnAQuery,user_id);
         return selectVisitorNQnARow;
-    }
+    },
 
+    updateQuestionHidden : async(connection, updateQuestionHiddenParams) =>{ // 질문 공개 여부 수정
+        const patchQuestionHiddenQuery = `
+            UPDATE nQnA 
+            SET question_hidden= ?
+            WHERE nQnA_id =?;
+        `
+        const updateQuestionHiddenRow = await connection.query(patchQuestionHiddenQuery, updateQuestionHiddenParams);
+        return updateQuestionHiddenRow;
+    },
+
+    updateAnswerHidden : async(connection, updateAnswerHiddenParams) =>{ // 답변 공개 여부 수정
+        const patchAnswerHiddenQuery = `
+            UPDATE nQnA 
+            SET answer_hidden= ?
+            WHERE nQnA_id =?;
+        `
+        const updateAnswerHiddenRow = await connection.query(patchAnswerHiddenQuery, updateAnswerHiddenParams);
+        return updateAnswerHiddenRow;
+    }
 }
 
 export const posterDao = {
@@ -262,5 +280,17 @@ export const posterDao = {
         `
         const [selectPosterRow] = await connection.query(selectPosterQuery,user_id);
         return selectPosterRow;
+    },
+    insertPoster : async(connection, params) =>{
+        try{
+            const insertPosterQuery = `
+                INSERT INTO user_poster(user_id, nickname, q_season,q_number,q_date,q_important)
+                VALUES(?,?,?,?,?,?);
+            `
+            const [insertPosterRow] = await connection.query(insertPosterQuery,params);
+            return insertPosterRow;
+        }catch(err){
+            return err;
+        }
     }
 }
