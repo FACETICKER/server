@@ -108,7 +108,7 @@ export const stickerController = {
                 user_id : user_id,
             };
             const stickersResult = await stickerService.getStickersByType(params); //호스트와 방문자를 구분해주기 위해
-            return res.send(stickersResult);
+            return res.status(200).send(stickersResult);
     
         }catch(err){
             return res.status(500).json(err);
@@ -154,13 +154,21 @@ export const stickerController = {
     attachSticker : async(req,res)=>{ //스티커 위치 저장
         try{
             const {x,y} = req.body;
-            const id = req.query.id; // 이 부분은 라우팅 경로가 nickname >> user_id로 바뀌어도 달라질 코드가 없는 게 맞나요?!?!?!
+            const id = req.query.user_id; // 이 부분은 라우팅 경로가 nickname >> user_id로 바뀌어도 달라질 코드가 없는 게 맞나요?!?!?!
             const params = [x,y,id]; 
             console.log(params);
             const result = await stickerService.insertStickerLocation(params);
             return res.send(result);
         }catch(err){
             return res.send(err);
+        }
+    },
+    getInfo : async(req,res) =>{
+        try{
+            const result = await stickerProvider.retrieveStickerInfo();
+            return res.send(response(baseResponse.SUCCESS,result));
+        }catch(err){
+            return res.status(500).send(err);
         }
     }
 };

@@ -1,5 +1,7 @@
+import { response } from "express";
 import pool from "../../../config/database.js";
 import {loginDao, userDao, stickerDao, nqnaDao, posterDao} from "./userDao.js";
+import baseResponse from "../../../config/baseResponse.js";
 
 export const userCheck = async(userInfoParams) =>{ // 사용자 정보를 조회
     try{
@@ -79,6 +81,27 @@ export const stickerProvider = { //스티커
         const newStickersResult = await stickerDao.selectNewSticker(connection,user_id);
         connection.release();
         return newStickersResult;
+    },
+    retrieveStickerInfo : async()=>{
+        const connection = await pool.getConnection(async conn => conn);
+        const faceResult = await stickerDao.selectFace(connection);
+        const eyesResult = await stickerDao.selectEyes(connection);
+        const noseResult = await stickerDao.selectNose(connection);
+        const mouthResult = await stickerDao.selectMouth(connection);
+        const armResult = await stickerDao.selectArm(connection);
+        const footResult = await stickerDao.selectFoot(connection);
+        const accessoryResult = await stickerDao.selectAccessory(connection);
+        connection.release();
+        const retrieveStickerInfoResult = {
+            face : faceResult,
+            eyes : eyesResult,
+            nose : noseResult,
+            mouth : mouthResult,
+            arm : armResult,
+            foot : footResult,
+            accessory : accessoryResult
+        };
+        return retrieveStickerInfoResult;
     }
 };
 
