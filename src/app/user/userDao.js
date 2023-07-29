@@ -161,7 +161,7 @@ export const nqnaDao = {
         return insertVisitorQuestionRow;
     },
 
-    insertAnswer : async(connection, insertAnswerParams) => { // 답변 생성
+    insertAnswer : async(connection, insertAnswerParams) => { // 답변 생성 + 수정
         const postAnswerQuery = `
             UPDATE nQnA 
             SET answer= ?
@@ -199,8 +199,27 @@ export const nqnaDao = {
         `
         const [selectVisitorNQnARow] = await connection.query(selectVisitorNQnAQuery,user_id);
         return selectVisitorNQnARow;
-    }
+    },
 
+    updateQuestionHidden : async(connection, updateQuestionHiddenParams) =>{ // 질문 공개 여부 수정
+        const patchQuestionHiddenQuery = `
+            UPDATE nQnA 
+            SET question_hidden= ?
+            WHERE nQnA_id =?;
+        `
+        const updateQuestionHiddenRow = await connection.query(patchQuestionHiddenQuery, updateQuestionHiddenParams);
+        return updateQuestionHiddenRow;
+    },
+
+    updateAnswerHidden : async(connection, updateAnswerHiddenParams) =>{ // 답변 공개 여부 수정
+        const patchAnswerHiddenQuery = `
+            UPDATE nQnA 
+            SET answer_hidden= ?
+            WHERE nQnA_id =?;
+        `
+        const updateAnswerHiddenRow = await connection.query(patchAnswerHiddenQuery, updateAnswerHiddenParams);
+        return updateAnswerHiddenRow;
+    }
 }
 
 export const posterDao = {

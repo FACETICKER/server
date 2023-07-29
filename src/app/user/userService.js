@@ -190,13 +190,47 @@ export const nqnaService = { //n문n답 관련 서비스
         }
     },
 
-    createAnswer : async(answer,nQnA_id) =>{ // 답변 등록
+    createAnswer : async(answer,nQnA_id) =>{ // 답변 등록 + 수정
 
         try{
             const insertAnswerParams =[answer,nQnA_id]; 
         
             const connection = await pool.getConnection(async conn => conn);
             const createAnswerResult = await nqnaDao.insertAnswer(connection,insertAnswerParams);
+            
+            connection.release();
+            
+            return response(baseResponse.SUCCESS);
+        }
+        catch(error){
+            return errResponse(baseResponse.DB_ERROR)
+        }
+    },
+
+    editnQuestionHidden : async(nQnA_id, question_hidden) =>{ // 질문 공개 여부 수정 
+
+        try{    
+            const updateQuestionHiddenParams = [question_hidden, nQnA_id];
+
+            const connection = await pool.getConnection(async conn => conn);
+            const editQuestionHiddenResult = await nqnaDao.updateQuestionHidden(connection,updateQuestionHiddenParams);
+            
+            connection.release();
+            
+            return response(baseResponse.SUCCESS);
+        }
+        catch(error){
+            return errResponse(baseResponse.DB_ERROR)
+        }
+    },
+
+    editnAnswerHidden : async(nQnA_id, answer_hidden) =>{ // 답변 공개 여부 수정 
+
+        try{    
+            const updateAnswerHiddenParams = [answer_hidden, nQnA_id];
+
+            const connection = await pool.getConnection(async conn => conn);
+            const editnAnswerHiddenResult = await nqnaDao.updateAnswerHidden(connection,updateAnswerHiddenParams);
             
             connection.release();
             
