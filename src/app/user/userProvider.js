@@ -102,6 +102,12 @@ export const stickerProvider = { //스티커
             accessory : accessoryResult
         };
         return retrieveStickerInfoResult;
+    },
+    retrieveStickerDeatils : async(userId) =>{
+        const connection = await pool.getConnection(async conn => conn);
+        const detailsResult = await stickerDao.selectUserStickerDetails(connection,userId);
+        connection.release();
+        return detailsResult;
     }
 };
 
