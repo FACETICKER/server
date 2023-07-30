@@ -277,7 +277,17 @@ export const nqnaDao = {
         `
         const updateAnswerHiddenRow = await connection.query(patchAnswerHiddenQuery, updateAnswerHiddenParams);
         return updateAnswerHiddenRow;
-    }
+    },
+
+    selectEmptyAnswer : async(connection,user_id)=>{ // 미답변 질문 개수 조회
+        const selectEmptyAnswerQuery = `
+            SELECT COUNT(*) AS emptyanswer
+            FROM nQnA
+            WHERE user_id = ? AND answer IS NULL ;
+        `
+        const [selectEmptyAnswerRow] = await connection.query(selectEmptyAnswerQuery,user_id);
+        return selectEmptyAnswerRow; 
+    },
 }
 
 export const posterDao = {
