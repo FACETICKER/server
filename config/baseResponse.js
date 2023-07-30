@@ -28,6 +28,7 @@ const baseResponse = {
     NQNA_ANSWER_EMPTY : { "isSuccess": false, "code": 5003, "message":"답변을 입력해주세요" },
     NQNA_QUESTION_LENGTH : { "isSuccess": false, "code": 5004, "message":"질문은 100자리 미만으로 입력해주세요." },
     NQNA_ANSWER_LENGTH : { "isSuccess": false, "code": 5005, "message":"답변은 100자리 미만으로 입력해주세요." },
+    NQNA_VISITOR_QUESTION_NOT_EXIST : { "isSuccess": false, "code": 5000, "message": "방문자의 질문이 존재하지 않습니다." },
 
 
     //토큰 6000번
