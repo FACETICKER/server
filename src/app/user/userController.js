@@ -188,7 +188,7 @@ export const stickerController = {
 export const nqnaController = {
     /**
     * API Name: default 질문 등록
-    * POST: /:user_id/nqna/default
+    * POST: /:user_id/nqna/question/default
     */
     postDefaultQuestion : async(req,res) => {
 
@@ -212,12 +212,13 @@ export const nqnaController = {
 
     /**
     * API Name: Visitor 질문 등록 
-    * POST: /:user_id/nqna/visitor
+    * POST: /:user_id/nqna/question/visitor
     */
     postVisitorQuestion : async(req,res) => {
    
         const {question} = req.body; 
         const {user_id} = req.params; 
+        const userIdFromJWT = req.verifiedToken ? req.verifiedToken.user_id : null; // 로그인한 방문자의 ID
         const User = await userProvider.retrieveUser(user_id);
         
         try {
@@ -229,7 +230,7 @@ export const nqnaController = {
                     return res.status(400).json(errResponse(baseResponse.NQNA_QUESTION_LENGTH));
                 }
                 else{
-                    const postVisitorQuestionResult = await nqnaService.createVisitorQuestion(user_id, question);
+                    const postVisitorQuestionResult = await nqnaService.createVisitorQuestion(user_id, question, userIdFromJWT);
                     return res.status(200).json(response(baseResponse.SUCCESS, postVisitorQuestionResult));
                 }
             } 
@@ -398,12 +399,18 @@ export const nqnaController = {
         const {user_id} = req.params;
         const User = await userProvider.retrieveUser(user_id);
         const userIdFromJWT = req.verifiedToken ? req.verifiedToken.user_id : null; // 로그인한 방문자의 user_id
-        console.log(userIdFromJWT);
+
         try{
             if(User){
                 if(userIdFromJWT){ // 로그인한 방문자라면
                     const getVisitorQuestionResult = await nqnaProvider.retrieveVisitorQuestion(user_id, userIdFromJWT);
-                    return res.status(200).json(response(baseResponse.SUCCESS, getVisitorQuestionResult)); 
+
+                    if(getVisitorQuestionResult[0] === undefined){//질문을 남기지 않은 방문자라면
+                        return res.status(400).json(errResponse(baseResponse.NQNA_VISITOR_QUESTION_NOT_EXIST)); 
+                    }
+                    else{
+                        return res.status(200).json(response(baseResponse.SUCCESS, getVisitorQuestionResult)); 
+                    }
                 }
                 else{
                     return res.status(400).json(errResponse(baseResponse.SIGNIN_NOT_SIGNIN)); 
