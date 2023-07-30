@@ -174,10 +174,10 @@ export const nqnaProvider = { //n문n답
             const selectVisitorQuestionParms = [user_id, userIdFromJWT];
 
             const connection = await pool.getConnection(async conn => conn);
-            const EmptyAnswerResult = await nqnaDao.selectVisitorQuestion(connection,selectVisitorQuestionParms);
+            const VisitorQuestionResult = await nqnaDao.selectVisitorQuestion(connection,selectVisitorQuestionParms);
             connection.release();
     
-            return EmptyAnswerResult;
+            return VisitorQuestionResult;
     
         }catch(err){
             console.error(err);  
