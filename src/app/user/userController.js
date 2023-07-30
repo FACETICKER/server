@@ -3,7 +3,7 @@ import dotenv from "dotenv";
 import { response,errResponse } from "../../../config/response";
 import baseResponse from "../../../config/baseResponse";
 import {loginService, stickerService, nqnaService, mainpageService, posterService} from "./userService.js";
-import {stickerProvider, nqnaProvider, retrieveUserId, posterProvider} from "./userProvider";
+import {stickerProvider, nqnaProvider, userProvider, retrieveUserId, posterProvider} from "./userProvider";
 dotenv.config();
 export const loginController = {
     kakao : async(req,res)=>{ //카카오
@@ -188,7 +188,7 @@ export const stickerController = {
 export const nqnaController = {
     /**
     * API Name: default 질문 등록
-    * POST: /:user_id/nqna/default
+    * POST: /:user_id/nqna/question/default
     */
     postDefaultQuestion : async(req,res) => {
 
@@ -197,10 +197,10 @@ export const nqnaController = {
         const User = await userProvider.retrieveUser(user_id)
 
         try {
-            if (User) {
+            if (User) {     
                 const postDefaultQuestionResult = await nqnaService.createDefaultQuestion(user_id,question);
-                return res.status(200).json(response(baseResponse.SUCCESS, postDefaultQuestionResult));
-            } 
+                return res.status(200).json(errResponse(baseResponse.SUCCESS, postDefaultQuestionResult));
+            }
             else {
                  return res.status(404).json(response(baseResponse.USER_USERID_NOT_EXIST));
             }
@@ -212,19 +212,27 @@ export const nqnaController = {
 
     /**
     * API Name: Visitor 질문 등록 
-    * POST: /:user_id/nqna/visitor
+    * POST: /:user_id/nqna/question/visitor
     */
     postVisitorQuestion : async(req,res) => {
    
         const {question} = req.body; 
         const {user_id} = req.params; 
-        const User = await userProvider.retrieveUser(user_id)
-                
+        const userIdFromJWT = req.verifiedToken ? req.verifiedToken.user_id : null; // 로그인한 방문자의 ID
+        const User = await userProvider.retrieveUser(user_id);
+        
         try {
             if (User) {
-                const postVisitorQuestionResult = await nqnaService.createVisitorQuestion(user_id, question);
-
-                return res.status(200).json(response(baseResponse.SUCCESS, postVisitorQuestionResult));
+                if(question.length === 0){
+                    return res.status(400).json(errResponse(baseResponse.NQNA_QUESTION_EMPTY));
+                }
+                else if(question.length > 100){
+                    return res.status(400).json(errResponse(baseResponse.NQNA_QUESTION_LENGTH));
+                }
+                else{
+                    const postVisitorQuestionResult = await nqnaService.createVisitorQuestion(user_id, question, userIdFromJWT);
+                    return res.status(200).json(response(baseResponse.SUCCESS, postVisitorQuestionResult));
+                }
             } 
             else {
                  return res.status(404).json(response(baseResponse.USER_USERID_NOT_EXIST));
@@ -243,15 +251,23 @@ export const nqnaController = {
    
         const {answer} = req.body;
         const {nQnA_id} = req.params;
-
+ 
         try{
             const nQnA = await nqnaProvider.retrieveNQnA(nQnA_id); // nQnA 개별 질문 조회
             if(nQnA){
-                const postAnswerResult = await nqnaService.createAnswer(answer, nQnA_id);
-                return res.status(200).json(response(baseResponse.SUCCESS, postAnswerResult));
+                if(answer.length === 0){
+                    return res.status(400).json(errResponse(baseResponse.NQNA_ANSWER_EMPTY));
+                }
+                else if(answer.length > 100){
+                    return res.status(400).json(errResponse(baseResponse.NQNA_ANSWER_LENGTH));
+                }
+                else{
+                    const postAnswerResult = await nqnaService.createAnswer(answer, nQnA_id);
+                    return res.status(200).json(response(baseResponse.SUCCESS, postAnswerResult));
+                }
             }
             else{
-                return res.status(404).json(response(baseResponse.NQ_NQID_NOT_EXIST));
+                return res.status(404).json(response(baseResponse.NQNA_QUESTION_NOT_EXIST));
             }     
         }
         catch(error){
@@ -312,7 +328,7 @@ export const nqnaController = {
                 return res.status(200).json(response(baseResponse.SUCCESS, patchQuestionHiddenResult));            
             }   
             else{
-                return res.status(404).json(response(baseResponse.NQ_NQID_NOT_EXIST));
+                return res.status(404).json(response(baseResponse.NQNA_QUESTION_NOT_EXIST));
             }     
         }
         catch(error){
@@ -340,14 +356,70 @@ export const nqnaController = {
                     return res.status(200).json(response(baseResponse.SUCCESS, patchAnswerResult));            
                 }
                 else{
-                    return res.status(404).json(response(baseResponse.NA_NAID_NOT_EXIST));
+                    return res.status(404).json(response(baseResponse.NQNA_ANSWER_NOT_EXIST));
                 }
             }   
             else{
-                return res.status(404).json(response(baseResponse.NQ_NQID_NOT_EXIST));
+                return res.status(404).json(response(baseResponse.NQNA_QUESTION_NOT_EXIST));
             }     
         }
         catch(error){
+            return res.status(500).json(errResponse(baseResponse.SERVER_ERROR));
+        }
+    },
+
+    /**
+     * API Name: 미답변 질문 개수 조회
+     * GET: /:user_id/nqna/question/emptyanswer
+     */
+    getEmptyAnswer : async(req,res) =>{
+
+        const {user_id} = req.params;
+        const User = await userProvider.retrieveUser(user_id);
+
+        try{
+            if(User){
+                const getEmptyAnswerResult = await nqnaProvider.retrieveEmptyAnswer(user_id);
+                return res.status(200).json(response(baseResponse.SUCCESS, getEmptyAnswerResult)); 
+            }
+            else {
+                return res.status(404).json(response(baseResponse.USER_USERID_NOT_EXIST));
+           }
+        }catch(error){
+            return res.status(500).json(errResponse(baseResponse.SERVER_ERROR));
+        }
+    },
+
+    /**
+     * API Name: (방문자 플로우) 로그인한 방문자가 남긴 질문 조회
+     * GET: /:user_id/nqna/question/visitor
+     */
+    getVisitorQuestion : async(req,res) =>{
+
+        const {user_id} = req.params;
+        const User = await userProvider.retrieveUser(user_id);
+        const userIdFromJWT = req.verifiedToken ? req.verifiedToken.user_id : null; // 로그인한 방문자의 user_id
+
+        try{
+            if(User){
+                if(userIdFromJWT){ // 로그인한 방문자라면
+                    const getVisitorQuestionResult = await nqnaProvider.retrieveVisitorQuestion(user_id, userIdFromJWT);
+
+                    if(getVisitorQuestionResult[0] === undefined){//질문을 남기지 않은 방문자라면
+                        return res.status(400).json(errResponse(baseResponse.NQNA_VISITOR_QUESTION_NOT_EXIST)); 
+                    }
+                    else{
+                        return res.status(200).json(response(baseResponse.SUCCESS, getVisitorQuestionResult)); 
+                    }
+                }
+                else{
+                    return res.status(400).json(errResponse(baseResponse.SIGNIN_NOT_SIGNIN)); 
+                }
+            }
+            else {
+                return res.status(404).json(response(baseResponse.USER_USERID_NOT_EXIST));
+           }
+        }catch(error){
             return res.status(500).json(errResponse(baseResponse.SERVER_ERROR));
         }
     },

@@ -211,8 +211,8 @@ export const nqnaDao = {
 
     insertVisitorQuestion : async(connection, insertDefaultQuestionParams) => { // visitor 질문 생성
         const postVisitorQuestionQuery = `
-            INSERT INTO nQnA(user_id, question, question_type) 
-            VALUES (?,?,"visitor");
+            INSERT INTO nQnA(user_id, question, question_type,visitor_id) 
+            VALUES (?,?,"visitor",?);
     
         `;
         const insertVisitorQuestionRow = await connection.query(postVisitorQuestionQuery, insertDefaultQuestionParams);
@@ -241,7 +241,7 @@ export const nqnaDao = {
 
     selectHostNQnA : async(connection,user_id)=>{ // 호스트 플로우 nQnA 전체 조회
         const selectHostNQnAQuery = `
-            SELECT question, question_type, question_hidden, answer, answer_hidden, seen,created_at
+            SELECT question, question_type, question_hidden, answer, answer_hidden, created_at
             FROM nQnA
             WHERE user_id = ?;
         `
@@ -277,7 +277,27 @@ export const nqnaDao = {
         `
         const updateAnswerHiddenRow = await connection.query(patchAnswerHiddenQuery, updateAnswerHiddenParams);
         return updateAnswerHiddenRow;
-    }
+    },
+
+    selectEmptyAnswer : async(connection,user_id)=>{ // 미답변 질문 개수 조회
+        const selectEmptyAnswerQuery = `
+            SELECT COUNT(*) AS emptyanswer
+            FROM nQnA
+            WHERE user_id = ? AND answer IS NULL ;
+        `
+        const [selectEmptyAnswerRow] = await connection.query(selectEmptyAnswerQuery,user_id);
+        return selectEmptyAnswerRow; 
+    },
+
+    selectVisitorQuestion : async(connection,selectVisitorQuestionParms)=>{ // (방문자 플로우) 로그인한 방문자가 남긴 질문 조회
+        const selectVisitorQuestionQuery = `
+        SELECT nQnA_id, question, visitor_id
+        FROM nQnA
+        WHERE user_id = ? AND visitor_id = ?;
+        `
+        const [selectVisitorQuestionQueryRow] = await connection.query(selectVisitorQuestionQuery,selectVisitorQuestionParms);
+        return selectVisitorQuestionQueryRow; 
+    },
 }
 
 export const posterDao = {

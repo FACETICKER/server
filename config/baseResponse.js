@@ -10,6 +10,7 @@ const baseResponse = {
     SIGNUP_KAKAO_NEWUSER: {"isSuccess":true, "code":2001, "message": "새로운 사용자입니다"},
     SIGNUP_GOOGLE_EXUSER : {"isSuccess":true, "code":2002, "message":"이미 가입된 사용자입니다"},
     SIGNUP_GOOGLE_NEWUSER: {"isSuccess":true, "code":2003, "message":"새로운 사용자입니다"},
+    SIGNIN_NOT_SIGNIN : { "isSuccess": false, "code": 2004, "message": "로그인하지 않은 사용자입니다." },
     
     //유저 관련 오류 3000번
     USER_USERID_EMPTY : { "isSuccess": false, "code": 3000, "message": "user_id를 입력해주세요." },
@@ -21,8 +22,13 @@ const baseResponse = {
     STICKER_STICKERID_NOT_EXIST : { "isSuccess": false, "code": 4000, "message": "해당 스티커가 존재하지 않습니다." },
 
     //질문 관련 오류 5000번
-    NQ_NQID_NOT_EXIST : { "isSuccess": false, "code": 5000, "message": "질문이 존재하지 않습니다." },
-    NA_NAID_NOT_EXIST : { "isSuccess": false, "code": 5001, "message": "답변이 존재하지 않습니다." },
+    NQNA_QUESTION_NOT_EXIST : { "isSuccess": false, "code": 5000, "message": "질문이 존재하지 않습니다." },
+    NQNA_ANSWER_NOT_EXIST : { "isSuccess": false, "code": 5001, "message": "답변이 존재하지 않습니다." },
+    NQNA_QUESTION_EMPTY : { "isSuccess": false, "code": 5002, "message":"질문을 입력해주세요" },
+    NQNA_ANSWER_EMPTY : { "isSuccess": false, "code": 5003, "message":"답변을 입력해주세요" },
+    NQNA_QUESTION_LENGTH : { "isSuccess": false, "code": 5004, "message":"질문은 100자리 미만으로 입력해주세요." },
+    NQNA_ANSWER_LENGTH : { "isSuccess": false, "code": 5005, "message":"답변은 100자리 미만으로 입력해주세요." },
+    NQNA_VISITOR_QUESTION_NOT_EXIST : { "isSuccess": false, "code": 5000, "message": "방문자의 질문이 존재하지 않습니다." },
 
 
     //토큰 6000번
