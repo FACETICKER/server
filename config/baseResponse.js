@@ -21,8 +21,12 @@ const baseResponse = {
     STICKER_STICKERID_NOT_EXIST : { "isSuccess": false, "code": 4000, "message": "해당 스티커가 존재하지 않습니다." },
 
     //질문 관련 오류 5000번
-    NQ_NQID_NOT_EXIST : { "isSuccess": false, "code": 5000, "message": "질문이 존재하지 않습니다." },
-    NA_NAID_NOT_EXIST : { "isSuccess": false, "code": 5001, "message": "답변이 존재하지 않습니다." },
+    NQNA_QUESTION_NOT_EXIST : { "isSuccess": false, "code": 5000, "message": "질문이 존재하지 않습니다." },
+    NQNA_ANSWER_NOT_EXIST : { "isSuccess": false, "code": 5001, "message": "답변이 존재하지 않습니다." },
+    NQNA_QUESTION_EMPTY : { "isSuccess": false, "code": 5002, "message":"질문을 입력해주세요" },
+    NQNA_ANSWER_EMPTY : { "isSuccess": false, "code": 5003, "message":"답변을 입력해주세요" },
+    NQNA_QUESTION_LENGTH : { "isSuccess": false, "code": 5004, "message":"질문은 100자리 미만으로 입력해주세요." },
+    NQNA_ANSWER_LENGTH : { "isSuccess": false, "code": 5005, "message":"답변은 100자리 미만으로 입력해주세요." },
 
 
     //토큰 6000번

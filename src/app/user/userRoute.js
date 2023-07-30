@@ -713,6 +713,7 @@ userRouter.patch('/:user_id/nqna/:nQnA_id/answer/hidden',nqnaController.patchAns
  *              message:
  *                  type: string
  */
+userRouter.get('/:user_id/nqna/question/emptyanswer',nqnaController.getEmptyAnswer); //미답변 질문 개수 조회 API
 
 //포스터 관련
 userRouter.post("/:user_id/poster",jwtMiddleware,posterController.postPoster); //포스터 등록
