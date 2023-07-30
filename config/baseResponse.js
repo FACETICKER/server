@@ -10,6 +10,7 @@ const baseResponse = {
     SIGNUP_KAKAO_NEWUSER: {"isSuccess":true, "code":2001, "message": "새로운 사용자입니다"},
     SIGNUP_GOOGLE_EXUSER : {"isSuccess":true, "code":2002, "message":"이미 가입된 사용자입니다"},
     SIGNUP_GOOGLE_NEWUSER: {"isSuccess":true, "code":2003, "message":"새로운 사용자입니다"},
+    SIGNIN_NOT_SIGNIN : { "isSuccess": false, "code": 2004, "message": "로그인하지 않은 사용자입니다." },
     
     //유저 관련 오류 3000번
     USER_USERID_EMPTY : { "isSuccess": false, "code": 3000, "message": "user_id를 입력해주세요." },

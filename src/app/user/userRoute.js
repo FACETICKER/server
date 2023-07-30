@@ -471,11 +471,11 @@ userRouter.get('/:user_id/sticker/detail',jwtMiddleware,stickerController.getSti
 
 
 // nQnA 관련
-userRouter.post('/:user_id/nqna/default',nqnaController.postDefaultQuestion); //default 질문 등록 API
+userRouter.post('/:user_id/nqna/question/default',nqnaController.postDefaultQuestion); //default 질문 등록 API
 /**
  * @swagger
  * paths:
- *  /:user_id/nqna/default:
+ *  /:user_id/nqna/question/default:
  *   post:
  *    summary : default 질문 등록
  *    tags: [N문 N답]
@@ -505,11 +505,11 @@ userRouter.post('/:user_id/nqna/default',nqnaController.postDefaultQuestion); //
  *              message:
  *                  type: string
  */
-userRouter.post('/:user_id/nqna/visitor',nqnaController.postVisitorQuestion); //visitor 질문 등록 API
+userRouter.post('/:user_id/nqna/question/visitor',nqnaController.postVisitorQuestion); //visitor 질문 등록 API
 /**
  * @swagger
  * paths:
- *  /:user_id/nqna/visitor:
+ *  /:user_id/nqna/question/visitor:
  *   post:
  *    summary : visitor 질문 등록
  *    tags: [N문 N답]
@@ -714,6 +714,8 @@ userRouter.patch('/:user_id/nqna/:nQnA_id/answer/hidden',nqnaController.patchAns
  *                  type: string
  */
 userRouter.get('/:user_id/nqna/question/emptyanswer',nqnaController.getEmptyAnswer); //미답변 질문 개수 조회 API
+userRouter.get('/:user_id/nqna/question/visitor',nqnaController.getVisitorQuestion); //(방문자 플로우) 로그인한 방문자가 남긴 질문 조회 API
+
 
 //포스터 관련
 userRouter.post("/:user_id/poster",jwtMiddleware,posterController.postPoster); //포스터 등록

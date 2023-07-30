@@ -168,6 +168,21 @@ export const nqnaProvider = { //n문n답
             console.error(err);  
         }
         },
+    
+    retrieveVisitorQuestion : async(user_id, userIdFromJWT) =>{ //(방문자 플로우) 로그인한 방문자가 남긴 질문 조회
+        try{ 
+            const selectVisitorQuestionParms = [user_id, userIdFromJWT];
+
+            const connection = await pool.getConnection(async conn => conn);
+            const EmptyAnswerResult = await nqnaDao.selectVisitorQuestion(connection,selectVisitorQuestionParms);
+            connection.release();
+    
+            return EmptyAnswerResult;
+    
+        }catch(err){
+            console.error(err);  
+        }
+        },
 };
 
 export const posterProvider = { //포스터
