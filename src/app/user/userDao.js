@@ -288,6 +288,16 @@ export const nqnaDao = {
         const [selectEmptyAnswerRow] = await connection.query(selectEmptyAnswerQuery,user_id);
         return selectEmptyAnswerRow; 
     },
+
+    selectVisitorQuestion : async(connection,selectVisitorQuestionParms)=>{ // (방문자 플로우) 로그인한 방문자가 남긴 질문 조회
+        const selectVisitorQuestionQuery = `
+        SELECT nQnA_id, question
+        FROM nQnA
+        WHERE user_id = ? AND visitor_id = ?;
+        `
+        const [selectVisitorQuestionQueryRow] = await connection.query(selectVisitorQuestionQuery,selectVisitorQuestionParms);
+        return selectVisitorQuestionQueryRow; 
+    },
 }
 
 export const posterDao = {
