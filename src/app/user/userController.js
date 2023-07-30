@@ -170,6 +170,18 @@ export const stickerController = {
         }catch(err){
             return res.status(500).send(err);
         }
+    },
+    getStickerDetails : async(req,res)=>{
+        try{
+            const userid = req.params.user_id;
+            const userIdFromJWT = req.verifiedToken ? req.verifiedToken.user_id : null;
+            if(userIdFromJWT==userid){
+                const result = await stickerProvider.retrieveStickerDeatils(userid);
+                return res.status(200).send(response(baseResponse.SUCCESS,result));
+            }
+        }catch(err){
+            return res.status(500).send(errResponse(baseResponse.SERVER_ERROR));
+        }
     }
 };
 

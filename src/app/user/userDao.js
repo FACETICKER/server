@@ -185,6 +185,15 @@ export const stickerDao = {
         `
         const [selectAccessoryRow] = await connection.query(selectAccessoryQuery);
         return selectAccessoryRow;
+    },
+    selectUserStickerDetails : async(connection,userId) =>{
+        const selectUserStickerDetailsQuery = `
+            SELECT face_id, eyes_id, nose_id, mouth_id, arm_id, foot_id, accessory_id
+            FROM user_sticker
+            WHERE user_id = ?;
+        `
+        const [selectUserStickerDetailsRow] = await connection.query(selectUserStickerDetailsQuery,userId);
+        return selectUserStickerDetailsRow;
     }
     
 }
