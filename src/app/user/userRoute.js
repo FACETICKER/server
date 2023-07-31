@@ -579,7 +579,8 @@ userRouter.get('/:user_id/nqna',jwtMiddleware,nqnaController.getnQnA); //N문 N�
  *                              answer_hidden:
  *                                  type: integer
  *                              created_at:
- *                                  type: date-time
+ *                                  type: string
+ *                                  format: date-time
  *      '201':
  *        description: 방문자 플로우 조회 성공
  *        schema:
@@ -605,7 +606,8 @@ userRouter.get('/:user_id/nqna',jwtMiddleware,nqnaController.getnQnA); //N문 N�
  *                              answer_hidden:
  *                                  type: integer
  *                              created_at:
- *                                  type: date-time
+ *                                  type: string
+ *                                  format: date-time
  */
 userRouter.patch('/:user_id/nqna/:nQnA_id/question/hidden',nqnaController.patchQuestionHidden); //질문 공개 여부 수정 API
 /**
@@ -675,6 +677,83 @@ userRouter.patch('/:user_id/nqna/:nQnA_id/answer/hidden',nqnaController.patchAns
  *              message:
  *                  type: string
  */
+userRouter.get('/:user_id/nqna/question/emptyanswer',nqnaController.getEmptyAnswer); //미답변 질문 개수 조회 API
+/**
+ * @swagger
+ * paths:
+ *  /:user_id/nqna/question/emptyanswer:
+ *   get:
+ *    summary : 미답변 질문 개수 조회
+ *    tags: [N문 N답]
+ *    description: 미답변 질문 개수 조회
+ *    parameters:
+ *    - in: path
+ *      name: user_id
+ *      required: true
+ *      description: 사용자 ID
+ *      schema:
+ *        type: integer
+ *    responses:
+ *      '200':
+ *        description: 조회 성공
+ *        schema:
+ *          properties:
+ *              isSuccess:
+ *                  type: boolean
+ *              code:
+ *                  type: integer
+ *              message:
+ *                  type: string
+ *              result:
+ *                  type: object
+ *                  properties:
+ *                      EmptyAnswerResult:
+ *                          type: object
+ *                          properties:
+ *                              emptyanswer:
+ *                                  type: integer
+ */
+userRouter.get('/:user_id/nqna/question/visitor',nqnaController.getVisitorQuestion); //(방문자 플로우) 로그인한 방문자가 남긴 질문 조회 API
+/**
+ * @swagger
+ * paths:
+ *  /:user_id/nqna/question/visitor:
+ *   get:
+ *    summary : (방문자 플로우) 로그인한 방문자가 남긴 질문 조회
+ *    tags: [N문 N답]
+ *    description: (방문자 플로우) 로그인한 방문자가 남긴 질문 조회
+ *    parameters:
+ *    - in: path
+ *      name: user_id
+ *      required: true
+ *      description: 사용자 ID
+ *      schema:
+ *        type: integer
+ *    responses:
+ *      '200':
+ *        description: 조회 성공
+ *        schema:
+ *          properties:
+ *              isSuccess:
+ *                  type: boolean
+ *              code:
+ *                  type: integer
+ *              message:
+ *                  type: string
+ *              result:
+ *                  type: object
+ *                  properties:
+ *                      VisitorQuestionResult:
+ *                          type: object
+ *                          properties:
+ *                              nQnA_id:
+ *                                  type: integer
+ *                              question:
+ *                                  type: string
+ *                              visitor_id:
+ *                                  type: integer
+ */
+
 //포스터 관련
 userRouter.post("/:user_id/poster",jwtMiddleware,posterController.postPoster); //포스터 등록
 /**
