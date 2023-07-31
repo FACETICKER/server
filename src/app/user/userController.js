@@ -1,9 +1,9 @@
 import axios from "axios";
 import dotenv from "dotenv";
-import { response,errResponse } from "../../../config/response";
-import baseResponse from "../../../config/baseResponse";
+import { response,errResponse } from "../../../config/response.js";
+import baseResponse from "../../../config/baseResponse.js";
 import {loginService, stickerService, nqnaService, mainpageService, posterService} from "./userService.js";
-import {stickerProvider, nqnaProvider, userProvider, retrieveUserId, posterProvider} from "./userProvider";
+import {stickerProvider, nqnaProvider, userProvider, retrieveUserId, posterProvider} from "./userProvider.js";
 dotenv.config();
 export const loginController = {
     kakao : async(req,res)=>{ //카카오

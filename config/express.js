@@ -2,7 +2,7 @@ import  express  from "express";
 import compression from "compression";
 import methodOverride from "method-override";
 import cors from "cors";
-import userRouter from "../src/app/user/userRoute";
+import userRouter from "../src/app/user/userRoute.js";
 import {specs, swaggerUi} from "./swagger.js";
 const app = express();
 
