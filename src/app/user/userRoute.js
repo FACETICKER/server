@@ -434,12 +434,247 @@ userRouter.get('/:user_id/sticker/detail',jwtMiddleware,stickerController.getSti
 
 // nQnA 관련
 userRouter.post('/:user_id/nqna/default',nqnaController.postDefaultQuestion); //default 질문 등록 API
+/**
+ * @swagger
+ * paths:
+ *  /:user_id/nqna/question/default:
+ *   post:
+ *    summary : default 질문 등록
+ *    tags: [N문 N답]
+ *    description: default 질문 등록
+ *    parameters:
+ *    - in: path
+ *      name: user_id
+ *      required: true
+ *      description: 사용자 ID
+ *      schema:
+ *        type: integer
+ *    - in: body
+ *      name: question
+ *      required: true
+ *      description: default 질문 내용
+ *      schema:
+ *        type: string
+ *    responses:
+ *      '200':
+ *        description: 등록 성공
+ *        schema:
+ *          properties:
+ *              isSuccess:
+ *                  type: boolean
+ *              code:
+ *                  type: integer
+ *              message:
+ *                  type: string
+ */
 userRouter.post('/:user_id/nqna/visitor',nqnaController.postVisitorQuestion); //visitor 질문 등록 API
+/**
+ * @swagger
+ * paths:
+ *  /:user_id/nqna/question/visitor:
+ *   post:
+ *    summary : visitor 질문 등록
+ *    tags: [N문 N답]
+ *    description: visitor 질문 등록
+ *    parameters:
+ *    - in: path
+ *      name: user_id
+ *      required: true
+ *      description: 사용자 ID
+ *      schema:
+ *        type: integer
+ *    - in: body
+ *      name: question
+ *      required: true
+ *      description: visitor 질문 내용
+ *      schema:
+ *        type: string
+ *    responses:
+ *      '200':
+ *        description: 등록 성공
+ *        schema:
+ *          properties:
+ *              isSuccess:
+ *                  type: boolean
+ *              code:
+ *                  type: integer
+ *              message:
+ *                  type: string
+ */
 userRouter.patch('/:user_id/nqna/:nQnA_id/answer',nqnaController.postAnswer); //Host 답변 등록 + 수정 API
+/**
+ * @swagger
+ * paths:
+ *  /:user_id/nqna/:nQnA_id/answer:
+ *   patch:
+ *    summary : Host 답변 등록 + 수정
+ *    tags: [N문 N답]
+ *    description: Host 답변 등록 + 수정
+ *    parameters:
+ *    - in: path
+ *      name: user_id
+ *      required: true
+ *      description: 사용자 ID
+ *      schema:
+ *        type: integer
+ *    - in: body
+ *      name: answer
+ *      required: true
+ *      description: 답변 내용
+ *      schema:
+ *        type: string
+ *    responses:
+ *      '200':
+ *        description: 등록 성공
+ *        schema:
+ *          properties:
+ *              isSuccess:
+ *                  type: boolean
+ *              code:
+ *                  type: integer
+ *              message:
+ *                  type: string
+ */
 userRouter.get('/:user_id/nqna',jwtMiddleware,nqnaController.getnQnA); //N문 N답 조회 API
+/**
+ * @swagger
+ * paths:
+ *  /:user_id/nqna:
+ *   get:
+ *    summary : N문 N답 조회
+ *    tags: [N문 N답]
+ *    description: N문 N답 전체 조회 (호스트 AND 방문자 플로우)
+ *    parameters:
+ *    - in: path
+ *      name: user_id
+ *      required: true
+ *      description: 사용자 ID
+ *      schema:
+ *        type: integer
+ *    responses:
+ *      '200':
+ *        description: 호스트 플로우 조회 성공
+ *        schema:
+ *          properties:
+ *              isSuccess:
+ *                  type: boolean
+ *              code:
+ *                  type: integer
+ *              message:
+ *                  type: string
+ *              result:
+ *                  type: object
+ *                  properties:
+ *                      hostNQnAResult:
+ *                          type: object
+ *                          properties:
+ *                              question:
+ *                                  type: string
+ *                              question_type:
+ *                                  type: integer
+ *                              question_hidden:
+ *                                  type: integer
+ *                              answer:
+ *                                  type: string
+ *                              answer_hidden:
+ *                                  type: integer
+ *                              created_at:
+ *                                  type: date-time
+ *      '201':
+ *        description: 방문자 플로우 조회 성공
+ *        schema:
+ *          properties:
+ *              isSuccess:
+ *                  type: boolean
+ *              code:
+ *                  type: integer
+ *              message:
+ *                  type: string
+ *              result:
+ *                  type: object
+ *                  properties:
+ *                      visitorNQnAResult:
+ *                          type: object
+ *                          properties:
+ *                              question:
+ *                                  type: string
+ *                              question_hidden:
+ *                                  type: integer
+ *                              answer:
+ *                                  type: string
+ *                              answer_hidden:
+ *                                  type: integer
+ *                              created_at:
+ *                                  type: date-time
+ */
 userRouter.patch('/:user_id/nqna/:nQnA_id/question/hidden',nqnaController.patchQuestionHidden); //질문 공개 여부 수정 API
+/**
+ * @swagger
+ * paths:
+ *  /:user_id/nqna/:nQnA_id/question/hidden:
+ *   patch:
+ *    summary : 질문 공개 여부 수정
+ *    tags: [N문 N답]
+ *    description: 질문 공개 여부 수정
+ *    parameters:
+ *    - in: path
+ *      name: user_id
+ *      required: true
+ *      description: 사용자 ID
+ *      schema:
+ *        type: integer
+ *    - in: body
+ *      name: question_hidden
+ *      required: true
+ *      description: 질문 공개 여부
+ *      schema:
+ *        type: integer
+ *    responses:
+ *      '200':
+ *        description: 수정 성공
+ *        schema:
+ *          properties:
+ *              isSuccess:
+ *                  type: boolean
+ *              code:
+ *                  type: integer
+ *              message:
+ *                  type: string
+ */
 userRouter.patch('/:user_id/nqna/:nQnA_id/answer/hidden',nqnaController.patchAnswerHidden); //답변 공개 여부 수정 API
-
+/**
+ * @swagger
+ * paths:
+ *  /:user_id/nqna/:nQnA_id/answer/hidden:
+ *   patch:
+ *    summary : 답변 공개 여부 수정
+ *    tags: [N문 N답]
+ *    description: 답변 공개 여부 수정
+ *    parameters:
+ *    - in: path
+ *      name: user_id
+ *      required: true
+ *      description: 사용자 ID
+ *      schema:
+ *        type: integer
+ *    - in: body
+ *      name: answer_hidden
+ *      required: true
+ *      description: 답변 공개 여부
+ *      schema:
+ *        type: integer
+ *    responses:
+ *      '200':
+ *        description: 수정 성공
+ *        schema:
+ *          properties:
+ *              isSuccess:
+ *                  type: boolean
+ *              code:
+ *                  type: integer
+ *              message:
+ *                  type: string
+ */
 //포스터 관련
 userRouter.post("/:user_id/poster",jwtMiddleware,posterController.postPoster); //포스터 등록
 /**
