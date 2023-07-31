@@ -5,6 +5,9 @@ import { jwtMiddleware } from "../../../config/jwtMiddleware.js";
 
 const userRouter = express.Router();
 
+//서버 연습용
+userRouter.get('/hello-world',(req,res)=>res.status(200).json("hello world"));
+
 //웹 브라우저에서 favicon.ico를 자동으로 요청해서 /favicon.ico 요청이 
 //메인 페이지 조회 API /:nickname으로 가기 때문에 이를 무시하기 위해서 아래처럼 라우팅 처리를 해줌
 userRouter.get('/favicon.ico',(req,res)=>res.status(404).end()); 
