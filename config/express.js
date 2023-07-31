@@ -12,8 +12,8 @@ app.use(express.json());
 app.use(express.urlencoded({extended:true}));
 app.use(methodOverride());
 app.use(cors());
-app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(specs, { explorer: true }));
-app.use('/',userRouter);
+app.use('/app/api-docs', swaggerUi.serve, swaggerUi.setup(specs, { explorer: true }));
+app.use('/app',userRouter);
 
 
 export default app;
