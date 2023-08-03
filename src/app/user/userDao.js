@@ -128,7 +128,7 @@ export const stickerDao = {
         const [insertVisitorMessageRow] = await connection.query(insertVisitorMessageQuery,params);
         return insertVisitorMessageRow;
     },
-    insertStickerLocation : async(connection, params) =>{ //방문자 스티커 위치 등록
+    updateStickerLocation : async(connection, params) =>{ //방문자 스티커 위치 등록
         const insertStickerLocationQuery = `
             UPDATE visitor_sticker
             SET location_x = ?,  location_y = ?
@@ -136,55 +136,6 @@ export const stickerDao = {
         `
         const [insertStickerLocationRow] = await connection.query(insertStickerLocationQuery, params);
         return insertStickerLocationRow;
-    },
-    selectFace : async(connection) =>{
-        const selectFaceQuery = `
-            SELECT * FROM face;
-        `
-        const [selectFaceRow] = await connection.query(selectFaceQuery);
-        return selectFaceRow;
-    },
-    selectEyes : async(connection) =>{
-        const selectEyesQuery = `
-            SELECT * FROM eyes;
-        `
-        const [selectEyesRow] = await connection.query(selectEyesQuery);
-        return selectEyesRow;
-    },
-    selectNose : async(connection) =>{
-        const selectNoseQuery = `
-            SELECT * FROM nose;
-        `
-        const [selectNoseRow] = await connection.query(selectNoseQuery);
-        return selectNoseRow; 
-    },
-    selectMouth : async(connection) =>{
-        const selectMouthQuery = `
-            SELECT * FROM mouth;
-        `
-        const [selectMouthRow] = await connection.query(selectMouthQuery);
-        return selectMouthRow;
-    },
-    selectArm : async(connection) =>{
-        const selectArmQuery = `
-            SELECT * FROM arm;
-        `
-        const [selectArmRow] = await connection.query(selectArmQuery);
-        return selectArmRow;
-    },
-    selectFoot : async(connection) =>{
-        const selectFootQuery = `
-            SELECT * FROM foot;
-        `
-        const [selectFootRow] = await connection.query(selectFootQuery);
-        return selectFootRow;
-    },
-    selectAccessory : async(connection) =>{
-        const selectAccessoryQuery = `
-            SELECT * FROM accessory;
-        `
-        const [selectAccessoryRow] = await connection.query(selectAccessoryQuery);
-        return selectAccessoryRow;
     },
     selectUserStickerDetails : async(connection,userId) =>{
         const selectUserStickerDetailsQuery = `

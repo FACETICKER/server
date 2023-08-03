@@ -234,8 +234,52 @@ userRouter.get("/:user_id/sticker/all",jwtMiddleware,stickerController.getSticke
  *                              location_y:
  *                                  type: integer
  */
-
-
+userRouter.patch("/:user_id/sticker/all/location",jwtMiddleware,stickerController.patchStickerLocation); //스티커 위치 수정
+/**
+ * @swagger
+ * paths:
+ *  /:user_id/sticker/all/location:
+ *   patch:
+ *    summary : 방문자 스티커 위치 수정
+ *    tags: [스티커]
+ *    description: 스티커 수정
+ *    parameters:
+ *    - in: path
+ *      name: user_id
+ *      required: true
+ *      description: 사용자 ID
+ *      schema:
+ *        type: integer
+ *    - in: body
+ *      name: id
+ *      required: true
+ *      description: 방문자 스티커 아이디
+ *      schema:
+ *        type: integer
+ *    - in: body
+ *      name: x
+ *      required: true
+ *      description: x 좌표
+ *      schema:
+ *        type: integer
+ *    - in: body
+ *      name: y
+ *      required: true
+ *      description: y 좌표
+ *      schema:
+ *        type: integer
+ *    responses:
+ *      '200':
+ *        description: 변경 성공
+ *        schema:
+ *          properties:
+ *              isSuccess:
+ *                  type: boolean
+ *              code:
+ *                  type: integer
+ *              message:
+ *                  type: string
+ */
 
 // 스티커 관련
 userRouter.post('/:user_id/sticker',jwtMiddleware,stickerController.postSticker); //스티커 등록(Host,Visitor)
@@ -272,15 +316,15 @@ userRouter.post('/:user_id/sticker',jwtMiddleware,stickerController.postSticker)
  *              message:
  *                  type: string
  */
-userRouter.patch('/:user_id/sticker/attach',jwtMiddleware,stickerController.attachSticker); //스티커 부착, 스티커 위치 수정도 같은 API 호출
+userRouter.patch('/:user_id/sticker/attach',jwtMiddleware,stickerController.attachSticker); //스티커 부착
 /**
  * @swagger
  * paths:
  *  /:user_id/sticker/attach:
  *   patch:
- *    summary : 방문자 스티커 부탁
+ *    summary : 방문자 스티커 부착
  *    tags: [스티커]
- *    description: 스티커 부착 + 위치 수정
+ *    description: 스티커 부착
  *    parameters:
  *    - in: path
  *      name: user_id
@@ -813,6 +857,8 @@ userRouter.post("/:user_id/poster",jwtMiddleware,posterController.postPoster); /
  *              message:
  *                  type: string               
  */
+
+
 
 export default userRouter;
 

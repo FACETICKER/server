@@ -18,7 +18,7 @@ export const loginController = {
                 data: ({
                     grant_type: 'authorization_code',
                     client_id: process.env.KAKAO_ID,
-                    redirect_uri: 'http://faceticker.site/app/auth/kakao/callback',
+                    redirect_uri: 'https://faceticker.site/app/auth/kakao/callback',
                     code: code,
                 })
             });
@@ -181,6 +181,25 @@ export const stickerController = {
             }
         }catch(err){
             return res.status(500).send(errResponse(baseResponse.SERVER_ERROR));
+        }
+    },
+    patchStickerLocation : async(req,res)=>{
+        try{
+            const userIdFromJWT = req.verifiedToken ? req.verifiedToken.user_id : null;
+            const userId = req.params.user_id;
+            const reqBody = req.body;
+            if(userId === userIdFromJWT){
+                for(const[num, newPosition] of Object.entries(reqBody)){
+                    console.log(newPosition);
+                    const result = await stickerService.patchStickerLocation(newPosition);
+                    if(result == fail){
+                        return res.send(response(baseResponse.DB_ERROR));
+                    }
+                }
+                return res.send(response(baseResponse.SUCCESS));
+            }
+        }catch(err){
+            return res.json(err).send(err);
         }
     }
 };
