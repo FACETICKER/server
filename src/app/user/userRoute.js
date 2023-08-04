@@ -1,9 +1,12 @@
 import express from "express";
 
-import { loginController, stickerController, nqnaController, mainController,posterController  } from "./userController";
+import { loginController, stickerController, nqnaController, mainController,posterController  } from "./userController.js";
 import { jwtMiddleware } from "../../../config/jwtMiddleware.js";
 
 const userRouter = express.Router();
+
+//서버 연습용
+userRouter.get('/hello-world',(req,res)=>res.status(200).json("hello world"));
 
 //웹 브라우저에서 favicon.ico를 자동으로 요청해서 /favicon.ico 요청이 
 //메인 페이지 조회 API /:nickname으로 가기 때문에 이를 무시하기 위해서 아래처럼 라우팅 처리를 해줌
@@ -617,7 +620,8 @@ userRouter.get('/:user_id/nqna',jwtMiddleware,nqnaController.getnQnA); //N문 N�
  *                              answer_hidden:
  *                                  type: integer
  *                              created_at:
- *                                  type: date-time
+ *                                  type: string
+ *                                  format: date-time
  *      '201':
  *        description: 방문자 플로우 조회 성공
  *        schema:
@@ -643,7 +647,8 @@ userRouter.get('/:user_id/nqna',jwtMiddleware,nqnaController.getnQnA); //N문 N�
  *                              answer_hidden:
  *                                  type: integer
  *                              created_at:
- *                                  type: date-time
+ *                                  type: string
+ *                                  format: date-time
  */
 userRouter.patch('/:user_id/nqna/:nQnA_id/question/hidden',nqnaController.patchQuestionHidden); //질문 공개 여부 수정 API
 /**
@@ -849,6 +854,7 @@ userRouter.post("/:user_id/poster",jwtMiddleware,posterController.postPoster); /
  *              message:
  *                  type: string               
  */
+
 export default userRouter;
 
 

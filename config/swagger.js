@@ -18,6 +18,4 @@ export const options = {
 
 const specs = swaggerJSDoc(options);
 
-module.exports = {
-    swaggerUi, specs
-};
+export {specs, swaggerUi};
