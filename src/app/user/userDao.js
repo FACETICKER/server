@@ -128,7 +128,7 @@ export const stickerDao = {
         const [insertVisitorMessageRow] = await connection.query(insertVisitorMessageQuery,params);
         return insertVisitorMessageRow;
     },
-    insertStickerLocation : async(connection, params) =>{ //방문자 스티커 위치 등록
+    updateStickerLocation : async(connection, params) =>{ //방문자 스티커 위치 등록
         const insertStickerLocationQuery = `
             UPDATE visitor_sticker
             SET location_x = ?,  location_y = ?
@@ -136,55 +136,6 @@ export const stickerDao = {
         `
         const [insertStickerLocationRow] = await connection.query(insertStickerLocationQuery, params);
         return insertStickerLocationRow;
-    },
-    selectFace : async(connection) =>{
-        const selectFaceQuery = `
-            SELECT * FROM face;
-        `
-        const [selectFaceRow] = await connection.query(selectFaceQuery);
-        return selectFaceRow;
-    },
-    selectEyes : async(connection) =>{
-        const selectEyesQuery = `
-            SELECT * FROM eyes;
-        `
-        const [selectEyesRow] = await connection.query(selectEyesQuery);
-        return selectEyesRow;
-    },
-    selectNose : async(connection) =>{
-        const selectNoseQuery = `
-            SELECT * FROM nose;
-        `
-        const [selectNoseRow] = await connection.query(selectNoseQuery);
-        return selectNoseRow; 
-    },
-    selectMouth : async(connection) =>{
-        const selectMouthQuery = `
-            SELECT * FROM mouth;
-        `
-        const [selectMouthRow] = await connection.query(selectMouthQuery);
-        return selectMouthRow;
-    },
-    selectArm : async(connection) =>{
-        const selectArmQuery = `
-            SELECT * FROM arm;
-        `
-        const [selectArmRow] = await connection.query(selectArmQuery);
-        return selectArmRow;
-    },
-    selectFoot : async(connection) =>{
-        const selectFootQuery = `
-            SELECT * FROM foot;
-        `
-        const [selectFootRow] = await connection.query(selectFootQuery);
-        return selectFootRow;
-    },
-    selectAccessory : async(connection) =>{
-        const selectAccessoryQuery = `
-            SELECT * FROM accessory;
-        `
-        const [selectAccessoryRow] = await connection.query(selectAccessoryQuery);
-        return selectAccessoryRow;
     },
     selectUserStickerDetails : async(connection,userId) =>{
         const selectUserStickerDetailsQuery = `
@@ -241,7 +192,7 @@ export const nqnaDao = {
 
     selectHostNQnA : async(connection,user_id)=>{ // 호스트 플로우 nQnA 전체 조회
         const selectHostNQnAQuery = `
-            SELECT question, question_type, question_hidden, answer, answer_hidden, created_at
+            SELECT nQnA_id, question, question_type, question_hidden, answer, answer_hidden, created_at
             FROM nQnA
             WHERE user_id = ?;
         `
@@ -251,7 +202,7 @@ export const nqnaDao = {
 
     selectVisitorNQnA : async(connection,user_id)=>{ // 방문자 플로우 nQnA 전체 조회
         const selectVisitorNQnAQuery = `
-            SELECT question, question_hidden, answer, answer_hidden, created_at
+            SELECT nQnA_id, question, question_hidden, answer, answer_hidden, created_at
             FROM nQnA
             WHERE user_id = ?;
         `
@@ -313,8 +264,8 @@ export const posterDao = {
     insertPoster : async(connection, params) =>{
         try{
             const insertPosterQuery = `
-                INSERT INTO user_poster(user_id, nickname, q_season,q_number,q_date,q_important)
-                VALUES(?,?,?,?,?,?);
+                INSERT INTO user_poster(user_id, nickname, q_season,q_number,q_date,q_important,chinese,pronunciation,meaning)
+                VALUES(?,?,?,?,?,?,?,?,?);
             `
             const [insertPosterRow] = await connection.query(insertPosterQuery,params);
             return insertPosterRow;
