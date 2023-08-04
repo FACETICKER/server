@@ -1,10 +1,11 @@
 import {response, errResponse} from "../../../config/response.js";
 import baseResponse from "../../../config/baseResponse.js";
-import { userCheck, stickerProvider, posterProvider, userProvider } from "./userProvider.js";
+import { userCheck, stickerProvider, posterProvider, userProvider, nqnaProvider } from "./userProvider.js";
 import {loginDao,nqnaDao, stickerDao, posterDao } from "./userDao.js";
 import pool from "../../../config/database.js";
 import jwt from "jsonwebtoken";
 import dotenv from "dotenv";
+import { nqnaController } from "./userController.js";
 dotenv.config();
 
 export const loginService = { //로그인 서비스
@@ -253,11 +254,13 @@ export const mainpageService = async(userIdFromJWT,user_id) =>{
     const poster = await posterProvider.poster(user_id);
     const sticker = await stickerProvider.userSticker(user_id);
     const newSticker = await stickerProvider.newStickers(user_id);
+    const newQuestion = await nqnaProvider.retrieveEmptyAnswer(user_id);
     if(userIdFromJWT == user_id){ //사용자가 본인 페이지에 들어갔을 경우
         const result = {
             poster:poster,
             sticker:sticker,
             newSticker:newSticker,
+            newQuestion: newQuestion,
         };
         return response(baseResponse.HOST,result); 
     }else{ //방문자가 다른 사용자 페이지에 방문했을 경우
@@ -265,7 +268,8 @@ export const mainpageService = async(userIdFromJWT,user_id) =>{
             userId: userIdFromJWT, //본인 프로필으로 돌아갈 경우를 위해
             hostPoster: poster,
             hostSticker:sticker,
-            hostnewSticer : newSticker
+            hostnewSticer : newSticker,
+            howtnewQuestion : newQuestion
         };
         return response(baseResponse.VISITOR,result);
     }
