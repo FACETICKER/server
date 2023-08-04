@@ -185,15 +185,14 @@ export const nqnaService = { //n문n답 관련 서비스
     createVisitorQuestion : async(user_id,question,userIdFromJWT) =>{ // visitor 질문 생성
         try{
             const insertVisitorQuestionParams =[user_id,question,userIdFromJWT]; 
-        
             const connection = await pool.getConnection(async conn => conn);
             const createVisitorQuestionResult = await nqnaDao.insertVisitorQuestion(connection,insertVisitorQuestionParams);
-
+            console.log(createVisitorQuestionResult);
             connection.release();
-            
             return response(baseResponse.SUCCESS);
         }
         catch(error){
+            console.log(error);
             return errResponse(baseResponse.DB_ERROR)
         }
     },
