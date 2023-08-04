@@ -1,9 +1,12 @@
 import express from "express";
 
-import { loginController, stickerController, nqnaController, mainController,posterController  } from "./userController";
+import { loginController, stickerController, nqnaController, mainController,posterController  } from "./userController.js";
 import { jwtMiddleware } from "../../../config/jwtMiddleware.js";
 
 const userRouter = express.Router();
+
+//서버 연습용
+userRouter.get('/hello-world',(req,res)=>res.status(200).json("hello world"));
 
 //웹 브라우저에서 favicon.ico를 자동으로 요청해서 /favicon.ico 요청이 
 //메인 페이지 조회 API /:nickname으로 가기 때문에 이를 무시하기 위해서 아래처럼 라우팅 처리를 해줌
@@ -179,47 +182,6 @@ userRouter.patch('/:user_id/sticker/message',jwtMiddleware,stickerController.pos
  *                  type: string
  */
 userRouter.get('/:user_id/sticker/visitor/:visitor_sticker_id',stickerController.getSticker); //방문자 기록 visitor_sticker_id로 상세 조회 API
-/**
- * @swagger
- * paths:
- *  /:user_id/sticker/visitor/:visitor_sticker_id:
- *   get:
- *    summary : 방문자가 남긴 스티커 상세 조회
- *    tags: [메인 페이지]
- *    description: 방문자 기록 페이지에서 스티커 클릭 시 나타나는 스티커 정보 상세 조회
- *    parameters:
- *    - in: path
- *      name: visitor_sticker_id
- *      required: true
- *      description: 방문자 스티커 ID
- *      schema:
- *        type: integer
- *    responses:
- *      '200':
- *        description: 조회 성공
- *        schema:
- *          properties:
- *              isSuccess:
- *                  type: boolean
- *              code:
- *                  type: integer
- *              message:
- *                  type: string
- *              result:
- *                  type: object
- *                  properties:
- *                      visitorStickerResult:
- *                          type: object
- *                          properties:
- *                              image_url:
- *                                  type: integer
- *                              name:
- *                                  type: string
- *                              message:
- *                                  type: string
- *                              visitor_id:
- *                                  type: integer
- */
 
 userRouter.get("/:user_id/sticker/all",jwtMiddleware,stickerController.getStickers); //방문자 기록 페이지 조회
 /**
@@ -272,8 +234,52 @@ userRouter.get("/:user_id/sticker/all",jwtMiddleware,stickerController.getSticke
  *                              location_y:
  *                                  type: integer
  */
-
-
+userRouter.patch("/:user_id/sticker/all/location",jwtMiddleware,stickerController.patchStickerLocation); //스티커 위치 수정
+/**
+ * @swagger
+ * paths:
+ *  /:user_id/sticker/all/location:
+ *   patch:
+ *    summary : 방문자 스티커 위치 수정
+ *    tags: [스티커]
+ *    description: 스티커 수정
+ *    parameters:
+ *    - in: path
+ *      name: user_id
+ *      required: true
+ *      description: 사용자 ID
+ *      schema:
+ *        type: integer
+ *    - in: body
+ *      name: id
+ *      required: true
+ *      description: 방문자 스티커 아이디
+ *      schema:
+ *        type: integer
+ *    - in: body
+ *      name: x
+ *      required: true
+ *      description: x 좌표
+ *      schema:
+ *        type: integer
+ *    - in: body
+ *      name: y
+ *      required: true
+ *      description: y 좌표
+ *      schema:
+ *        type: integer
+ *    responses:
+ *      '200':
+ *        description: 변경 성공
+ *        schema:
+ *          properties:
+ *              isSuccess:
+ *                  type: boolean
+ *              code:
+ *                  type: integer
+ *              message:
+ *                  type: string
+ */
 
 // 스티커 관련
 userRouter.post('/:user_id/sticker',jwtMiddleware,stickerController.postSticker); //스티커 등록(Host,Visitor)
@@ -300,7 +306,7 @@ userRouter.post('/:user_id/sticker',jwtMiddleware,stickerController.postSticker)
  *        type: string
  *    responses:
  *      '200':
- *        description: 등록 성공
+ *        description: 조회 성공
  *        schema:
  *          properties:
  *              isSuccess:
@@ -310,7 +316,7 @@ userRouter.post('/:user_id/sticker',jwtMiddleware,stickerController.postSticker)
  *              message:
  *                  type: string
  */
-userRouter.patch('/:user_id/sticker/attach',jwtMiddleware,stickerController.attachSticker); //스티커 부착, 스티커 위치 수정도 같은 API 호출
+userRouter.patch('/:user_id/sticker/attach',jwtMiddleware,stickerController.attachSticker); //스티커 부착
 /**
  * @swagger
  * paths:
@@ -318,7 +324,7 @@ userRouter.patch('/:user_id/sticker/attach',jwtMiddleware,stickerController.atta
  *   patch:
  *    summary : 방문자 스티커 부착
  *    tags: [스티커]
- *    description: 스티커 부착 + 위치 수정
+ *    description: 스티커 부착
  *    parameters:
  *    - in: path
  *      name: user_id
@@ -340,7 +346,7 @@ userRouter.patch('/:user_id/sticker/attach',jwtMiddleware,stickerController.atta
  *        type: integer
  *    responses:
  *      '200':
- *        description: 수정 성공
+ *        description: 조회 성공
  *        schema:
  *          properties:
  *              isSuccess:
@@ -471,7 +477,7 @@ userRouter.get('/:user_id/sticker/detail',jwtMiddleware,stickerController.getSti
 
 
 // nQnA 관련
-userRouter.post('/:user_id/nqna/question/default',nqnaController.postDefaultQuestion); //default 질문 등록 API
+userRouter.post('/:user_id/nqna/default',nqnaController.postDefaultQuestion); //default 질문 등록 API
 /**
  * @swagger
  * paths:
@@ -505,7 +511,7 @@ userRouter.post('/:user_id/nqna/question/default',nqnaController.postDefaultQues
  *              message:
  *                  type: string
  */
-userRouter.post('/:user_id/nqna/question/visitor',nqnaController.postVisitorQuestion); //visitor 질문 등록 API
+userRouter.post('/:user_id/nqna/visitor',nqnaController.postVisitorQuestion); //visitor 질문 등록 API
 /**
  * @swagger
  * paths:
@@ -617,7 +623,8 @@ userRouter.get('/:user_id/nqna',jwtMiddleware,nqnaController.getnQnA); //N문 N�
  *                              answer_hidden:
  *                                  type: integer
  *                              created_at:
- *                                  type: date-time
+ *                                  type: string
+ *                                  format: date-time
  *      '201':
  *        description: 방문자 플로우 조회 성공
  *        schema:
@@ -643,7 +650,8 @@ userRouter.get('/:user_id/nqna',jwtMiddleware,nqnaController.getnQnA); //N문 N�
  *                              answer_hidden:
  *                                  type: integer
  *                              created_at:
- *                                  type: date-time
+ *                                  type: string
+ *                                  format: date-time
  */
 userRouter.patch('/:user_id/nqna/:nQnA_id/question/hidden',nqnaController.patchQuestionHidden); //질문 공개 여부 수정 API
 /**
@@ -849,6 +857,9 @@ userRouter.post("/:user_id/poster",jwtMiddleware,posterController.postPoster); /
  *              message:
  *                  type: string               
  */
+
+
+
 export default userRouter;
 
 
