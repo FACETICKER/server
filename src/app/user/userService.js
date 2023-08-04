@@ -146,7 +146,6 @@ export const stickerService = { //스티커 관련 서비스
             const connection = await pool.getConnection(async conn => conn);
             const insertStickerLocationResult = await stickerDao.updateStickerLocation(connection,params);
             connection.release();
-            console.log(insertStickerLocationResult);
             if(insertStickerLocationResult.changedRows === 1 && insertStickerLocationResult.affectedRows===1){
                 return response(baseResponse.SUCCESS);
             }else return response(baseResponse.DB_ERROR);
@@ -254,8 +253,6 @@ export const mainpageService = async(userIdFromJWT,user_id) =>{
     const poster = await posterProvider.poster(user_id);
     const sticker = await stickerProvider.userSticker(user_id);
     const newSticker = await stickerProvider.newStickers(user_id);
-    console.log(userIdFromJWT);
-    console.log(user_id);
     if(userIdFromJWT == user_id){ //사용자가 본인 페이지에 들어갔을 경우
         const result = {
             poster:poster,
