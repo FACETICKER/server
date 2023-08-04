@@ -339,12 +339,48 @@ userRouter.post('/:user_id/sticker',jwtMiddleware,stickerController.postSticker)
  *      description: 사용자 ID
  *      schema:
  *        type: integer
- *    - in: query
- *      name: type
+ *    - in: body
+ *      name: face
  *      required: true
- *      description: host 또는 visitor
+ *      description:페이스 스티커 번호
  *      schema:
- *        type: string
+ *        type: integer
+ *    - in: body
+ *      name: eyes
+ *      required: true
+ *      description: 눈 스티커 번호
+ *      schema:
+ *        type: integer
+ *    - in: body
+ *      name: nose
+ *      required: true
+ *      description: 코 스티커 번호
+ *      schema:
+ *        type: integer
+ *    - in: body
+ *      name: mouth
+ *      required: true
+ *      description: 입 스티커 번호
+ *      schema:
+ *        type: integer
+ *    - in: body
+ *      name: arm
+ *      required: true
+ *      description: 팔 스티커 번호
+ *      schema:
+ *        type: integer
+ *    - in: body
+ *      name: foot
+ *      required: true
+ *      description: 발 스티커 번호
+ *      schema:
+ *        type: integer
+ *    - in: body
+ *      name: accessory
+ *      required: true
+ *      description: 악세사리 스티커 번호
+ *      schema:
+ *        type: integer
  *    responses:
  *      '200':
  *        description: 등록 성공
@@ -508,11 +544,11 @@ userRouter.get('/:user_id/sticker/detail',jwtMiddleware,stickerController.getSti
  *                          type: integer
  *                      mouth_id:
  *                          type: integer
- *                      arm:
+ *                      arm_id:
  *                          type: integer      
- *                      foot:
+ *                      foot_id:
  *                          type: integer
- *                      accessory:
+ *                      accessory_id:
  *                          type: integer                  
  */
 
