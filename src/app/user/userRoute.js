@@ -588,7 +588,7 @@ userRouter.post('/:user_id/nqna/question/default',nqnaController.postDefaultQues
  *              message:
  *                  type: string
  */
-userRouter.post('/:user_id/nqna/question/visitor',nqnaController.postVisitorQuestion); //visitor 질문 등록 API
+userRouter.post('/:user_id/nqna/question/visitor',jwtMiddleware,nqnaController.postVisitorQuestion); //visitor 질문 등록 API
 /**
  * @swagger
  * paths:

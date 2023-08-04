@@ -220,7 +220,7 @@ export const nqnaController = {
                 return res.status(200).json(response(baseResponse.SUCCESS, postDefaultQuestionResult));
             }
             else {
-                 return res.status(404).json(response(baseResponse.USER_USERID_NOT_EXIST));
+                return res.status(404).json(response(baseResponse.USER_USERID_NOT_EXIST));
             }
         }
         catch(error){
@@ -233,13 +233,11 @@ export const nqnaController = {
     * POST: /:user_id/nqna/question/visitor
     */
     postVisitorQuestion : async(req,res) => {
-   
-        const {question} = req.body; 
-        const {user_id} = req.params; 
-        const userIdFromJWT = req.verifiedToken ? req.verifiedToken.user_id : null; // 로그인한 방문자의 ID
-        const User = await userProvider.retrieveUser(user_id);
-        
         try {
+            const {question} = req.body; 
+            const {user_id} = req.params; 
+            const userIdFromJWT = req.verifiedToken ? req.verifiedToken.user_id : null; // 로그인한 방문자의 ID
+            const User = await userProvider.retrieveUser(user_id);
             if (User) {
                 if(question.length === 0){
                     return res.status(400).json(errResponse(baseResponse.NQNA_QUESTION_EMPTY));
@@ -253,7 +251,7 @@ export const nqnaController = {
                 }
             } 
             else {
-                 return res.status(404).json(errResponse(baseResponse.USER_USERID_NOT_EXIST));
+                return res.status(404).json(errResponse(baseResponse.USER_USERID_NOT_EXIST));
             }
         }
         catch(error){
