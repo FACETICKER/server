@@ -2,7 +2,7 @@ import  express  from "express";
 import compression from "compression";
 import methodOverride from "method-override";
 import cors from "cors";
-import userRouter from "../src/app/user/userRoute";
+import userRouter from "../src/app/user/userRoute.js";
 import {specs, swaggerUi} from "./swagger.js";
 const app = express();
 
@@ -12,8 +12,8 @@ app.use(express.json());
 app.use(express.urlencoded({extended:true}));
 app.use(methodOverride());
 app.use(cors());
-app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(specs, { explorer: true }));
-app.use('/',userRouter);
+app.use('/app/api-docs', swaggerUi.serve, swaggerUi.setup(specs, { explorer: true }));
+app.use('/app',userRouter);
 
 
 export default app;

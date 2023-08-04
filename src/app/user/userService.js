@@ -144,7 +144,7 @@ export const stickerService = { //스티커 관련 서비스
     insertStickerLocation : async(params) =>{ //방문자 스티커 부착 위치 등록
         try{
             const connection = await pool.getConnection(async conn => conn);
-            const insertStickerLocationResult = await stickerDao.insertStickerLocation(connection,params);
+            const insertStickerLocationResult = await stickerDao.updateStickerLocation(connection,params);
             connection.release();
             if(insertStickerLocationResult.changedRows === 1 && insertStickerLocationResult.affectedRows===1){
                 return response(baseResponse.SUCCESS);
@@ -152,7 +152,15 @@ export const stickerService = { //스티커 관련 서비스
         }catch(err){
             console.error(err);
         }
-    }
+    },
+    patchStickerLocation : async(stickerId, newLocation) =>{
+        const connection = await pool.getConnection(async conn=> conn);
+        const patchStickerLocation = await stickerDao.updateLocation(connection,params);
+        connection.release();
+        if(insertStickerLocationResult.changedRows === 1 && insertStickerLocationResult.affectedRows===1){
+            return "success";
+        }else return "fail";
+    },
 };
 
 export const nqnaService = { //n문n답 관련 서비스
