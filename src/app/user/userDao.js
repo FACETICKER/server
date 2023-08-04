@@ -241,7 +241,7 @@ export const nqnaDao = {
 
     selectHostNQnA : async(connection,user_id)=>{ // 호스트 플로우 nQnA 전체 조회
         const selectHostNQnAQuery = `
-            SELECT question, question_type, question_hidden, answer, answer_hidden, created_at
+            SELECT nQnA_id, question, question_type, question_hidden, answer, answer_hidden, created_at
             FROM nQnA
             WHERE user_id = ?;
         `
@@ -251,7 +251,7 @@ export const nqnaDao = {
 
     selectVisitorNQnA : async(connection,user_id)=>{ // 방문자 플로우 nQnA 전체 조회
         const selectVisitorNQnAQuery = `
-            SELECT question, question_hidden, answer, answer_hidden, created_at
+            SELECT nQnA_id, question, question_hidden, answer, answer_hidden, created_at
             FROM nQnA
             WHERE user_id = ?;
         `

@@ -199,7 +199,7 @@ export const nqnaController = {
         try {
             if (User) {     
                 const postDefaultQuestionResult = await nqnaService.createDefaultQuestion(user_id,question);
-                return res.status(200).json(errResponse(baseResponse.SUCCESS, postDefaultQuestionResult));
+                return res.status(200).json(response(baseResponse.SUCCESS, postDefaultQuestionResult));
             }
             else {
                  return res.status(404).json(response(baseResponse.USER_USERID_NOT_EXIST));
@@ -235,7 +235,7 @@ export const nqnaController = {
                 }
             } 
             else {
-                 return res.status(404).json(response(baseResponse.USER_USERID_NOT_EXIST));
+                 return res.status(404).json(errResponse(baseResponse.USER_USERID_NOT_EXIST));
             }
         }
         catch(error){
@@ -267,7 +267,7 @@ export const nqnaController = {
                 }
             }
             else{
-                return res.status(404).json(response(baseResponse.NQNA_QUESTION_NOT_EXIST));
+                return res.status(404).json(errResponse(baseResponse.NQNA_QUESTION_NOT_EXIST));
             }     
         }
         catch(error){
@@ -328,7 +328,7 @@ export const nqnaController = {
                 return res.status(200).json(response(baseResponse.SUCCESS, patchQuestionHiddenResult));            
             }   
             else{
-                return res.status(404).json(response(baseResponse.NQNA_QUESTION_NOT_EXIST));
+                return res.status(404).json(errResponse(baseResponse.NQNA_QUESTION_NOT_EXIST));
             }     
         }
         catch(error){
@@ -356,11 +356,11 @@ export const nqnaController = {
                     return res.status(200).json(response(baseResponse.SUCCESS, patchAnswerResult));            
                 }
                 else{
-                    return res.status(404).json(response(baseResponse.NQNA_ANSWER_NOT_EXIST));
+                    return res.status(404).json(errResponse(baseResponse.NQNA_ANSWER_NOT_EXIST));
                 }
             }   
             else{
-                return res.status(404).json(response(baseResponse.NQNA_QUESTION_NOT_EXIST));
+                return res.status(404).json(errResponse(baseResponse.NQNA_QUESTION_NOT_EXIST));
             }     
         }
         catch(error){
@@ -383,7 +383,7 @@ export const nqnaController = {
                 return res.status(200).json(response(baseResponse.SUCCESS, getEmptyAnswerResult)); 
             }
             else {
-                return res.status(404).json(response(baseResponse.USER_USERID_NOT_EXIST));
+                return res.status(404).json(errResponse(baseResponse.USER_USERID_NOT_EXIST));
            }
         }catch(error){
             return res.status(500).json(errResponse(baseResponse.SERVER_ERROR));
@@ -417,7 +417,7 @@ export const nqnaController = {
                 }
             }
             else {
-                return res.status(404).json(response(baseResponse.USER_USERID_NOT_EXIST));
+                return res.status(404).json(errResponse(baseResponse.USER_USERID_NOT_EXIST));
            }
         }catch(error){
             return res.status(500).json(errResponse(baseResponse.SERVER_ERROR));
