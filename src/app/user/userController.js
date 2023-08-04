@@ -210,11 +210,12 @@ export const nqnaController = {
     */
     postDefaultQuestion : async(req,res) => {
 
-        const {question} = req.body;
-        const {user_id} = req.params;
-        const User = await userProvider.retrieveUser(user_id)
-
+        
         try {
+            const {question} = req.body;
+            const {user_id} = req.params;
+            const User = await userProvider.retrieveUser(user_id);
+
             if (User) {     
                 const postDefaultQuestionResult = await nqnaService.createDefaultQuestion(user_id,question);
                 return res.status(200).json(response(baseResponse.SUCCESS, postDefaultQuestionResult));
@@ -224,6 +225,7 @@ export const nqnaController = {
             }
         }
         catch(error){
+            console.log(error);
             return res.status(500).json(errResponse(baseResponse.SERVER_ERROR));
         }
     },
@@ -237,6 +239,7 @@ export const nqnaController = {
             const {question} = req.body; 
             const {user_id} = req.params; 
             const userIdFromJWT = req.verifiedToken ? req.verifiedToken.user_id : null; // 로그인한 방문자의 ID
+
             const User = await userProvider.retrieveUser(user_id);
             if (User) {
                 if(question.length === 0){
@@ -255,6 +258,7 @@ export const nqnaController = {
             }
         }
         catch(error){
+            console.log(error);
             return res.status(500).json(errResponse(baseResponse.SERVER_ERROR));
         }
     },
@@ -264,12 +268,13 @@ export const nqnaController = {
      * PATCH: /:user_id/nqna/:nQnA_id/answer
      */
     postAnswer : async(req,res) => {
-   
-        const {answer} = req.body;
-        const {nQnA_id} = req.params;
- 
+        
         try{
+            
+            const {answer} = req.body;
+            const {nQnA_id} = req.params;
             const nQnA = await nqnaProvider.retrieveNQnA(nQnA_id); // nQnA 개별 질문 조회
+
             if(nQnA){
                 if(answer.length === 0){
                     return res.status(400).json(errResponse(baseResponse.NQNA_ANSWER_EMPTY));
@@ -287,6 +292,7 @@ export const nqnaController = {
             }     
         }
         catch(error){
+            console.log(error);
             return res.status(500).json(errResponse(baseResponse.SERVER_ERROR));
         }
     },
@@ -297,11 +303,11 @@ export const nqnaController = {
      */
     getnQnA : async(req,res)=>{
         
-        const {user_id} = req.params; 
-        //const type = req.query.type; //type으로 Host, visitor 구분 >>>> 일단 보류
-        const userIdFromJWT = req.verifiedToken ? req.verifiedToken.user_id : null; // 토큰이 있을 때만 user_id를 가져오도록 수정
-
         try {
+            const {user_id} = req.params; 
+            //const type = req.query.type; //type으로 Host, visitor 구분 >>>> 일단 보류
+            const userIdFromJWT = req.verifiedToken ? req.verifiedToken.user_id : null; // 토큰이 있을 때만 user_id를 가져오도록 수정
+
             if(user_id === userIdFromJWT){ //호스트 본인의 N문 N답 페이지일 때 (호스트 플로우)
 
                 const nQnA = await nqnaProvider.retrieveHostNQnA(user_id);
@@ -323,6 +329,7 @@ export const nqnaController = {
                 });
             }         
         } catch (error) {
+            console.log(error);
             return res.status(500).json(errResponse(baseResponse.SERVER_ERROR));
         }
     },
@@ -333,13 +340,12 @@ export const nqnaController = {
      */
     patchQuestionHidden : async(req,res) => {
    
-        const {nQnA_id} = req.params;
-        const {question_hidden} = req.body;
-
         try{
+            const {nQnA_id} = req.params;
+            const {question_hidden} = req.body;
             const nQnA = await nqnaProvider.retrieveNQnA(nQnA_id); // nQnA 개별 질문 조회
-            if(nQnA){
-            
+
+            if(nQnA){ 
                 const patchQuestionHiddenResult = await nqnaService.editnQuestionHidden(nQnA_id, question_hidden);
                 return res.status(200).json(response(baseResponse.SUCCESS, patchQuestionHiddenResult));            
             }   
@@ -348,6 +354,7 @@ export const nqnaController = {
             }     
         }
         catch(error){
+            console.log(error);
             return res.status(500).json(errResponse(baseResponse.SERVER_ERROR));
         }
     },
@@ -358,10 +365,9 @@ export const nqnaController = {
      */
     patchAnswerHidden : async(req,res) => {
    
-        const {nQnA_id} = req.params;
-        const {answer_hidden} = req.body;
-
         try{
+            const {nQnA_id} = req.params;
+            const {answer_hidden} = req.body;
             const nQnA = await nqnaProvider.retrieveNQnA(nQnA_id); // nQnA 개별 질문 조회
 
             if(nQnA){ // 질문이 존재한다면
@@ -380,6 +386,7 @@ export const nqnaController = {
             }     
         }
         catch(error){
+            console.log(error);
             return res.status(500).json(errResponse(baseResponse.SERVER_ERROR));
         }
     },
@@ -389,11 +396,11 @@ export const nqnaController = {
      * GET: /:user_id/nqna/question/emptyanswer
      */
     getEmptyAnswer : async(req,res) =>{
-
-        const {user_id} = req.params;
-        const User = await userProvider.retrieveUser(user_id);
-
+    
         try{
+            const {user_id} = req.params;
+            const User = await userProvider.retrieveUser(user_id);
+
             if(User){
                 const getEmptyAnswerResult = await nqnaProvider.retrieveEmptyAnswer(user_id);
                 return res.status(200).json(response(baseResponse.SUCCESS, getEmptyAnswerResult)); 
@@ -402,6 +409,7 @@ export const nqnaController = {
                 return res.status(404).json(errResponse(baseResponse.USER_USERID_NOT_EXIST));
            }
         }catch(error){
+            console.log(error);
             return res.status(500).json(errResponse(baseResponse.SERVER_ERROR));
         }
     },
@@ -412,11 +420,11 @@ export const nqnaController = {
      */
     getVisitorQuestion : async(req,res) =>{
 
-        const {user_id} = req.params;
-        const User = await userProvider.retrieveUser(user_id);
-        const userIdFromJWT = req.verifiedToken ? req.verifiedToken.user_id : null; // 로그인한 방문자의 user_id
-
         try{
+            const {user_id} = req.params;
+            const User = await userProvider.retrieveUser(user_id);
+            const userIdFromJWT = req.verifiedToken ? req.verifiedToken.user_id : null; // 로그인한 방문자의 user_id
+            
             if(User){
                 if(userIdFromJWT){ // 로그인한 방문자라면
                     const getVisitorQuestionResult = await nqnaProvider.retrieveVisitorQuestion(user_id, userIdFromJWT);
@@ -436,6 +444,7 @@ export const nqnaController = {
                 return res.status(404).json(errResponse(baseResponse.USER_USERID_NOT_EXIST));
            }
         }catch(error){
+            console.log(error);
             return res.status(500).json(errResponse(baseResponse.SERVER_ERROR));
         }
     },
