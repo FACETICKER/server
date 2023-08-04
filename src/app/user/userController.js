@@ -236,7 +236,8 @@ export const nqnaController = {
     */
     postVisitorQuestion : async(req,res) => {
         try {
-            const {question} = req.body; 
+            const {question} = req.body;
+            console.log(question); 
             const {user_id} = req.params; 
             const userIdFromJWT = req.verifiedToken ? req.verifiedToken.user_id : null; // 로그인한 방문자의 ID
 
