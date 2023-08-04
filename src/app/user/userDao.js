@@ -313,8 +313,8 @@ export const posterDao = {
     insertPoster : async(connection, params) =>{
         try{
             const insertPosterQuery = `
-                INSERT INTO user_poster(user_id, nickname, q_season,q_number,q_date,q_important)
-                VALUES(?,?,?,?,?,?);
+                INSERT INTO user_poster(user_id, nickname, q_season,q_number,q_date,q_important,chinese,pronunciation,meaning)
+                VALUES(?,?,?,?,?,?,?,?,?);
             `
             const [insertPosterRow] = await connection.query(insertPosterQuery,params);
             return insertPosterRow;
