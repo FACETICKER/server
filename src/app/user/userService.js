@@ -172,12 +172,13 @@ export const nqnaService = { //n문n답 관련 서비스
         
             const connection = await pool.getConnection(async conn => conn);
             const createDefaultQuestionResult = await nqnaDao.insertDefaultQuestion(connection,insertDefaultQuestionParams);
-            
+            console.log(createDefaultQuestionResult);
             connection.release();
             
             return response(baseResponse.SUCCESS);
         }
         catch(error){
+            console.log(error);
             return errResponse(baseResponse.DB_ERROR)
         }
     },
@@ -204,12 +205,13 @@ export const nqnaService = { //n문n답 관련 서비스
         
             const connection = await pool.getConnection(async conn => conn);
             const createAnswerResult = await nqnaDao.insertAnswer(connection,insertAnswerParams);
-            
+            console.log(createAnswerResult);
             connection.release();
             
             return response(baseResponse.SUCCESS);
         }
         catch(error){
+            console.log(error);
             return errResponse(baseResponse.DB_ERROR)
         }
     },
@@ -221,12 +223,13 @@ export const nqnaService = { //n문n답 관련 서비스
 
             const connection = await pool.getConnection(async conn => conn);
             const editQuestionHiddenResult = await nqnaDao.updateQuestionHidden(connection,updateQuestionHiddenParams);
-            
+            console.log(editQuestionHiddenResult);
             connection.release();
             
             return response(baseResponse.SUCCESS);
         }
         catch(error){
+            console.log(error);
             return errResponse(baseResponse.DB_ERROR)
         }
     },
@@ -238,12 +241,13 @@ export const nqnaService = { //n문n답 관련 서비스
 
             const connection = await pool.getConnection(async conn => conn);
             const editnAnswerHiddenResult = await nqnaDao.updateAnswerHidden(connection,updateAnswerHiddenParams);
-            
+            console.log(editnAnswerHiddenResult);
             connection.release();
             
             return response(baseResponse.SUCCESS);
         }
         catch(error){
+            console.log(error);
             return errResponse(baseResponse.DB_ERROR)
         }
     },

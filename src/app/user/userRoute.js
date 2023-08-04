@@ -834,7 +834,7 @@ userRouter.get('/:user_id/nqna/question/emptyanswer',nqnaController.getEmptyAnsw
  *                              emptyanswer:
  *                                  type: integer
  */
-userRouter.get('/:user_id/nqna/question/visitor',nqnaController.getVisitorQuestion); //(방문자 플로우) 로그인한 방문자가 남긴 질문 조회 API
+userRouter.get('/:user_id/nqna/question/visitor',jwtMiddleware,nqnaController.getVisitorQuestion); //(방문자 플로우) 로그인한 방문자가 남긴 질문 조회 API
 /**
  * @swagger
  * paths:
