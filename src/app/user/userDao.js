@@ -165,7 +165,7 @@ export const nqnaDao = {
             INSERT INTO nQnA(user_id, question, question_type,visitor_id) 
             VALUES (?,?,"visitor",?);
     
-        `;
+        `
         const insertVisitorQuestionRow = await connection.query(postVisitorQuestionQuery, insertDefaultQuestionParams);
         return insertVisitorQuestionRow;
     },
