@@ -342,7 +342,7 @@ userRouter.post('/:user_id/sticker',jwtMiddleware,stickerController.postSticker)
  *    - in: body
  *      name: face
  *      required: true
- *      description:페이스 스티커 번호
+ *      description: 페이스 스티커 번호
  *      schema:
  *        type: integer
  *    - in: body
