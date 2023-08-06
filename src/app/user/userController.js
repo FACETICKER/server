@@ -7,7 +7,9 @@ import {stickerProvider, nqnaProvider, userProvider} from "./userProvider.js";
 dotenv.config();
 export const loginController = {
     kakao : async(req,res)=>{ //카카오
+        console.log('----------');
         const code = req.query.code;
+        console.log(code);
         try{
             const accessTokenResponse = await axios({ //카카오 API 호출해서 Access Token 받아오기
                 method: 'POST',
