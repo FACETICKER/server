@@ -20,6 +20,7 @@ userRouter.get('/login/kakao',loginController.kakao); //카카오 로그인 API
  *    summary : 로그인하여 토큰 발급
  *    tags : [로그인]
  *    description: 카카오 로그인
+ *    parameters:
  *    - in : query
  *      name: code
  *      required: true
@@ -54,6 +55,7 @@ userRouter.get('/login/google',loginController.google); //구글 로그인 API
  *    summary : 로그인하여 토큰 발급
  *    tags: [로그인]
  *    description: 구글 로그인
+ *    parameters:
  *    - in : query
  *      name: code
  *      required: true
