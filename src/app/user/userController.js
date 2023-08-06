@@ -485,6 +485,7 @@ export const posterController = {
         try{
             const userIdFromJWT = req.verifiedToken ? req.verifiedToken.user_id : null; // 토큰이 있을 때만 user_id를 가져오도록 수정
             const userId = req.params.user_id;
+            
         }catch(err){
             return res.status(500).send(err);
         }

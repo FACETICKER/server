@@ -935,6 +935,7 @@ userRouter.post("/:user_id/poster",jwtMiddleware,posterController.postPoster); /
 userRouter.put("/:user_id/poster/put",jwtMiddleware,posterController.putPoster); //포스터 수정
 
 
+
 export default userRouter;
 
 
