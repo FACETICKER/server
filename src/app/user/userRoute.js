@@ -932,7 +932,7 @@ userRouter.post("/:user_id/poster",jwtMiddleware,posterController.postPoster); /
  *              message:
  *                  type: string               
  */
-userRouter.put("/:user_id/poster/put",jwtMiddleware,posterController.putPoster); //포스터 수정
+//userRouter.put("/:user_id/poster/put",jwtMiddleware,posterController.putPoster); //포스터 수정
 
 
 export default userRouter;
