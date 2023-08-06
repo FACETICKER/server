@@ -7,7 +7,9 @@ import {stickerProvider, nqnaProvider, userProvider} from "./userProvider.js";
 dotenv.config();
 export const loginController = {
     kakao : async(req,res)=>{ //카카오
+        console.log('----------');
         const code = req.query.code;
+        console.log(code);
         try{
             const accessTokenResponse = await axios({ //카카오 API 호출해서 Access Token 받아오기
                 method: 'POST',
@@ -18,7 +20,7 @@ export const loginController = {
                 data: ({
                     grant_type: 'authorization_code',
                     client_id: process.env.KAKAO_ID,
-                    redirect_uri: 'http://faceticker.site/app/auth/kakao/callback',
+                    redirect_uri: 'http://localhost:3001/oauth',
                     code: code,
                 })
             });
@@ -34,6 +36,7 @@ export const loginController = {
             const userInfo = userInfoResponse.data.kakao_account;
             const provider = 'kakao';
             const Result = await loginService.kakao(userInfo,provider); //새로운 사용자 생성 
+            console.log("API END");
             return res.status(200).send(Result);
         }catch(err){
             console.error(err);
