@@ -15,11 +15,18 @@ userRouter.get('/login/kakao',loginController.kakao); //카카오 로그인 API
 /**
  * @swagger
  * paths:
- *  /auth/kakao/callback:
+ *  /login/kakao:
  *   get:
  *    summary : 로그인하여 토큰 발급
  *    tags : [로그인]
  *    description: 카카오 로그인
+ *    parameters:
+ *    - in : query
+ *      name: code
+ *      required: true
+ *      description: 인가 코드
+ *      schema:
+ *        type: integer
  *    responses:
  *      '200':
  *        description: 로그인 성공
@@ -48,6 +55,13 @@ userRouter.get('/login/google',loginController.google); //구글 로그인 API
  *    summary : 로그인하여 토큰 발급
  *    tags: [로그인]
  *    description: 구글 로그인
+ *    parameters:
+ *    - in : query
+ *      name: code
+ *      required: true
+ *      description: 인가 코드
+ *      schema:
+ *        type: integer
  *    responses:
  *      '200':
  *        description: 로그인 성공
