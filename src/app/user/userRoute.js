@@ -15,7 +15,7 @@ userRouter.get('/auth/kakao/callback',loginController.kakao); //카카오 로그
 /**
  * @swagger
  * paths:
- *  /login/kakao:
+ *  /auth/kakao/callback:
  *   get:
  *    summary : 로그인하여 토큰 발급
  *    tags : [로그인]
@@ -43,7 +43,7 @@ userRouter.get('/auth/google/callback',loginController.google); //구글 로그�
 /**
  * @swagger
  * paths:
- *  /login/google:
+ *  /auth/google/callback:
  *   get:
  *    summary : 로그인하여 토큰 발급
  *    tags: [로그인]
