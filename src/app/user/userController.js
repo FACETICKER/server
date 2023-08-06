@@ -36,6 +36,7 @@ export const loginController = {
             const userInfo = userInfoResponse.data.kakao_account;
             const provider = 'kakao';
             const Result = await loginService.kakao(userInfo,provider); //새로운 사용자 생성 
+            console.log("API END");
             return res.status(200).send(Result);
         }catch(err){
             console.error(err);
