@@ -11,12 +11,12 @@ const userRouter = express.Router();
 userRouter.get('/favicon.ico',(req,res)=>res.status(404).end()); 
 
 // 로그인 관련
-userRouter.get('/login/kakao',loginController.kakao); //카카오 로그인 API
+userRouter.post('/login/kakao',loginController.kakao); //카카오 로그인 API
 /**
  * @swagger
  * paths:
  *  /login/kakao:
- *   get:
+ *   post:
  *    summary : 로그인하여 토큰 발급
  *    tags : [로그인]
  *    description: 카카오 로그인
@@ -46,12 +46,12 @@ userRouter.get('/login/kakao',loginController.kakao); //카카오 로그인 API
  *                      jwt:
  *                          type: string
  */
-userRouter.get('/login/google',loginController.google); //구글 로그인 API
+userRouter.post('/login/google',loginController.google); //구글 로그인 API
 /**
  * @swagger
  * paths:
  *  /auth/google/callback:
- *   get:
+ *   post:
  *    summary : 로그인하여 토큰 발급
  *    tags: [로그인]
  *    description: 구글 로그인
