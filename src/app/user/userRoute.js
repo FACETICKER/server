@@ -11,7 +11,7 @@ const userRouter = express.Router();
 userRouter.get('/favicon.ico',(req,res)=>res.status(404).end()); 
 
 // 로그인 관련
-userRouter.get('/login/kakao',loginController.kakao); //카카오 로그인 API
+userRouter.get('/auth/kakao/callback',loginController.kakao); //카카오 로그인 API
 /**
  * @swagger
  * paths:
@@ -39,7 +39,7 @@ userRouter.get('/login/kakao',loginController.kakao); //카카오 로그인 API
  *                      jwt:
  *                          type: string
  */
-userRouter.get('/login/google',loginController.google); //구글 로그인 API
+userRouter.get('/auth/google/callback',loginController.google); //구글 로그인 API
 /**
  * @swagger
  * paths:
