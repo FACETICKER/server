@@ -20,7 +20,7 @@ export const loginController = {
                 data: ({
                     grant_type: 'authorization_code',
                     client_id: process.env.KAKAO_ID,
-                    redirect_uri: 'http://faceticker.site/app/auth/kakao/callback',
+                    redirect_uri: 'http://localhost:3001/oauth',
                     code: code,
                 })
             });
