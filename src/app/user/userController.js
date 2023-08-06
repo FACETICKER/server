@@ -309,7 +309,7 @@ export const nqnaController = {
             //const type = req.query.type; //type으로 Host, visitor 구분 >>>> 일단 보류
             const userIdFromJWT = req.verifiedToken ? req.verifiedToken.user_id : null; // 토큰이 있을 때만 user_id를 가져오도록 수정
 
-            if(user_id === userIdFromJWT){ //호스트 본인의 N문 N답 페이지일 때 (호스트 플로우)
+            if(user_id == userIdFromJWT){ //호스트 본인의 N문 N답 페이지일 때 (호스트 플로우)
 
                 const nQnA = await nqnaProvider.retrieveHostNQnA(user_id);
                 return res.status(200).json({
