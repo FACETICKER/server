@@ -162,6 +162,75 @@ export const stickerService = { //스티커 관련 서비스
             return "success";
         }else return "fail";
     },
+    updateFace : async(params) =>{
+        const connection = await pool.getConnection(async conn => conn);
+        const updateResult = await stickerDao.updateFace(connection,params);
+        connection.release();
+        if(updateResult.affectedRows === 1){
+            return "success";
+        }
+        else return "fail";
+
+    },
+    updateEyes : async(params) =>{
+        const connection = await pool.getConnection(async conn => conn);
+        const updateResult = await stickerDao.updateEyes(connection,params);
+        connection.release();
+        if(updateResult.affectedRows === 1){
+            return "success";
+        }
+        else return "fail";
+
+    },
+    updateNose : async(params) =>{
+        const connection = await pool.getConnection(async conn => conn);
+        const updateResult = await stickerDao.updateNose(connection,params);
+        connection.release();
+        if(updateResult.affectedRows === 1){
+            return "success";
+        }
+        else return "fail";
+
+    },
+    updateMouth : async(params) =>{
+        const connection = await pool.getConnection(async conn => conn);
+        const updateResult = await stickerDao.updateMouth(connection,params);
+        connection.release();
+        if(updateResult.affectedRows === 1){
+            return "success";
+        }
+        else return "fail";
+
+    },
+    updateArm : async(params) =>{
+        const connection = await pool.getConnection(async conn => conn);
+        const updateResult = await stickerDao.updateArm(connection,params);
+        connection.release();
+        if(updateResult.affectedRows === 1){
+            return "success";
+        }
+        else return "fail";
+    },
+    updateFoot : async(params) =>{
+        const connection = await pool.getConnection(async conn => conn);
+        const updateResult = await stickerDao.updateFoot(connection,params);
+        connection.release();
+        if(updateResult.affectedRows === 1){
+            return "success";
+        }
+        else return "fail";
+
+    },
+    updateAccessory : async(params) =>{
+        const connection = await pool.getConnection(async conn => conn);
+        const updateResult = await stickerDao.updateAccessory(connection,params);
+        connection.release();
+        if(updateResult.affectedRows === 1){
+            return "success";
+        }
+        else return "fail";
+
+    },
 };
 
 export const nqnaService = { //n문n답 관련 서비스
@@ -294,6 +363,8 @@ export const posterService = {
         if(updateResult.affectedRows === 1){
             return "success";
         }
+        else return "fail";
+
 
     },
     updateNumber : async(params) =>{
@@ -303,6 +374,8 @@ export const posterService = {
         if(updateResult.affectedRows === 1){
             return "success";
         }
+        else return "fail";
+
     },
     updateDate : async(params) =>{
         const connection = await pool.getConnection(async conn => conn);
@@ -311,6 +384,8 @@ export const posterService = {
         if(updateResult.affectedRows === 1){
             return "success";
         }
+        else return "fail";
+
     },
     updateImportant : async(params) =>{
         const connection = await pool.getConnection(async conn => conn);
@@ -319,6 +394,8 @@ export const posterService = {
         if(updateResult.affectedRows === 1){
             return "success";
         }
+        else return "fail";
+
     }
 };
 
