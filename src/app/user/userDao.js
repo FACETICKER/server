@@ -272,5 +272,41 @@ export const posterDao = {
         }catch(err){
             return err;
         }
+    },
+    updateSeason : async(connection, params) =>{
+        const updateSeasonQuery = `
+            UPDATE user_poster
+            SET q_season = ?
+            WHERE user_id = ?;
+        `
+        const [updateSeasonRow] = await connection.query(updateSeasonQuery,params);
+        return updateSeasonRow;
+    },
+    updateNumber : async(connection, params) =>{
+        const updateNumberQuery = `
+            UPDATE user_poster
+            SET q_number = ?
+            WHERE user_id = ?;
+        `
+        const [updateNumberRow] = await connection.query(updateNumberQuery, params);
+        return updateNumberRow;
+    },
+    updateDate : async(connection, params) =>{
+        const updateDateQuery = `
+            UPDATE user_poster
+            SET q_date = ?
+            WHERE user_id = ?;
+        `
+        const [updateDateRow] = await connection.query(updateDateQuery,params);
+        return updateDateRow;
+    },
+    updateImporant : async(connection, params) =>{
+        const updateImporantQuery = `
+            UPDATE user_poster
+            SET q_important = ?, chinese = ?, pronunciation = ?, meaning = ?
+            WHERE user_id = ?;
+        `
+        const [updateImporantRow] = await connection.query(updateImporantQuery, params);
+        return updateImporantRow;
     }
 }
