@@ -146,10 +146,10 @@ export const nqnaProvider = { //n문n답
     retrieveHostQ : async(user_id) =>{ //호스트 플로우 미답변 질문 조회
         try{ 
             const connection = await pool.getConnection(async conn => conn);
-            const hostNQnAResult = await nqnaDao.selectHostQ(connection,user_id);
+            const hostQResult = await nqnaDao.selectHostQ(connection,user_id);
             connection.release();
     
-            return hostNQnAResult;
+            return hostQResult;
     
         }catch(err){
             console.error(err);        

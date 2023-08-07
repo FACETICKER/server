@@ -722,6 +722,12 @@ userRouter.get("/:user_id/nqna", jwtMiddleware, nqnaController.getnQnA); //N문 
  *      description: 사용자 ID
  *      schema:
  *        type: integer
+ *    - in: body
+ *      name: viewType
+ *      required: true
+ *      description: N문 N답 조회 type (미답변 질문만 or 답변 + 질문)
+ *      schema:
+ *        type: string
  *    responses:
  *      '200':
  *        description: 호스트 플로우 조회 성공
