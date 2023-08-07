@@ -445,80 +445,7 @@ userRouter.patch('/:user_id/sticker/attach',jwtMiddleware,stickerController.atta
  *              message:
  *                  type: string
  */
-userRouter.get('/sticker/info',stickerController.getInfo); //스티커 요소들 호출 API(얼굴,눈,코,입....)
-/**
- * @swagger
- * paths:
- *  /sticker/info:
- *   get:
- *    summary : 스티커 생성에 필요한 이미지 조회
- *    tags: [스티커]
- *    description: 스티커 요소들 조회(얼굴, 눈,코,입,손,발,악세사리)
- *    responses:
- *      '200':
- *        description: 조회 성공
- *        schema:
- *          properties:
- *              isSuccess:
- *                  type: boolean
- *              code:
- *                  type: integer
- *              message:
- *                  type: string
- *              result:
- *                  type: object
- *                  properties:
- *                      face:
- *                          type: object
- *                          properties:
- *                              face_id:
- *                                  type: integer
- *                              face_url:
- *                                  type: string
- *                      eyes:
- *                          type: object
- *                          properties:
- *                              eyes_id:
- *                                  type: integer
- *                              face_url:
- *                                  type: string
- *                      nose:
- *                          type: object
- *                          properties:
- *                              nose_id:
- *                                  type: integer
- *                              face_url:
- *                                  type: string
- *                      mouth:
- *                          type: object
- *                          properties:
- *                              mouth_id:
- *                                  type: integer
- *                              mouth_url:
- *                                  type: string
- *                      arm:
- *                          type: object
- *                          properties:
- *                              arm_id:
- *                                  type: integer
- *                              arm_url:
- *                                  type: string                 
- *                      foot:
- *                          type: object
- *                          properties:
- *                              foot_id:
- *                                  type: integer
- *                              foot_url:
- *                                  type: string
- *                      accessory:
- *                          type: object
- *                          properties:
- *                              accessory_id:
- *                                  type: integer
- *                              accessory_url:
- *                                  type: string                      
- */
-userRouter.get('/:user_id/sticker/detail',jwtMiddleware,stickerController.getStickerDetails);
+userRouter.get('/:user_id/sticker/detail',jwtMiddleware,stickerController.getStickerDetails); //호스트 스티커 정보
 /**
  * @swagger
  * paths:
@@ -563,7 +490,76 @@ userRouter.get('/:user_id/sticker/detail',jwtMiddleware,stickerController.getSti
  *                      accessory_id:
  *                          type: integer                  
  */
-
+userRouter.patch('/:user_id/sticker/patch',jwtMiddleware,stickerController.patchSticker); //호스트 스티커 수정
+/**
+ * @swagger
+ * paths:
+ *  /:user_id/sticker/patch:
+ *   patch:
+ *    summary : 호스트 스티커 수정
+ *    tags: [스티커]
+ *    description: 스티커 수정
+ *    parameters:
+ *    - in: path
+ *      name: user_id
+ *      required: true
+ *      description: 사용자 ID
+ *      schema:
+ *        type: integer
+ *    - in: body
+ *      name: face
+ *      required: false
+ *      description: 페이스 스티커 번호
+ *      schema:
+ *        type: integer
+ *    - in: body
+ *      name: eyes
+ *      required: false
+ *      description: 눈 스티커 번호
+ *      schema:
+ *        type: integer
+ *    - in: body
+ *      name: nose
+ *      required: false
+ *      description: 코 스티커 번호
+ *      schema:
+ *        type: integer
+ *    - in: body
+ *      name: mouth
+ *      required: false
+ *      description: 입 스티커 번호
+ *      schema:
+ *        type: integer
+ *    - in: body
+ *      name: arm
+ *      required: false
+ *      description: 팔 스티커 번호
+ *      schema:
+ *        type: integer
+ *    - in: body
+ *      name: foot
+ *      required: false
+ *      description: 발 스티커 번호
+ *      schema:
+ *        type: integer
+ *    - in: body
+ *      name: accessory
+ *      required: false
+ *      description: 악세사리 스티커 번호
+ *      schema:
+ *        type: integer
+ *    responses:
+ *      '200':
+ *        description: 수정 성공
+ *        schema:
+ *          properties:
+ *              isSuccess:
+ *                  type: boolean
+ *              code:
+ *                  type: integer
+ *              message:
+ *                  type: string
+ */
 
 // nQnA 관련
 userRouter.post('/:user_id/nqna/question/default',nqnaController.postDefaultQuestion); //default 질문 등록 API
