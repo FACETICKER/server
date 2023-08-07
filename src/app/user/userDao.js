@@ -145,7 +145,70 @@ export const stickerDao = {
         `
         const [selectUserStickerDetailsRow] = await connection.query(selectUserStickerDetailsQuery,userId);
         return selectUserStickerDetailsRow;
-    }
+    },
+    updateFace : async(connection, params) =>{
+        const updateFaceQuery = `
+            UPDATE user_sticker
+            SET face_id = ?
+            WHERE user_id = ?;
+        `
+        const [updateFaceRow] = await connection.query(updateFaceQuery,params);
+        return updateFaceRow;
+    },
+    updateEyes : async(connection, params)=>{
+        const updateEyesQuery = `
+            UPDATE user_sticker
+            SET eyes_id = ?
+            WHERE user_id = ?;
+        `
+        const [updateEyesRow] = await connection.query(updateEyesQuery,params);
+        return updateEyesRow;
+    },
+    updateNose : async(connection, params)=>{
+        const updateNoseQuery = `
+            UPDATE user_sticker
+            SET nose_id = ?
+            WHERE user_id = ?;
+        `
+        const [udpateNoseRow] = await connection.query(updateNoseQuery,params);
+        return udpateNoseRow;
+    },
+    updateMouth : async(connection, params) =>{
+        const updateMouthQuery = `
+            UPDATE user_sticker
+            SET mouth_id = ?
+            WHERE user_Id = ?;
+        `
+        const [updateMouthRow] = await connection.query(updateMouthQuery,params);
+        return updateMouthRow;
+    },
+    updateArm : async(connection, params) =>{
+        const updateArmQuery = `
+            UPDATE user_sticker
+            SET arm_id = ?
+            WHERE user_id = ?;
+        `
+        const [updateArmRow] = await connection.query(updateArmQuery,params);
+        return updateArmRow;
+    },
+    updateFoot : async(connection, params) =>{
+        const updateFootQuery = `
+            UPDATE user_sticker
+            SET foot_id = ?
+            WHERE user_id = ?;
+        `
+        const [updateFootRow] = await connection.query(updateFootQuery,params);
+        return updateFootRow;
+    },
+    updateAccessory : async(connection, params) =>{
+        const updateAccessoryQuery = `
+            UPDATE user_sticker
+            SET accessory_id = ?
+            WHERE user_id = ?;
+        `
+        const [updateAccessoryRow] = await connection.query(updateAccessoryQuery,params);
+        return updateAccessoryRow;
+    },
     
 }
 
@@ -284,5 +347,41 @@ export const posterDao = {
         }catch(err){
             return err;
         }
+    },
+    updateSeason : async(connection, params) =>{
+        const updateSeasonQuery = `
+            UPDATE user_poster
+            SET q_season = ?
+            WHERE user_id = ?;
+        `
+        const [updateSeasonRow] = await connection.query(updateSeasonQuery,params);
+        return updateSeasonRow;
+    },
+    updateNumber : async(connection, params) =>{
+        const updateNumberQuery = `
+            UPDATE user_poster
+            SET q_number = ?
+            WHERE user_id = ?;
+        `
+        const [updateNumberRow] = await connection.query(updateNumberQuery, params);
+        return updateNumberRow;
+    },
+    updateDate : async(connection, params) =>{
+        const updateDateQuery = `
+            UPDATE user_poster
+            SET q_date = ?
+            WHERE user_id = ?;
+        `
+        const [updateDateRow] = await connection.query(updateDateQuery,params);
+        return updateDateRow;
+    },
+    updateImporant : async(connection, params) =>{
+        const updateImporantQuery = `
+            UPDATE user_poster
+            SET q_important = ?, chinese = ?, pronunciation = ?, meaning = ?
+            WHERE user_id = ?;
+        `
+        const [updateImporantRow] = await connection.query(updateImporantQuery, params);
+        return updateImporantRow;
     }
 }

@@ -162,6 +162,75 @@ export const stickerService = { //스티커 관련 서비스
             return "success";
         }else return "fail";
     },
+    updateFace : async(params) =>{
+        const connection = await pool.getConnection(async conn => conn);
+        const updateResult = await stickerDao.updateFace(connection,params);
+        connection.release();
+        if(updateResult.affectedRows === 1){
+            return "success";
+        }
+        else return "fail";
+
+    },
+    updateEyes : async(params) =>{
+        const connection = await pool.getConnection(async conn => conn);
+        const updateResult = await stickerDao.updateEyes(connection,params);
+        connection.release();
+        if(updateResult.affectedRows === 1){
+            return "success";
+        }
+        else return "fail";
+
+    },
+    updateNose : async(params) =>{
+        const connection = await pool.getConnection(async conn => conn);
+        const updateResult = await stickerDao.updateNose(connection,params);
+        connection.release();
+        if(updateResult.affectedRows === 1){
+            return "success";
+        }
+        else return "fail";
+
+    },
+    updateMouth : async(params) =>{
+        const connection = await pool.getConnection(async conn => conn);
+        const updateResult = await stickerDao.updateMouth(connection,params);
+        connection.release();
+        if(updateResult.affectedRows === 1){
+            return "success";
+        }
+        else return "fail";
+
+    },
+    updateArm : async(params) =>{
+        const connection = await pool.getConnection(async conn => conn);
+        const updateResult = await stickerDao.updateArm(connection,params);
+        connection.release();
+        if(updateResult.affectedRows === 1){
+            return "success";
+        }
+        else return "fail";
+    },
+    updateFoot : async(params) =>{
+        const connection = await pool.getConnection(async conn => conn);
+        const updateResult = await stickerDao.updateFoot(connection,params);
+        connection.release();
+        if(updateResult.affectedRows === 1){
+            return "success";
+        }
+        else return "fail";
+
+    },
+    updateAccessory : async(params) =>{
+        const connection = await pool.getConnection(async conn => conn);
+        const updateResult = await stickerDao.updateAccessory(connection,params);
+        connection.release();
+        if(updateResult.affectedRows === 1){
+            return "success";
+        }
+        else return "fail";
+
+    },
 };
 
 export const nqnaService = { //n문n답 관련 서비스
@@ -286,6 +355,123 @@ export const posterService = {
         if(insertPosterResult.affectedRows===1){
             return response(baseResponse.SUCCESS);
         }else return response(baseResponse.DB_ERROR);
+    },
+    updateSeason : async(params) =>{
+        const connection = await pool.getConnection(async conn => conn);
+        const updateResult = await posterDao.updateSeason(connection,params);
+        connection.release();
+        if(updateResult.affectedRows === 1){
+            return "success";
+        }
+        else return "fail";
+
+
+    },
+    updateNumber : async(params) =>{
+        const connection = await pool.getConnection(async conn => conn);
+        const updateResult = await posterDao.updateNumber(connection, params);
+        connection.release();
+        if(updateResult.affectedRows === 1){
+            return "success";
+        }
+        else return "fail";
+
+    },
+    updateDate : async(params) =>{
+        const connection = await pool.getConnection(async conn => conn);
+        const updateResult = await posterDao.updateDate(connection, params);
+        connection.release();
+        if(updateResult.affectedRows === 1){
+            return "success";
+        }
+        else return "fail";
+
+    },
+    updateImportant : async(params) =>{
+        const connection = await pool.getConnection(async conn => conn);
+        const updateResult = await posterDao.updateImporant(connection,params);
+        connection.release();
+        if(updateResult.affectedRows === 1){
+            return "success";
+        }
+        else return "fail";
+
     }
 };
 
+
+export const chineseDict = (important) =>{ //사자성어 생성
+    let Dict;
+    if(important=='사랑'){
+        Dict = [
+            {chinese: '寤寐不忘', pronunciation: '오매불망', meaning: '자나깨나 잊지 못함'},
+            {chinese: '寤寐思服', pronunciation: '오매사복', meaning: '자나깨나 생각하는 것'},
+            {chinese: '戀戀不忘', pronunciation: '연연불망', meaning: '그리워서 잊지 못함'},
+            {chinese: '意中之人', pronunciation: '의중지인', meaning: '마음속에 품고 그리워하는 사람'},
+            {chinese: '戀慕之情', pronunciation: '연모지정', meaning: '사랑하여 그리워하는 정'},
+            {chinese: '三秋之思', pronunciation: '삼추지사', meaning: '몹시 사모하여 기다리는 마음'},
+            {chinese: '念念不忘', pronunciation: '염념불망', meaning: '자꾸 생각나서 잊지 못함'},
+            {chinese: '天生緣分', pronunciation: '천생연분', meaning: '하늘에서 정해 준 연분'},
+            {chinese: '落花流水', pronunciation: '낙화유수', meaning: '남녀 간 서로 그리워하는 애틋한 정'},
+            {chinese: '擲果滿車', pronunciation: '척과만거', meaning: '여성이 남성에게 사랑을 고백함'},
+            {chinese: '你可昭綏', pronunciation: '니가조타', meaning: '좋아하는 마음을 고백함'},
+            {chinese: '昭我偕耀', pronunciation: '조아해요', meaning: '좋아하는 마음을 고백함'},
+            {chinese: '氣麗云你', pronunciation: '기여운너', meaning: '네가 뭐만 해도 귀여워 보임'},
+            {chinese: '娜圖昭湛', pronunciation: '나도조음', meaning: '아름다움이 밝게 빛나는 네가 좋음'},
+            {chinese: '友鄰因緣', pronunciation: '우린인연', meaning: '서로의 관계를 확인하는 말'},
+            {chinese: '思浪海照', pronunciation: '사랑해조', meaning: '사랑을 받고 싶어하는 마음'},
+            {chinese: '所重憪恁', pronunciation: '소중한님', meaning: '언제나 당신만을 생각함'},
+            {chinese: '寶考時捕', pronunciation: '보고시포', meaning: '몹시 그리워하는 마음'},
+            {chinese: '乃据解剌', pronunciation: '내거해라', meaning: '마음에 드는 이에게 사랑을 고백함'},
+            {chinese: '電話曷來', pronunciation: '전화할래', meaning: '상대 목소리를 너무나도 듣고 싶음'}
+        ];
+    }else if(important == '우정'){
+        Dict = [
+            {chinese: '寤寐不忘', pronunciation: '오매불망', meaning: '자나깨나 잊지 못함'},
+            {chinese: '寤寐思服', pronunciation: '오매사복', meaning: '자나깨나 생각하는 것'},
+            {chinese: '戀戀不忘', pronunciation: '연연불망', meaning: '그리워서 잊지 못함'},
+            {chinese: '意中之人', pronunciation: '의중지인', meaning: '마음속에 품고 그리워하는 사람'},
+            {chinese: '戀慕之情', pronunciation: '연모지정', meaning: '사랑하여 그리워하는 정'},
+            {chinese: '三秋之思', pronunciation: '삼추지사', meaning: '몹시 사모하여 기다리는 마음'},
+            {chinese: '念念不忘', pronunciation: '염념불망', meaning: '자꾸 생각나서 잊지 못함'},
+            {chinese: '天生緣分', pronunciation: '천생연분', meaning: '하늘에서 정해 준 연분'},
+            {chinese: '落花流水', pronunciation: '낙화유수', meaning: '남녀 간 서로 그리워하는 애틋한 정'},
+            {chinese: '擲果滿車', pronunciation: '척과만거', meaning: '여성이 남성에게 사랑을 고백함'},
+            {chinese: '你可昭綏', pronunciation: '니가조타', meaning: '좋아하는 마음을 고백함'},
+            {chinese: '昭我偕耀', pronunciation: '조아해요', meaning: '좋아하는 마음을 고백함'},
+            {chinese: '氣麗云你', pronunciation: '기여운너', meaning: '네가 뭐만 해도 귀여워 보임'},
+            {chinese: '娜圖昭湛', pronunciation: '나도조음', meaning: '아름다움이 밝게 빛나는 네가 좋음'},
+            {chinese: '友鄰因緣', pronunciation: '우린인연', meaning: '서로의 관계를 확인하는 말'},
+            {chinese: '思浪海照', pronunciation: '사랑해조', meaning: '사랑을 받고 싶어하는 마음'},
+            {chinese: '所重憪恁', pronunciation: '소중한님', meaning: '언제나 당신만을 생각함'},
+            {chinese: '寶考時捕', pronunciation: '보고시포', meaning: '몹시 그리워하는 마음'},
+            {chinese: '乃据解剌', pronunciation: '내거해라', meaning: '마음에 드는 이에게 사랑을 고백함'},
+            {chinese: '電話曷來', pronunciation: '전화할래', meaning: '상대 목소리를 너무나도 듣고 싶음'}
+        ];
+    }
+    const index = Math.floor(Math.random()*Dict.length);
+    const random = Dict[index];
+    return random;
+
+};
+
+export const dateFormat = (date) =>{ //날짜 포맷 변경
+    const [month, day] = date.split(' ');
+    const year = new Date().getFullYear();
+    const monthMap = {
+        'January': '01',
+        'February': '02',
+        'March': '03',
+        'April': '04',
+        'May': '05',
+        'June': '06',
+        'July': '07',
+        'August': '08',
+        'September': '09',
+        'October': '10',
+        'November': '11',
+        'December': '12',
+    };
+    const formattedDate = `${year}-${monthMap[month]}-${day}`;
+    return formattedDate;
+}
