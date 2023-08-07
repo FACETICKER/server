@@ -20,7 +20,7 @@ export const loginController = {
                 data: ({
                     grant_type: 'authorization_code',
                     client_id: process.env.KAKAO_ID,
-                    redirect_uri: 'http://localhost:3001/oauth',
+                    redirect_uri: 'http://localhost:3000/app/login/kakao',
                     code: code,
                 })
             });
@@ -215,16 +215,22 @@ export const nqnaController = {
 
         
         try {
+            const userIdFromJWT = req.verifiedToken ? req.verifiedToken.user_id : null;
             const {question} = req.body;
             const {user_id} = req.params;
             const User = await userProvider.retrieveUser(user_id);
 
-            if (User) {     
-                const postDefaultQuestionResult = await nqnaService.createDefaultQuestion(user_id,question);
-                return res.status(200).json(response(baseResponse.SUCCESS, postDefaultQuestionResult));
+            if (userIdFromJWT == user_id) {     
+                if(User){
+                    const postDefaultQuestionResult = await nqnaService.createDefaultQuestion(user_id,question);
+                    return res.status(200).json(response(baseResponse.SUCCESS, postDefaultQuestionResult));
+                }
+                else{
+                    return res.status(404).json(errResponse(baseResponse.USER_USERID_NOT_EXIST));
+                }
             }
             else {
-                return res.status(404).json(response(baseResponse.USER_USERID_NOT_EXIST));
+                return res.status(400).json(errResponse(baseResponse.USER_USERID_USERIDFROMJWT_NOT_MATCH));
             }
         }
         catch(error){
@@ -274,25 +280,31 @@ export const nqnaController = {
     postAnswer : async(req,res) => {
         
         try{
-            
+            const userIdFromJWT = req.verifiedToken ? req.verifiedToken.user_id : null; // 로그인한 방문자의 ID
             const {answer} = req.body;
-            const {nQnA_id} = req.params;
+            console.log(answer); 
+            const {nQnA_id, user_id} = req.params;
             const nQnA = await nqnaProvider.retrieveNQnA(nQnA_id); // nQnA 개별 질문 조회
 
-            if(nQnA){
-                if(answer.length === 0){
-                    return res.status(400).json(errResponse(baseResponse.NQNA_ANSWER_EMPTY));
-                }
-                else if(answer.length > 100){
-                    return res.status(400).json(errResponse(baseResponse.NQNA_ANSWER_LENGTH));
+            if(userIdFromJWT == user_id){
+                if(nQnA){
+                    if(answer.length == 0){
+                        return res.status(400).json(errResponse(baseResponse.NQNA_ANSWER_EMPTY));
+                    }
+                    else if(answer.length > 100){
+                        return res.status(400).json(errResponse(baseResponse.NQNA_ANSWER_LENGTH));
+                    }
+                    else{
+                        const postAnswerResult = await nqnaService.createAnswer(answer, nQnA_id);
+                        return res.status(200).json(response(baseResponse.SUCCESS, postAnswerResult));
+                    }
                 }
                 else{
-                    const postAnswerResult = await nqnaService.createAnswer(answer, nQnA_id);
-                    return res.status(200).json(response(baseResponse.SUCCESS, postAnswerResult));
+                    return res.status(404).json(errResponse(baseResponse.NQNA_QUESTION_NOT_EXIST));
                 }
             }
             else{
-                return res.status(404).json(errResponse(baseResponse.NQNA_QUESTION_NOT_EXIST));
+                return res.status(400).json(errResponse(baseResponse.USER_USERID_USERIDFROMJWT_NOT_MATCH));
             }     
         }
         catch(error){
@@ -345,16 +357,22 @@ export const nqnaController = {
     patchQuestionHidden : async(req,res) => {
    
         try{
-            const {nQnA_id} = req.params;
+            const userIdFromJWT = req.verifiedToken ? req.verifiedToken.user_id : null; // 토큰이 있을 때만 user_id를 가져오도록 수정
+            const {nQnA_id, user_id} = req.params;
             const {question_hidden} = req.body;
             const nQnA = await nqnaProvider.retrieveNQnA(nQnA_id); // nQnA 개별 질문 조회
 
-            if(nQnA){ 
-                const patchQuestionHiddenResult = await nqnaService.editnQuestionHidden(nQnA_id, question_hidden);
-                return res.status(200).json(response(baseResponse.SUCCESS, patchQuestionHiddenResult));            
+            if(userIdFromJWT == user_id){ 
+                if(nQnA){
+                    const patchQuestionHiddenResult = await nqnaService.editnQuestionHidden(nQnA_id, question_hidden);
+                    return res.status(200).json(response(baseResponse.SUCCESS, patchQuestionHiddenResult));      
+                }
+                else{
+                    return res.status(404).json(errResponse(baseResponse.NQNA_QUESTION_NOT_EXIST));
+                }           
             }   
             else{
-                return res.status(404).json(errResponse(baseResponse.NQNA_QUESTION_NOT_EXIST));
+                return res.status(400).json(errResponse(baseResponse.USER_USERID_USERIDFROMJWT_NOT_MATCH));          
             }     
         }
         catch(error){
@@ -370,24 +388,29 @@ export const nqnaController = {
     patchAnswerHidden : async(req,res) => {
    
         try{
-            const {nQnA_id} = req.params;
+            const userIdFromJWT = req.verifiedToken ? req.verifiedToken.user_id : null; // 토큰이 있을 때만 user_id를 가져오도록 수정
+            const {nQnA_id,user_id} = req.params;
             const {answer_hidden} = req.body;
             const nQnA = await nqnaProvider.retrieveNQnA(nQnA_id); // nQnA 개별 질문 조회
 
-            if(nQnA){ // 질문이 존재한다면
-            
-                if(nQnA.answer !== null){ // 답변이 존재한다면
+            if(userIdFromJWT == user_id){
+                if(nQnA){ // 질문이 존재한다면
 
-                    const patchAnswerResult = await nqnaService.editnAnswerHidden(nQnA_id, answer_hidden);
-                    return res.status(200).json(response(baseResponse.SUCCESS, patchAnswerResult));            
-                }
+                    if(nQnA.answer != null){ // 답변이 존재한다면
+                        const patchAnswerResult = await nqnaService.editnAnswerHidden(nQnA_id, answer_hidden);
+                        return res.status(200).json(response(baseResponse.SUCCESS, patchAnswerResult));            
+                    }
+                    else{
+                        return res.status(404).json(errResponse(baseResponse.NQNA_ANSWER_NOT_EXIST));
+                    }
+                }   
                 else{
-                    return res.status(404).json(errResponse(baseResponse.NQNA_ANSWER_NOT_EXIST));
-                }
-            }   
+                    return res.status(404).json(errResponse(baseResponse.NQNA_QUESTION_NOT_EXIST));
+                }       
+            }
             else{
-                return res.status(404).json(errResponse(baseResponse.NQNA_QUESTION_NOT_EXIST));
-            }     
+                return res.status(400).json(errResponse(baseResponse.USER_USERID_USERIDFROMJWT_NOT_MATCH));
+            }      
         }
         catch(error){
             console.log(error);
@@ -402,16 +425,22 @@ export const nqnaController = {
     getEmptyAnswer : async(req,res) =>{
     
         try{
+            const userIdFromJWT = req.verifiedToken ? req.verifiedToken.user_id : null; // 토큰이 있을 때만 user_id를 가져오도록 수정
             const {user_id} = req.params;
             const User = await userProvider.retrieveUser(user_id);
 
-            if(User){
-                const getEmptyAnswerResult = await nqnaProvider.retrieveEmptyAnswer(user_id);
-                return res.status(200).json(response(baseResponse.SUCCESS, getEmptyAnswerResult)); 
+            if(userIdFromJWT == user_id){
+                if(User){
+                    const getEmptyAnswerResult = await nqnaProvider.retrieveEmptyAnswer(user_id);
+                    return res.status(200).json(response(baseResponse.SUCCESS, getEmptyAnswerResult)); 
+                }
+                else {
+                    return res.status(404).json(errResponse(baseResponse.USER_USERID_NOT_EXIST));
+               }
             }
-            else {
-                return res.status(404).json(errResponse(baseResponse.USER_USERID_NOT_EXIST));
-           }
+            else{
+                return res.status(400).json(errResponse(baseResponse.USER_USERID_USERIDFROMJWT_NOT_MATCH));
+            }        
         }catch(error){
             console.log(error);
             return res.status(500).json(errResponse(baseResponse.SERVER_ERROR));

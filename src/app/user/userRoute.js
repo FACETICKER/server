@@ -598,6 +598,7 @@ userRouter.get(
 // nQnA 관련
 userRouter.post(
   "/:user_id/nqna/question/default",
+  jwtMiddleware,
   nqnaController.postDefaultQuestion
 ); //default 질문 등록 API
 /**
@@ -671,7 +672,7 @@ userRouter.post(
  *              message:
  *                  type: string
  */
-userRouter.patch("/:user_id/nqna/:nQnA_id/answer", nqnaController.postAnswer); //Host 답변 등록 + 수정 API
+userRouter.patch("/:user_id/nqna/:nQnA_id/answer", jwtMiddleware, nqnaController.postAnswer); //Host 답변 등록 + 수정 API
 /**
  * @swagger
  * paths:
@@ -781,6 +782,7 @@ userRouter.get("/:user_id/nqna", jwtMiddleware, nqnaController.getnQnA); //N문 
  */
 userRouter.patch(
   "/:user_id/nqna/:nQnA_id/question/hidden",
+  jwtMiddleware,
   nqnaController.patchQuestionHidden
 ); //질문 공개 여부 수정 API
 /**
@@ -818,6 +820,7 @@ userRouter.patch(
  */
 userRouter.patch(
   "/:user_id/nqna/:nQnA_id/answer/hidden",
+  jwtMiddleware,
   nqnaController.patchAnswerHidden
 ); //답변 공개 여부 수정 API
 /**
@@ -855,6 +858,7 @@ userRouter.patch(
  */
 userRouter.get(
   "/:user_id/nqna/question/emptyanswer",
+  jwtMiddleware,
   nqnaController.getEmptyAnswer
 ); //미답변 질문 개수 조회 API
 /**
