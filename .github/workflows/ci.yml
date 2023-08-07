@@ -1,0 +1,57 @@
+name: Faceticker CI/CD
+
+on:
+  pull_request:
+    types: [closed]
+  workflow_dispatch: # 수동 실행도 가능하도록
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    if: github.event.pull_request.merged == true && github.event.pull_request.base.ref == 'main'
+
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Set up Node.js 18.x # 노드 설치
+        uses: actions/setup-node@v3
+        with:
+          node-version: 18.x # 버전 확인!
+
+      - name: Get current time
+        uses: 1466587594/get-current-time@v2
+        id: current-time
+        with:
+          format: YYYY-MM-DDTHH-mm-ss
+          utcOffset: "+09:00" # build 시점 시간 확보
+
+      - name: Show Current Time
+        run: echo "CurrentTime=$"
+        shell: bash # 확보한 시간 확인
+
+      - name: Build with Babel
+        run: |
+          npm install --production=false
+          npm run build
+
+      - name: Generate deployment package
+        run: |
+          mkdir -p deploy
+          cp -r dist/* deploy
+          cp package.json deploy/package.json
+          cp Procfile deploy/Procfile
+          cp -r .platform deploy/.platform
+          cd deploy
+          zip -r deploy.zip .
+
+      - name: Beanstalk Deploy
+        uses: einaregilsson/beanstalk-deploy@v21
+        with:
+          aws_access_key: ${{ secrets.AWS_ACTION_ACCESS_KEY_ID }} # repo secrets에 추가할 것
+          aws_secret_key: ${{ secrets.AWS_ACTION_SECRET_ACCESS_KEY }} # repo secrets에 추가할 것
+          application_name: faceticker-server # beanstalk application name --> 헷갈리지 말 것
+          environment_name: Faceticker-server-env # beanstalk environment name --> 헷갈리지 말 것
+          version_label: github-action-${{ steps.current-time.outputs.formattedTime }}
+          region: ap-northeast-2
+          deployment_package: deploy/deploy.zip
+          wait_for_environment_recovery: 60
