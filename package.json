@@ -6,7 +6,9 @@
   "type": "module",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "dev": "nodemon"
+    "dev": "nodemon",
+    "start": "node index.js",
+    "build": "npx babel index.js -d dist && npx babel src -d dist/src && npx babel config -d dist/config"
   },
   "author": "",
   "license": "ISC",
@@ -23,6 +25,7 @@
     "sequelize-cli": "^6.6.1"
   },
   "devDependencies": {
+    "@babel/cli": "^7.22.9",
     "@babel/core": "^7.22.5",
     "@babel/node": "^7.22.5",
     "@babel/preset-env": "^7.22.5",

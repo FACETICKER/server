@@ -49,8 +49,8 @@ jobs:
         with:
           aws_access_key: ${{ secrets.AWS_ACTION_ACCESS_KEY_ID }} # repo secrets에 추가할 것
           aws_secret_key: ${{ secrets.AWS_ACTION_SECRET_ACCESS_KEY }} # repo secrets에 추가할 것
-          application_name: bookjam-dev # beanstalk application name --> 헷갈리지 말 것
-          environment_name: Bookjam-dev-env # beanstalk environment name --> 헷갈리지 말 것
+          application_name: faceticker-server # beanstalk application name --> 헷갈리지 말 것
+          environment_name: Faceticker-server-env # beanstalk environment name --> 헷갈리지 말 것
           version_label: github-action-${{ steps.current-time.outputs.formattedTime }}
           region: ap-northeast-2
           deployment_package: deploy/deploy.zip
