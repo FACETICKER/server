@@ -303,7 +303,7 @@ export const posterDao = {
     updateImporant : async(connection, params) =>{
         const updateImporantQuery = `
             UPDATE user_poster
-            SET q_imporant = ?, chinese = ?, pronunciation = ?, meaning = ?
+            SET q_important = ?, chinese = ?, pronunciation = ?, meaning = ?
             WHERE user_id = ?;
         `
         const [updateImporantRow] = await connection.query(updateImporantQuery, params);

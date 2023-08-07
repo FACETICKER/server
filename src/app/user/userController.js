@@ -484,12 +484,35 @@ export const posterController = {
             return res.send(err);
         }
     },
-    putPoster : async(req,res)=>{
+    patchPoster : async(req,res)=>{
         try{
             const userIdFromJWT = req.verifiedToken ? req.verifiedToken.user_id : null; // 토큰이 있을 때만 user_id를 가져오도록 수정
             const userId = req.params.user_id;
-            
-            
+            const {season, number, date, important} = req.body;
+            let params;
+            if(season){
+                params = [season, userId];
+                const result = await posterService.updateSeason(params);
+                if(result == 'failure') return res.status(200).send(response(baseResponse.SERVER_ERROR));
+            }
+            if(number){
+                params = [number, userId];
+                const result = await posterService.updateNumber(params);
+                if(result == 'failure') return res.status(200).send(response(baseResponse.SERVER_ERROR));
+            }
+            if(date){
+                const formattedDate = dateFormat(date);
+                params = [formattedDate, userId];
+                const result = await posterService.updateDate(params);
+                if(result == 'failure') return res.status(200).send(response(baseResponse.SERVER_ERROR));
+            }
+            if(important){
+                const random = chineseDict(important);
+                params = [important, random.chinese, random.pronunciation, random.meaning, userId];
+                const result = await posterService.updateImportant(params);
+                if(result == 'failure') return res.status(200).send(response(baseResponse.SERVER_ERROR));
+            }
+            return res.status(200).send(response(baseResponse.SUCCESS));
         }catch(err){
             return res.status(500).send(err);
         }

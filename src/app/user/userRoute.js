@@ -946,8 +946,58 @@ userRouter.post("/:user_id/poster",jwtMiddleware,posterController.postPoster); /
  *              message:
  *                  type: string               
  */
-userRouter.put("/:user_id/poster/put",jwtMiddleware,posterController.putPoster); //포스터 수정
-
+userRouter.patch("/:user_id/poster/patch",jwtMiddleware,posterController.patchPoster); //포스터 수정
+/**
+ * @swagger
+ * paths:
+ *  /:user_id/poster/patch:
+ *   patch:
+ *    summary : 포스터 정보 수정
+ *    tags: [포스터]
+ *    description: 호스트의 포스터 정보 수정
+ *    parameters:
+ *    - in: path
+ *      name: user_id
+ *      required: true
+ *      description: 사용자 ID
+ *      schema:
+ *        type: integer
+ *    - in: body
+ *      name: season
+ *      required: false
+ *      description: 좋아하는 계절
+ *      schema:
+ *        type: string
+ *    - in: body
+ *      name: number
+ *      required: false
+ *      description: 좋아하는 숫자
+ *      schema:
+ *        type: integer
+ *    - in: body
+ *      name: date
+ *      required: false
+ *      description: 의미있는 날
+ *      schema:
+ *        type: string
+ *    - in: body
+ *      name: important
+ *      required: false
+ *      description: 사랑 vs 우정
+ *      schema:
+ *        type: string
+ *    responses:
+ *      '200':
+ *        description: 수정 성공
+ *        schema:
+ *          properties:
+ *              isSuccess:
+ *                  type: boolean
+ *              code:
+ *                  type: integer
+ *              message:
+ *                  type: string               
+ */
 
 
 export default userRouter;
