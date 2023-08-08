@@ -229,8 +229,15 @@ export const stickerService = { //스티커 관련 서비스
             return "success";
         }
         else return "fail";
-
     },
+    updateVisitorName : async(id,name)=>{
+        const connection = await pool.getConnection(async conn => conn);
+        const updateResult = await stickerDao.updateVisitorName(connection,id,name);
+        connection.release();
+        if(updateResult.affectedRows === 1){
+            return response(baseResponse.SUCCESS);
+        }else return response(baseResponse.DB_ERROR);
+    }
 };
 
 export const nqnaService = { //n문n답 관련 서비스

@@ -153,7 +153,7 @@ userRouter.get("/:user_id", jwtMiddleware, mainController.getAll); //메인 페�
  *                                  count:
  *                                      type: integer
  */
-userRouter.patch("/:user_id/sticker/message",jwtMiddleware,stickerController.postMessage); //스티커 호스트 메세지 등록
+userRouter.patch("/:user_id/sticker/message",jwtMiddleware,stickerController.hostMessage); //스티커 호스트 메세지 등록
 /**
  * @swagger
  * paths:
@@ -552,6 +552,87 @@ userRouter.patch(  "/:user_id/sticker/patch",  jwtMiddleware,  stickerController
  */
 
 userRouter.patch("/:user_id/sticker/visitor/message",jwtMiddleware, stickerController.visitorMessage); //방문자 스티커 메세지 등록
+/**
+ * @swagger
+ * paths:
+ *  /:user_id/sticker/visitor/message:
+ *   patch:
+ *    summary : 방문자 메세지 등록
+ *    tags: [스티커]
+ *    description: 스티커 메세지 등록
+ *    parameters:
+ *    - in: path
+ *      name: user_id
+ *      required: true
+ *      description: 호스트 아이디
+ *      schema:
+ *        type: string
+ *    - in: query
+ *      name: id
+ *      required: true
+ *      description: 방문자 스티커 아이디
+ *      schema:
+ *        type: integer
+ *    - in: body
+ *      name: message
+ *      required: true
+ *      description: 방문록
+ *      schema:
+ *        type: string
+ *    responses:
+ *      '200':
+ *        description: 스티커 메세지 등록 성공
+ *        schema:
+ *          properties:
+ *              isSuccess:
+ *                  type: boolean
+ *              code:
+ *                  type: integer
+ *              message:
+ *                  type: string
+ */
+
+userRouter.patch('/:user_id/sticker/visitor/name',jwtMiddleware,stickerController.visitorName); //방문자 스티커 닉네임 등록
+/**
+ * @swagger
+ * paths:
+ *  /:user_id/sticker/visitor/name:
+ *   patch:
+ *    summary : 방문자 닉네임 등록
+ *    tags: [스티커]
+ *    description: 스티커 닉네임 등록
+ *    parameters:
+ *    - in: path
+ *      name: user_id
+ *      required: true
+ *      description: 호스트 ID
+ *      schema:
+ *        type: string
+ *    - in: query
+ *      name: id
+ *      required: true
+ *      description: 방문자 스티커 아이디
+ *      schema:
+ *        type: integer
+ *    - in: body
+ *      name: name
+ *      required: true
+ *      description: 방문자 스티커 닉네임
+ *      schema:
+ *        type: string
+ *    responses:
+ *      '200':
+ *        description: 스티커 닉네임 등록 성공
+ *        schema:
+ *          properties:
+ *              isSuccess:
+ *                  type: boolean
+ *              code:
+ *                  type: integer
+ *              message:
+ *                  type: string
+ */
+
 
 // nQnA 관련
 userRouter.post(  "/:user_id/nqna/question/default",  nqnaController.postDefaultQuestion); //default 질문 등록 API
