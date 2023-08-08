@@ -233,12 +233,25 @@ export const stickerController = {
         }
     },
     visitorMessage : async (req,res) =>{
-        const userIdFromJWT = req.verifiedToken ? req.verifiedToken.user_id : null;
-        const userId = req.params.user_id;
-        const visitorStickerId = req.query.id;
-        const message = req.body.message;
-        const result = await stickerService.updateVisitorMessage(visitorStickerId, message)
-        return res.status(200).send(result);
+        try{
+            const userId = req.params.user_id;
+            const visitorStickerId = req.query.id;
+            const message = req.body.message;
+            const result = await stickerService.updateVisitorMessage(visitorStickerId, message)
+            return res.status(200).send(result);
+        }catch(err){
+            return res.status(500).send(err);
+        }
+    },
+    visitorName : async(req,res)=>{
+        try{
+            const visitorStickerId = req.query.id;
+            const name = req.body.name;
+            const result = await stickerService.updateVisitorName(visitorStickerId, name);
+            return res.status(200).send(result);
+        }catch(err){
+            return res.status(500).send(err);
+        }
     } 
 };
 

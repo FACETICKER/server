@@ -209,7 +209,15 @@ export const stickerDao = {
         const [updateAccessoryRow] = await connection.query(updateAccessoryQuery,params);
         return updateAccessoryRow;
     },
-    
+    updateVisitorName : async(connection,id,name) =>{
+        const updateVisitorNameQuery = `
+            UPDATE visitor_sticker
+            SET name = ?
+            WHERE visitor_sticker_id = ?;
+        `
+        const [updateVisitorNameRow] = await connection.query(updateVisitorNameQuery,[name,id]);
+        return updateVisitorNameRow;
+    }
 }
 
 export const nqnaDao = {
