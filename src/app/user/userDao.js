@@ -110,7 +110,7 @@ export const stickerDao = {
         const [selectNewStickerRow] = await connection.query(selectNewStickerQuery,user_id);
         return selectNewStickerRow;
     },
-    insertUserMessage : async(connection,userId, message) =>{ //방문자에게 보여줄 한 마디 등록
+    updateUserMessage : async(connection,userId, message) =>{ //방문자에게 보여줄 한 마디 등록
         const insertUserMessageQuery = `
             UPDATE user_sticker
             SET message = ?
@@ -119,7 +119,7 @@ export const stickerDao = {
         const [insertUserMessageRow] = await connection.query(insertUserMessageQuery,[message,userId]);
         return insertUserMessageRow;
     },
-    insertVisitorMessage : async(connection,params)=>{ //방문자 메세지 등록
+    updateVisitorMessage : async(connection,params)=>{ //방문자 메세지 등록
         const insertVisitorMessageQuery = `
             UPDATE visitor_sticker
             SET name = ? , message = ?

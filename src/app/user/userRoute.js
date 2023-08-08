@@ -157,13 +157,13 @@ userRouter.get("/:user_id", jwtMiddleware, mainController.getAll); //메인 페�
  *                                  count:
  *                                      type: integer
  */
-userRouter.patch("/:user_id/sticker/message",jwtMiddleware,stickerController.postMessage); //스티커 메세지 등록(Host, Visitor)
+userRouter.patch("/:user_id/sticker/message",jwtMiddleware,stickerController.hostMessage); //호스트 스티커 메세지 등록
 /**
  * @swagger
  * paths:
  *  /:user_id/sticker/message:
  *   patch:
- *    summary : 호스트/방문자 메세지 등록
+ *    summary : 호스트 메세지 등록
  *    tags: [메인 페이지]
  *    description: 스티커 메세지 등록
  *    parameters:
@@ -171,12 +171,6 @@ userRouter.patch("/:user_id/sticker/message",jwtMiddleware,stickerController.pos
  *      name: user_id
  *      required: true
  *      description: 사용자 ID
- *      schema:
- *        type: string
- *    - in: query
- *      name: type
- *      required: true
- *      description: host 또는 visitor
  *      schema:
  *        type: string
  *    - in: body
