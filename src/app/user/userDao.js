@@ -122,7 +122,7 @@ export const stickerDao = {
     updateVisitorMessage : async(connection,params)=>{ //방문자 메세지 등록
         const insertVisitorMessageQuery = `
             UPDATE visitor_sticker
-            SET name = ? , message = ?
+            SET message = ?
             WHERE visitor_sticker_id = ?;
         `
         const [insertVisitorMessageRow] = await connection.query(insertVisitorMessageQuery,params);

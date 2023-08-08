@@ -231,7 +231,15 @@ export const stickerController = {
         }catch(err){
             return res.status(500).send(err);
         }
-    }
+    },
+    visitorMessage : async (req,res) =>{
+        const userIdFromJWT = req.verifiedToken ? req.verifiedToken.user_id : null;
+        const userId = req.params.user_id;
+        const visitorStickerId = req.query.id;
+        const message = req.body.message;
+        const result = await stickerService.updateVisitorMessage(visitorStickerId, message)
+        return res.status(200).send(result);
+    } 
 };
 
 export const nqnaController = {

@@ -557,6 +557,8 @@ userRouter.patch('/:user_id/sticker/patch',jwtMiddleware,stickerController.patch
  *                  type: string
  */
 
+userRouter.patch("/:user_id/sticker/visitor/message",jwtMiddleware, stickerController.visitorMessage); //방문자 스티커 메세지 등록
+
 // nQnA 관련
 userRouter.post(  "/:user_id/nqna/question/default",  jwtMiddleware,  nqnaController.postDefaultQuestion); //default 질문 등록 API
 /**
