@@ -154,11 +154,11 @@ export const stickerService = { //스티커 관련 서비스
             console.error(err);
         }
     },
-    patchStickerLocation : async(stickerId, newLocation) =>{
+    patchStickerLocation : async(params) =>{
         const connection = await pool.getConnection(async conn=> conn);
-        const patchStickerLocation = await stickerDao.updateLocation(connection,params);
+        const patchStickerLocation = await stickerDao.updateStickerLocation(connection,params);
         connection.release();
-        if(insertStickerLocationResult.changedRows === 1 && insertStickerLocationResult.affectedRows===1){
+        if(patchStickerLocation.affectedRows===1){
             return "success";
         }else return "fail";
     },

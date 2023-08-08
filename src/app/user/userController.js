@@ -182,11 +182,12 @@ export const stickerController = {
             const userIdFromJWT = req.verifiedToken ? req.verifiedToken.user_id : null;
             const userId = req.params.user_id;
             const reqBody = req.body;
-            if(userId === userIdFromJWT){
-                for(const[num, newPosition] of Object.entries(reqBody)){
-                    console.log(newPosition);
-                    const result = await stickerService.patchStickerLocation(newPosition);
-                    if(result == fail){
+            let params;
+            if(userId == userIdFromJWT){
+                for(const[id, newPosition] of Object.entries(reqBody)){
+                    params = [newPosition.x, newPosition.y, id];
+                    const result = await stickerService.patchStickerLocation(params);
+                    if(result == 'fail'){
                         return res.send(response(baseResponse.DB_ERROR));
                     }
                 }
