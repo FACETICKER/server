@@ -157,7 +157,11 @@ userRouter.get("/:user_id", jwtMiddleware, mainController.getAll); //메인 페�
  *                                  count:
  *                                      type: integer
  */
-userRouter.patch("/:user_id/sticker/message",jwtMiddleware,stickerController.postMessage); //스티커 메세지 등록(Host, Visitor)
+userRouter.patch(
+  "/:user_id/sticker/message",
+  jwtMiddleware,
+  stickerController.postMessage
+); //스티커 메세지 등록(Host, Visitor)
 /**
  * @swagger
  * paths:
@@ -197,7 +201,10 @@ userRouter.patch("/:user_id/sticker/message",jwtMiddleware,stickerController.pos
  *              message:
  *                  type: string
  */
-userRouter.get(  "/:user_id/sticker/visitor/:visitor_sticker_id",  stickerController.getSticker); //방문자 기록 visitor_sticker_id로 상세 조회 API
+userRouter.get(
+  "/:user_id/sticker/visitor/:visitor_sticker_id",
+  stickerController.getSticker
+); //방문자 기록 visitor_sticker_id로 상세 조회 API
 /**
  * @swagger
  * paths:
@@ -240,7 +247,11 @@ userRouter.get(  "/:user_id/sticker/visitor/:visitor_sticker_id",  stickerContro
  *                                  type: integer
  */
 
-userRouter.get(  "/:user_id/sticker/all",  jwtMiddleware,  stickerController.getStickers); //방문자 기록 페이지 조회
+userRouter.get(
+  "/:user_id/sticker/all",
+  jwtMiddleware,
+  stickerController.getStickers
+); //방문자 기록 페이지 조회
 /**
  * @swagger
  * paths:
@@ -291,7 +302,11 @@ userRouter.get(  "/:user_id/sticker/all",  jwtMiddleware,  stickerController.get
  *                              location_y:
  *                                  type: integer
  */
-userRouter.patch(  "/:user_id/sticker/all/location",  jwtMiddleware,  stickerController.patchStickerLocation); //스티커 위치 수정
+userRouter.patch(
+  "/:user_id/sticker/all/location",
+  jwtMiddleware,
+  stickerController.patchStickerLocation
+); //스티커 위치 수정
 /**
  * @swagger
  * paths:
@@ -339,7 +354,11 @@ userRouter.patch(  "/:user_id/sticker/all/location",  jwtMiddleware,  stickerCon
  */
 
 // 스티커 관련
-userRouter.post(  "/:user_id/sticker",  jwtMiddleware,  stickerController.postSticker); //스티커 등록(Host,Visitor)
+userRouter.post(
+  "/:user_id/sticker",
+  jwtMiddleware,
+  stickerController.postSticker
+); //스티커 등록(Host,Visitor)
 /**
  * @swagger
  * paths:
@@ -409,7 +428,11 @@ userRouter.post(  "/:user_id/sticker",  jwtMiddleware,  stickerController.postSt
  *              message:
  *                  type: string
  */
-userRouter.patch(  "/:user_id/sticker/attach",  jwtMiddleware,  stickerController.attachSticker); //스티커 부착
+userRouter.patch(
+  "/:user_id/sticker/attach",
+  jwtMiddleware,
+  stickerController.attachSticker
+); //스티커 부착
 /**
  * @swagger
  * paths:
@@ -450,7 +473,11 @@ userRouter.patch(  "/:user_id/sticker/attach",  jwtMiddleware,  stickerControlle
  *                  type: string
  */
 
-userRouter.get(  "/:user_id/sticker/detail",  jwtMiddleware,  stickerController.getStickerDetails);
+userRouter.get(
+  "/:user_id/sticker/detail",
+  jwtMiddleware,
+  stickerController.getStickerDetails
+);
 /**
  * @swagger
  * paths:
@@ -496,7 +523,11 @@ userRouter.get(  "/:user_id/sticker/detail",  jwtMiddleware,  stickerController.
  *                          type: integer
  */
 
-userRouter.patch('/:user_id/sticker/patch',jwtMiddleware,stickerController.patchSticker); //호스트 스티커 수정
+userRouter.patch(
+  "/:user_id/sticker/patch",
+  jwtMiddleware,
+  stickerController.patchSticker
+); //호스트 스티커 수정
 /**
  * @swagger
  * paths:
@@ -568,7 +599,10 @@ userRouter.patch('/:user_id/sticker/patch',jwtMiddleware,stickerController.patch
  */
 
 // nQnA 관련
-userRouter.post(  "/:user_id/nqna/question/default",  nqnaController.postDefaultQuestion); //default 질문 등록 API
+userRouter.post(
+  "/:user_id/nqna/question/default",
+  nqnaController.postDefaultQuestion
+); //default 질문 등록 API
 /**
  * @swagger
  * paths:
@@ -602,7 +636,11 @@ userRouter.post(  "/:user_id/nqna/question/default",  nqnaController.postDefault
  *              message:
  *                  type: string
  */
-userRouter.post(  "/:user_id/nqna/question/visitor",  jwtMiddleware,  nqnaController.postVisitorQuestion); //visitor 질문 등록 API
+userRouter.post(
+  "/:user_id/nqna/question/visitor",
+  jwtMiddleware,
+  nqnaController.postVisitorQuestion
+); //visitor 질문 등록 API
 /**
  * @swagger
  * paths:
@@ -744,7 +782,10 @@ userRouter.get("/:user_id/nqna", jwtMiddleware, nqnaController.getnQnA); //N문 
  *                                  type: string
  *                                  format: date-time
  */
-userRouter.patch(  "/:user_id/nqna/:nQnA_id/question/hidden",  nqnaController.patchQuestionHidden); //질문 공개 여부 수정 API
+userRouter.patch(
+  "/:user_id/nqna/:nQnA_id/question/hidden",
+  nqnaController.patchQuestionHidden
+); //질문 공개 여부 수정 API
 /**
  * @swagger
  * paths:
@@ -778,7 +819,10 @@ userRouter.patch(  "/:user_id/nqna/:nQnA_id/question/hidden",  nqnaController.pa
  *              message:
  *                  type: string
  */
-userRouter.patch(  "/:user_id/nqna/:nQnA_id/answer/hidden",  nqnaController.patchAnswerHidden); //답변 공개 여부 수정 API
+userRouter.patch(
+  "/:user_id/nqna/:nQnA_id/answer/hidden",
+  nqnaController.patchAnswerHidden
+); //답변 공개 여부 수정 API
 /**
  * @swagger
  * paths:
@@ -812,7 +856,10 @@ userRouter.patch(  "/:user_id/nqna/:nQnA_id/answer/hidden",  nqnaController.patc
  *              message:
  *                  type: string
  */
-userRouter.get(  "/:user_id/nqna/question/emptyanswer",  nqnaController.getEmptyAnswer); //미답변 질문 개수 조회 API
+userRouter.get(
+  "/:user_id/nqna/question/emptyanswer",
+  nqnaController.getEmptyAnswer
+); //미답변 질문 개수 조회 API
 /**
  * @swagger
  * paths:
@@ -848,7 +895,11 @@ userRouter.get(  "/:user_id/nqna/question/emptyanswer",  nqnaController.getEmpty
  *                              emptyanswer:
  *                                  type: integer
  */
-userRouter.get(  "/:user_id/nqna/question/visitor",  jwtMiddleware,  nqnaController.getVisitorQuestion); //(방문자 플로우) 로그인한 방문자가 남긴 질문 조회 API
+userRouter.get(
+  "/:user_id/nqna/question/visitor",
+  jwtMiddleware,
+  nqnaController.getVisitorQuestion
+); //(방문자 플로우) 로그인한 방문자가 남긴 질문 조회 API
 /**
  * @swagger
  * paths:
@@ -948,7 +999,11 @@ userRouter.post("/:user_id/poster", jwtMiddleware, posterController.postPoster);
  *              message:
  *                  type: string
  */
-userRouter.patch("/:user_id/poster/patch",jwtMiddleware,posterController.patchPoster); //포스터 수정
+userRouter.patch(
+  "/:user_id/poster/patch",
+  jwtMiddleware,
+  posterController.patchPoster
+); //포스터 수정
 /**
  * @swagger
  * paths:
@@ -998,12 +1053,12 @@ userRouter.patch("/:user_id/poster/patch",jwtMiddleware,posterController.patchPo
  *              code:
  *                  type: integer
  *              message:
- *                  type: string               
+ *                  type: string
  */
 
-//elastic beanstalk 배포용 (지우면 용욱이형 극대노)
+//elastic beanstalk 배포용
 userRouter.get("/health", (req, res) => {
-    return res.send("hi");
+  return res.send("hi");
 });
 
 export default userRouter;
