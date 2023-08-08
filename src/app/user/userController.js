@@ -136,18 +136,13 @@ export const stickerController = {
             return res.status(500).send(err);
         }
     },
-    postMessage : async(req,res)=>{ //메세지 등록(Host, Visitor)
+    hostMessage : async(req,res)=>{ //호스트 메세지 등록
         try{
             const userIdFromJWT = req.verifiedToken ? req.verifiedToken.user_id : null;
+            const userId = req.params.user_id;
             const message = req.body.message;
-            const type = req.query.type;
-            if(type === 'host'){
-                const result = await stickerService.insertUserMessage(userIdFromJWT,message);
-                return res.send(result);
-            }else if(type ==='visitor'){
-                const sticker_id = req.query.id;
-                const sticker_name = req.body.name;
-                const result = await stickerService.insertVisitorMessage(sticker_id,sticker_name,message);
+            if(userId == userIdFromJWT){
+                const result = await stickerService.updateUserMessage(userIdFromJWT, message);
                 return res.send(result);
             }
         }catch(err){
@@ -182,11 +177,12 @@ export const stickerController = {
             const userIdFromJWT = req.verifiedToken ? req.verifiedToken.user_id : null;
             const userId = req.params.user_id;
             const reqBody = req.body;
-            if(userId === userIdFromJWT){
-                for(const[num, newPosition] of Object.entries(reqBody)){
-                    console.log(newPosition);
-                    const result = await stickerService.patchStickerLocation(newPosition);
-                    if(result == fail){
+            let params;
+            if(userId == userIdFromJWT){
+                for(const[id, newPosition] of Object.entries(reqBody)){
+                    params = [newPosition.x, newPosition.y, id];
+                    const result = await stickerService.patchStickerLocation(params);
+                    if(result == 'fail'){
                         return res.send(response(baseResponse.DB_ERROR));
                     }
                 }

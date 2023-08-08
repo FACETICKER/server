@@ -118,22 +118,22 @@ export const stickerService = { //스티커 관련 서비스
             console.error(err);
         }
     },
-    insertUserMessage : async(userId, message) =>{ //사용자 메세지 등록
+    updateUserMessage : async(userId, message) =>{ //사용자 메세지 등록
         try{
             const connection = await pool.getConnection(async conn => conn);
-            const insertUserMessageResult = await stickerDao.insertUserMessage(connection,userId,message);
-            if(insertUserMessageResult.changedRows === 1 && insertUserMessageResult.affectedRows === 1){
+            const insertUserMessageResult = await stickerDao.updateUserMessage(connection,userId,message);
+            if(insertUserMessageResult.affectedRows === 1){
                 return response(baseResponse.SUCCESS);
             }else return response(baseResponse.DB_ERROR);
         }catch(err){
             console.error(err);
         }
     },
-    insertVisitorMessage : async(visitorId, name, message) =>{ //방문자 메세지 등록
+    updateVisitorMessage : async(visitorId, name, message) =>{ //방문자 메세지 등록
         try{
             const connection = await pool.getConnection(async conn => conn);
             const params = [name,message, visitorId];
-            const insertVisitorMessageResult = await stickerDao.insertVisitorMessage(connection,params);
+            const insertVisitorMessageResult = await stickerDao.updateVisitorMessage(connection,params);
             connection.release();
             if(insertVisitorMessageResult.changedRows === 1 && insertVisitorMessageResult.affectedRows===1){
                 return response(baseResponse.SUCCESS);
@@ -154,11 +154,11 @@ export const stickerService = { //스티커 관련 서비스
             console.error(err);
         }
     },
-    patchStickerLocation : async(stickerId, newLocation) =>{
+    patchStickerLocation : async(params) =>{
         const connection = await pool.getConnection(async conn=> conn);
-        const patchStickerLocation = await stickerDao.updateLocation(connection,params);
+        const patchStickerLocation = await stickerDao.updateStickerLocation(connection,params);
         connection.release();
-        if(insertStickerLocationResult.changedRows === 1 && insertStickerLocationResult.affectedRows===1){
+        if(patchStickerLocation.affectedRows===1){
             return "success";
         }else return "fail";
     },
