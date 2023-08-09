@@ -1074,9 +1074,4 @@ userRouter.patch(  "/:user_id/poster/patch",  jwtMiddleware,  posterController.p
  *                  type: string
  */
 
-//elastic beanstalk 배포용
-userRouter.get("/health", (req, res) => {
-  return res.send("hi");
-});
-
 export default userRouter;

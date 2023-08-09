@@ -5,6 +5,8 @@ dotenv.config();
 app.listen(process.env.SERVER_PORT, () => {
   console.log(`server is ready, ${process.env.SERVER_PORT}`);
 });
+
+// 배포 메세지 출력
 app.get("/", (req, res) => {
-  res.json({ result: "sibal" });
+  res.json({ result: "Deploy success!" });
 });
