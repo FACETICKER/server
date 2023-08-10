@@ -210,5 +210,11 @@ export const posterProvider = { //포스터
         const posterResult = await posterDao.selectPoster(connection,user_id);
         connection.release();
         return posterResult;
+    },
+    retrieveImportant: async(user_id)=>{
+        const connection = await pool.getConnection(async conn => conn);
+        const retrieveResult = await posterDao.selectImportant(connection,user_id);
+        connection.release();
+        return retrieveResult;
     }
 }

@@ -286,7 +286,7 @@ userRouter.patch(  "/:user_id/sticker/all/location",  jwtMiddleware,  stickerCon
  * @swagger
  * paths:
  *  /:user_id/sticker/all/location:
- *   put:
+ *   patch:
  *    summary : 방문자 스티커 위치 수정
  *    tags: [스티커]
  *    description: 스티커 수정
@@ -1052,26 +1052,32 @@ userRouter.patch(  "/:user_id/poster/patch",  jwtMiddleware,  posterController.p
  *      schema:
  *        type: integer
  *    - in: body
+ *      name: nickname
+ *      required: true
+ *      description: 닉네임
+ *      schema:
+ *        type: string
+ *    - in: body
  *      name: season
- *      required: false
+ *      required: true
  *      description: 좋아하는 계절
  *      schema:
  *        type: string
  *    - in: body
  *      name: number
- *      required: false
+ *      required: true
  *      description: 좋아하는 숫자
  *      schema:
  *        type: integer
  *    - in: body
  *      name: date
- *      required: false
+ *      required: true
  *      description: 의미있는 날
  *      schema:
  *        type: string
  *    - in: body
  *      name: important
- *      required: false
+ *      required: true
  *      description: 사랑 vs 우정
  *      schema:
  *        type: string

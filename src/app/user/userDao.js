@@ -300,40 +300,31 @@ export const posterDao = {
             return err;
         }
     },
-    updateSeason : async(connection, params) =>{
-        const updateSeasonQuery = `
-            UPDATE user_poster
-            SET q_season = ?
+    selectImportant : async(connection, user_id)=>{
+        const selectImportantQuery = `
+            SELECT important
+            FROM user_poster
             WHERE user_id = ?;
         `
-        const [updateSeasonRow] = await connection.query(updateSeasonQuery,params);
-        return updateSeasonRow;
+        const [selectImportantRow] = await connection.query(selectImportantQuery,user_id);
+        return selectImportantRow;
     },
-    updateNumber : async(connection, params) =>{
-        const updateNumberQuery = `
+    updatePoster : async(connection, params)=>{
+        const updatePosterQuery = `
             UPDATE user_poster
-            SET q_number = ?
+            SET nickname = ?, q_season = ?, q_number = ?, q_date = ?
             WHERE user_id = ?;
         `
-        const [updateNumberRow] = await connection.query(updateNumberQuery, params);
-        return updateNumberRow;
+        const [updatePosterRow] = await connection.query(updatePosterQuery, params);
+        return updatePosterRow;
     },
-    updateDate : async(connection, params) =>{
-        const updateDateQuery = `
+    updateChinese : async(connection, params)=>{
+        const updateChineseQuery = `
             UPDATE user_poster
-            SET q_date = ?
+            SET chinese = ?, pronunciation = ?, meaning =?
             WHERE user_id = ?;
         `
-        const [updateDateRow] = await connection.query(updateDateQuery,params);
-        return updateDateRow;
-    },
-    updateImporant : async(connection, params) =>{
-        const updateImporantQuery = `
-            UPDATE user_poster
-            SET q_important = ?, chinese = ?, pronunciation = ?, meaning = ?
-            WHERE user_id = ?;
-        `
-        const [updateImporantRow] = await connection.query(updateImporantQuery, params);
-        return updateImporantRow;
+        const [updateChineseRow] = await connection.query(updateChineseQuery, params);
+        return updateChineseRow;
     }
 }

@@ -3,7 +3,7 @@ import dotenv from "dotenv";
 import { response,errResponse } from "../../../config/response.js";
 import baseResponse from "../../../config/baseResponse.js";
 import {loginService, stickerService, nqnaService, mainpageService, posterService, chineseDict, dateFormat} from "./userService.js";
-import {stickerProvider, nqnaProvider, userProvider} from "./userProvider.js";
+import {stickerProvider, nqnaProvider, userProvider, posterProvider} from "./userProvider.js";
 import e from "express";
 dotenv.config();
 export const loginController = {
@@ -569,30 +569,19 @@ export const posterController = {
                 const userIdFromJWT = req.verifiedToken ? req.verifiedToken.user_id : null; // 토큰이 있을 때만 user_id를 가져오도록 수정
                 const userId = req.params.user_id;
                 if(userIdFromJWT == userId){
-                const {season, number, date, important} = req.body;
-                let params;
-                if(season){
-                    params = [season, userId];
-                    const result = await posterService.updateSeason(params);
-                    if(result == 'fail') return res.status(200).send(response(baseResponse.SERVER_ERROR));
-                }
-                if(number){
-                    params = [number, userId];
-                    const result = await posterService.updateNumber(params);
-                    if(result == 'fail') return res.status(200).send(response(baseResponse.SERVER_ERROR));
-                }
-                if(date){
-                    const formattedDate = dateFormat(date);
-                    params = [formattedDate, userId];
-                    const result = await posterService.updateDate(params);
-                    if(result == 'fail') return res.status(200).send(response(baseResponse.SERVER_ERROR));
-                }
-                if(important){
+                const {nickname, season, number, date, important} = req.body;
+                const oldImportant = await posterProvider.retrieveImportant(userId);
+                const formattedDate = dateFormat(date);
+                const params = [nickname, season, number, formattedDate, userId];
+                let result;
+                if(oldImportant != important){
                     const random = chineseDict(important);
-                    params = [important, random.chinese, random.pronunciation, random.meaning, userId];
-                    const result = await posterService.updateImportant(params);
-                    if(result == 'fail') return res.status(200).send(response(baseResponse.SERVER_ERROR));
+                    const chineseParams = [random.chinese, random.pronunciation, random.meaning, userId];
+                    result = await posterService.updateChinese(chineseParams);
+                    if(result === 'fail') return res.send(response(baseResponse.DB_ERROR));
                 }
+                result = await posterService.updatePoster(params);
+                if(result === 'fail') return res.send(response(baseResponse.DB_ERROR));
                 return res.status(200).send(response(baseResponse.SUCCESS));
             }
         }catch(err){
