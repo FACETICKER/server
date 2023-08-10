@@ -305,46 +305,23 @@ export const posterService = {
             return response(baseResponse.SUCCESS);
         }else return response(baseResponse.DB_ERROR);
     },
-    updateSeason : async(params) =>{
+    updatePoster : async(params) =>{
         const connection = await pool.getConnection(async conn => conn);
-        const updateResult = await posterDao.updateSeason(connection,params);
+        const updateResult = await posterDao.updatePoster(connection,params);
         connection.release();
         if(updateResult.affectedRows === 1){
             return "success";
         }
         else return "fail";
-
-
     },
-    updateNumber : async(params) =>{
+    updateChinese : async(params) =>{
         const connection = await pool.getConnection(async conn => conn);
-        const updateResult = await posterDao.updateNumber(connection, params);
+        const updateResult = await posterDao.updateChinese(connection,params);
         connection.release();
         if(updateResult.affectedRows === 1){
             return "success";
         }
         else return "fail";
-
-    },
-    updateDate : async(params) =>{
-        const connection = await pool.getConnection(async conn => conn);
-        const updateResult = await posterDao.updateDate(connection, params);
-        connection.release();
-        if(updateResult.affectedRows === 1){
-            return "success";
-        }
-        else return "fail";
-
-    },
-    updateImportant : async(params) =>{
-        const connection = await pool.getConnection(async conn => conn);
-        const updateResult = await posterDao.updateImporant(connection,params);
-        connection.release();
-        if(updateResult.affectedRows === 1){
-            return "success";
-        }
-        else return "fail";
-
     }
 };
 
