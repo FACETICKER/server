@@ -252,6 +252,19 @@ export const stickerController = {
         }catch(err){
             return res.status(500).send(err);
         }
+    },
+    getHostMessage : async(req,res)=>{
+        try{
+            const userId = req.params.user_id;
+            const visitorStickerId = req.query.id;
+            if(visitorStickerId == userId){
+                const result = await stickerProvider.retrieveHostMessage(userId);
+                return res.send(reportErrorb(baseResponse.SUCCESS,result));
+            }
+        }catch(err){
+            return res.status(500).send(err);
+        }
+        
     } 
 };
 
