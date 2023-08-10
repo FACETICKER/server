@@ -4,6 +4,7 @@ import { response,errResponse } from "../../../config/response.js";
 import baseResponse from "../../../config/baseResponse.js";
 import {loginService, stickerService, nqnaService, mainpageService, posterService, chineseDict, dateFormat} from "./userService.js";
 import {stickerProvider, nqnaProvider, userProvider} from "./userProvider.js";
+import e from "express";
 dotenv.config();
 export const loginController = {
     kakao : async(req,res)=>{ //카카오
@@ -121,14 +122,14 @@ export const stickerController = {
         try{ 
             const type = req.query.type; //type으로 Host, visitor 구분
             const userIdFromJWT = req.verifiedToken ? req.verifiedToken.user_id : null;
-            const {face, nose, eyes, mouth, arm, foot, accessory} = req.body;
             const user_id = req.params.user_id;
+            const {face, nose, eyes, mouth, arm, foot, accessory,final} = req.body;
             if(type === 'host'){ //호스트 스티커 등록
-                const params = [userIdFromJWT, face, nose, eyes, mouth, arm, foot, accessory];
+                const params = [userIdFromJWT, face, nose, eyes, mouth, arm, foot, accessory,final];
                 const insertResult = await stickerService.insertUserSticker(params);
                 return res.send(insertResult);
             }else if(type === 'visitor'){ //방문자 스티커 등록
-                const params = [user_id, userIdFromJWT, face, nose, eyes, mouth, arm, foot, accessory];
+                const params = [user_id, userIdFromJWT, face, nose, eyes, mouth, arm, foot, accessory,final];
                 const insertResult = await stickerService.insertVisitorSticker(params);
                 return res.send(insertResult);
             }
@@ -196,37 +197,14 @@ export const stickerController = {
         try{
             const userIdFromJWT = req.verifiedToken ? req.verifiedToken.user_id : null;
             const userId = req.params.user_id;
-            const {face, nose, eyes, mouth, arm, foot, accessory} = req.body;
+            const {face, nose, eyes, mouth, arm, foot, accessory, final} = req.body;
             if(userId == userIdFromJWT){
-                if(face){
-                    const result = await stickerService.updateFace([face,userId]);
-                    if(result == 'fail') return res.status(200).send(response(baseResponse.SERVER_ERROR));
+                const params = [face,nose,eyes, mouth, arm, foot, accessory, final, userId];
+                const result = await stickerService.updateUserSticker(params);
+                if(result === 'success'){
+                    return res.status(200).send(response(baseResponse.SUCCESS));
                 }
-                if(nose){
-                    const result = await stickerService.updateNose([nose,userId]);
-                    if(result == 'fail') return res.status(200).send(response(baseResponse.SERVER_ERROR));
-                }
-                if(eyes){
-                    const result = await stickerService.updateEyes([eyes,userId]);
-                    if(result == 'fail') return res.status(200).send(response(baseResponse.SERVER_ERROR));
-                }
-                if(mouth){
-                    const result = await stickerService.updateMouth([mouth,userId]);
-                    if(result == 'fail') return res.status(200).send(response(baseResponse.SERVER_ERROR));
-                }
-                if(arm){
-                    const result = await stickerService.updateArm([arm,userId]);
-                    if(result == 'fail') return res.status(200).send(response(baseResponse.SERVER_ERROR));
-                }
-                if(foot){
-                    const result = await stickerService.updateFoot([foot,userId]);
-                    if(result == 'fail') return res.status(200).send(response(baseResponse.SERVER_ERROR));
-                }
-                if(accessory){
-                    const result = await stickerService.updateAccessory([accessory,userId]);
-                    if(result == 'fail') return res.status(200).send(response(baseResponse.SERVER_ERROR));
-                }
-                return res.status(200).send(response(baseResponse.SUCCESS));
+                else return res.status(200).send(response(baseResponse.DB_ERROR));
             }
         }catch(err){
             return res.status(500).send(err);
@@ -252,6 +230,19 @@ export const stickerController = {
         }catch(err){
             return res.status(500).send(err);
         }
+    },
+    getHostMessage : async(req,res)=>{
+        try{
+            const userId = req.params.user_id;
+            const visitorStickerId = req.query.id;
+            if(visitorStickerId == userId){
+                const result = await stickerProvider.retrieveHostMessage(userId);
+                return res.send(reportErrorb(baseResponse.SUCCESS,result));
+            }
+        }catch(err){
+            return res.status(500).send(err);
+        }
+        
     } 
 };
 

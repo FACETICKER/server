@@ -162,73 +162,13 @@ export const stickerService = { //스티커 관련 서비스
             return "success";
         }else return "fail";
     },
-    updateFace : async(params) =>{
+    updateUserSticker : async(params) =>{
         const connection = await pool.getConnection(async conn => conn);
-        const updateResult = await stickerDao.updateFace(connection,params);
+        const udpateResult = await stickerDao.updateUserSticker(connection,params);
         connection.release();
         if(updateResult.affectedRows === 1){
             return "success";
-        }
-        else return "fail";
-
-    },
-    updateEyes : async(params) =>{
-        const connection = await pool.getConnection(async conn => conn);
-        const updateResult = await stickerDao.updateEyes(connection,params);
-        connection.release();
-        if(updateResult.affectedRows === 1){
-            return "success";
-        }
-        else return "fail";
-
-    },
-    updateNose : async(params) =>{
-        const connection = await pool.getConnection(async conn => conn);
-        const updateResult = await stickerDao.updateNose(connection,params);
-        connection.release();
-        if(updateResult.affectedRows === 1){
-            return "success";
-        }
-        else return "fail";
-
-    },
-    updateMouth : async(params) =>{
-        const connection = await pool.getConnection(async conn => conn);
-        const updateResult = await stickerDao.updateMouth(connection,params);
-        connection.release();
-        if(updateResult.affectedRows === 1){
-            return "success";
-        }
-        else return "fail";
-
-    },
-    updateArm : async(params) =>{
-        const connection = await pool.getConnection(async conn => conn);
-        const updateResult = await stickerDao.updateArm(connection,params);
-        connection.release();
-        if(updateResult.affectedRows === 1){
-            return "success";
-        }
-        else return "fail";
-    },
-    updateFoot : async(params) =>{
-        const connection = await pool.getConnection(async conn => conn);
-        const updateResult = await stickerDao.updateFoot(connection,params);
-        connection.release();
-        if(updateResult.affectedRows === 1){
-            return "success";
-        }
-        else return "fail";
-
-    },
-    updateAccessory : async(params) =>{
-        const connection = await pool.getConnection(async conn => conn);
-        const updateResult = await stickerDao.updateAccessory(connection,params);
-        connection.release();
-        if(updateResult.affectedRows === 1){
-            return "success";
-        }
-        else return "fail";
+        }else return "fail";
     },
     updateVisitorName : async(id,name)=>{
         const connection = await pool.getConnection(async conn => conn);
