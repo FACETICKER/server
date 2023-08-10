@@ -639,6 +639,8 @@ userRouter.patch('/:user_id/sticker/visitor/name',jwtMiddleware,stickerControlle
  *                  type: string
  */
 
+userRouter.get("/:user_id/sticker/message", jwtMiddleware, stickerController.getHostMessage);
+
 
 // nQnA 관련
 userRouter.post(  "/:user_id/nqna/question/default",  nqnaController.postDefaultQuestion); //default 질문 등록 API

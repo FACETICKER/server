@@ -215,6 +215,15 @@ export const stickerDao = {
         `
         const [updateVisitorNameRow] = await connection.query(updateVisitorNameQuery,[name,id]);
         return updateVisitorNameRow;
+    },
+    selectHostMessage : async(connection, id) =>{
+        const selectHostMessageQuery = `
+            SELECT message
+            FROM user_sticker
+            WHERE user_id = ?;
+        `
+        const [selectHostMessageRow] = await connection.query(selectHostMessageQuery, id);
+        return selectHostMessageRow;
     }
 }
 
