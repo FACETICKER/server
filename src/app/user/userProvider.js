@@ -112,6 +112,12 @@ export const stickerProvider = { //스티커
         const detailsResult = await stickerDao.selectUserStickerDetails(connection,userId);
         connection.release();
         return detailsResult;
+    },
+    retrieveHostMessage : async(userId) =>{
+        const connection = await pool.getConnection(async conn => conn);
+        const retrieveResult = await stickerDao.selectHostMessage(connection,userId);
+        connection.release();
+        return retrieveResult;
     }
 };
 
@@ -204,5 +210,11 @@ export const posterProvider = { //포스터
         const posterResult = await posterDao.selectPoster(connection,user_id);
         connection.release();
         return posterResult;
+    },
+    retrieveImportant: async(user_id)=>{
+        const connection = await pool.getConnection(async conn => conn);
+        const retrieveResult = await posterDao.selectImportant(connection,user_id);
+        connection.release();
+        return retrieveResult;
     }
 }

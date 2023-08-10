@@ -286,7 +286,7 @@ userRouter.patch(  "/:user_id/sticker/all/location",  jwtMiddleware,  stickerCon
  * @swagger
  * paths:
  *  /:user_id/sticker/all/location:
- *   put:
+ *   patch:
  *    summary : 방문자 스티커 위치 수정
  *    tags: [스티커]
  *    description: 스티커 수정
@@ -504,46 +504,52 @@ userRouter.patch(  "/:user_id/sticker/patch",  jwtMiddleware,  stickerController
  *        type: integer
  *    - in: body
  *      name: face
- *      required: false
+ *      required: true
  *      description: 페이스 스티커 번호
  *      schema:
  *        type: integer
  *    - in: body
  *      name: eyes
- *      required: false
+ *      required: true
  *      description: 눈 스티커 번호
  *      schema:
  *        type: integer
  *    - in: body
  *      name: nose
- *      required: false
+ *      required: true
  *      description: 코 스티커 번호
  *      schema:
  *        type: integer
  *    - in: body
  *      name: mouth
- *      required: false
+ *      required: true
  *      description: 입 스티커 번호
  *      schema:
  *        type: integer
  *    - in: body
  *      name: arm
- *      required: false
+ *      required: true
  *      description: 팔 스티커 번호
  *      schema:
  *        type: integer
  *    - in: body
  *      name: foot
- *      required: false
+ *      required: true
  *      description: 발 스티커 번호
  *      schema:
  *        type: integer
  *    - in: body
  *      name: accessory
- *      required: false
+ *      required: true
  *      description: 악세사리 스티커 번호
  *      schema:
  *        type: integer
+ *    - in: body
+ *      name: final
+ *      required: true
+ *      description: 최종 이미지 base64 인코딩 문자열
+ *      schema:
+ *        type: string
  *    responses:
  *      '200':
  *        description: 수정 성공
@@ -638,6 +644,8 @@ userRouter.patch('/:user_id/sticker/visitor/name',jwtMiddleware,stickerControlle
  *              message:
  *                  type: string
  */
+
+userRouter.get("/:user_id/sticker/message", jwtMiddleware, stickerController.getHostMessage);
 
 
 // nQnA 관련
@@ -1044,26 +1052,32 @@ userRouter.patch(  "/:user_id/poster/patch",  jwtMiddleware,  posterController.p
  *      schema:
  *        type: integer
  *    - in: body
+ *      name: nickname
+ *      required: true
+ *      description: 닉네임
+ *      schema:
+ *        type: string
+ *    - in: body
  *      name: season
- *      required: false
+ *      required: true
  *      description: 좋아하는 계절
  *      schema:
  *        type: string
  *    - in: body
  *      name: number
- *      required: false
+ *      required: true
  *      description: 좋아하는 숫자
  *      schema:
  *        type: integer
  *    - in: body
  *      name: date
- *      required: false
+ *      required: true
  *      description: 의미있는 날
  *      schema:
  *        type: string
  *    - in: body
  *      name: important
- *      required: false
+ *      required: true
  *      description: 사랑 vs 우정
  *      schema:
  *        type: string

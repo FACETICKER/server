@@ -3,7 +3,8 @@ import dotenv from "dotenv";
 import { response,errResponse } from "../../../config/response.js";
 import baseResponse from "../../../config/baseResponse.js";
 import {loginService, stickerService, nqnaService, mainpageService, posterService, chineseDict, dateFormat} from "./userService.js";
-import {stickerProvider, nqnaProvider, userProvider} from "./userProvider.js";
+import {stickerProvider, nqnaProvider, userProvider, posterProvider} from "./userProvider.js";
+import e from "express";
 dotenv.config();
 export const loginController = {
     kakao : async(req,res)=>{ //카카오
@@ -196,37 +197,14 @@ export const stickerController = {
         try{
             const userIdFromJWT = req.verifiedToken ? req.verifiedToken.user_id : null;
             const userId = req.params.user_id;
-            const {face, nose, eyes, mouth, arm, foot, accessory} = req.body;
+            const {face, nose, eyes, mouth, arm, foot, accessory, final} = req.body;
             if(userId == userIdFromJWT){
-                if(face){
-                    const result = await stickerService.updateFace([face,userId]);
-                    if(result == 'fail') return res.status(200).send(response(baseResponse.SERVER_ERROR));
+                const params = [face,nose,eyes, mouth, arm, foot, accessory, final, userId];
+                const result = await stickerService.updateUserSticker(params);
+                if(result === 'success'){
+                    return res.status(200).send(response(baseResponse.SUCCESS));
                 }
-                if(nose){
-                    const result = await stickerService.updateNose([nose,userId]);
-                    if(result == 'fail') return res.status(200).send(response(baseResponse.SERVER_ERROR));
-                }
-                if(eyes){
-                    const result = await stickerService.updateEyes([eyes,userId]);
-                    if(result == 'fail') return res.status(200).send(response(baseResponse.SERVER_ERROR));
-                }
-                if(mouth){
-                    const result = await stickerService.updateMouth([mouth,userId]);
-                    if(result == 'fail') return res.status(200).send(response(baseResponse.SERVER_ERROR));
-                }
-                if(arm){
-                    const result = await stickerService.updateArm([arm,userId]);
-                    if(result == 'fail') return res.status(200).send(response(baseResponse.SERVER_ERROR));
-                }
-                if(foot){
-                    const result = await stickerService.updateFoot([foot,userId]);
-                    if(result == 'fail') return res.status(200).send(response(baseResponse.SERVER_ERROR));
-                }
-                if(accessory){
-                    const result = await stickerService.updateAccessory([accessory,userId]);
-                    if(result == 'fail') return res.status(200).send(response(baseResponse.SERVER_ERROR));
-                }
-                return res.status(200).send(response(baseResponse.SUCCESS));
+                else return res.status(200).send(response(baseResponse.DB_ERROR));
             }
         }catch(err){
             return res.status(500).send(err);
@@ -252,6 +230,19 @@ export const stickerController = {
         }catch(err){
             return res.status(500).send(err);
         }
+    },
+    getHostMessage : async(req,res)=>{
+        try{
+            const userId = req.params.user_id;
+            const visitorStickerId = req.query.id;
+            if(visitorStickerId == userId){
+                const result = await stickerProvider.retrieveHostMessage(userId);
+                return res.send(reportErrorb(baseResponse.SUCCESS,result));
+            }
+        }catch(err){
+            return res.status(500).send(err);
+        }
+        
     } 
 };
 
@@ -578,30 +569,19 @@ export const posterController = {
                 const userIdFromJWT = req.verifiedToken ? req.verifiedToken.user_id : null; // 토큰이 있을 때만 user_id를 가져오도록 수정
                 const userId = req.params.user_id;
                 if(userIdFromJWT == userId){
-                const {season, number, date, important} = req.body;
-                let params;
-                if(season){
-                    params = [season, userId];
-                    const result = await posterService.updateSeason(params);
-                    if(result == 'fail') return res.status(200).send(response(baseResponse.SERVER_ERROR));
-                }
-                if(number){
-                    params = [number, userId];
-                    const result = await posterService.updateNumber(params);
-                    if(result == 'fail') return res.status(200).send(response(baseResponse.SERVER_ERROR));
-                }
-                if(date){
-                    const formattedDate = dateFormat(date);
-                    params = [formattedDate, userId];
-                    const result = await posterService.updateDate(params);
-                    if(result == 'fail') return res.status(200).send(response(baseResponse.SERVER_ERROR));
-                }
-                if(important){
+                const {nickname, season, number, date, important} = req.body;
+                const oldImportant = await posterProvider.retrieveImportant(userId);
+                const formattedDate = dateFormat(date);
+                const params = [nickname, season, number, formattedDate, userId];
+                let result;
+                if(oldImportant != important){
                     const random = chineseDict(important);
-                    params = [important, random.chinese, random.pronunciation, random.meaning, userId];
-                    const result = await posterService.updateImportant(params);
-                    if(result == 'fail') return res.status(200).send(response(baseResponse.SERVER_ERROR));
+                    const chineseParams = [random.chinese, random.pronunciation, random.meaning, userId];
+                    result = await posterService.updateChinese(chineseParams);
+                    if(result === 'fail') return res.send(response(baseResponse.DB_ERROR));
                 }
+                result = await posterService.updatePoster(params);
+                if(result === 'fail') return res.send(response(baseResponse.DB_ERROR));
                 return res.status(200).send(response(baseResponse.SUCCESS));
             }
         }catch(err){

@@ -162,73 +162,13 @@ export const stickerService = { //스티커 관련 서비스
             return "success";
         }else return "fail";
     },
-    updateFace : async(params) =>{
+    updateUserSticker : async(params) =>{
         const connection = await pool.getConnection(async conn => conn);
-        const updateResult = await stickerDao.updateFace(connection,params);
+        const udpateResult = await stickerDao.updateUserSticker(connection,params);
         connection.release();
         if(updateResult.affectedRows === 1){
             return "success";
-        }
-        else return "fail";
-
-    },
-    updateEyes : async(params) =>{
-        const connection = await pool.getConnection(async conn => conn);
-        const updateResult = await stickerDao.updateEyes(connection,params);
-        connection.release();
-        if(updateResult.affectedRows === 1){
-            return "success";
-        }
-        else return "fail";
-
-    },
-    updateNose : async(params) =>{
-        const connection = await pool.getConnection(async conn => conn);
-        const updateResult = await stickerDao.updateNose(connection,params);
-        connection.release();
-        if(updateResult.affectedRows === 1){
-            return "success";
-        }
-        else return "fail";
-
-    },
-    updateMouth : async(params) =>{
-        const connection = await pool.getConnection(async conn => conn);
-        const updateResult = await stickerDao.updateMouth(connection,params);
-        connection.release();
-        if(updateResult.affectedRows === 1){
-            return "success";
-        }
-        else return "fail";
-
-    },
-    updateArm : async(params) =>{
-        const connection = await pool.getConnection(async conn => conn);
-        const updateResult = await stickerDao.updateArm(connection,params);
-        connection.release();
-        if(updateResult.affectedRows === 1){
-            return "success";
-        }
-        else return "fail";
-    },
-    updateFoot : async(params) =>{
-        const connection = await pool.getConnection(async conn => conn);
-        const updateResult = await stickerDao.updateFoot(connection,params);
-        connection.release();
-        if(updateResult.affectedRows === 1){
-            return "success";
-        }
-        else return "fail";
-
-    },
-    updateAccessory : async(params) =>{
-        const connection = await pool.getConnection(async conn => conn);
-        const updateResult = await stickerDao.updateAccessory(connection,params);
-        connection.release();
-        if(updateResult.affectedRows === 1){
-            return "success";
-        }
-        else return "fail";
+        }else return "fail";
     },
     updateVisitorName : async(id,name)=>{
         const connection = await pool.getConnection(async conn => conn);
@@ -365,46 +305,23 @@ export const posterService = {
             return response(baseResponse.SUCCESS);
         }else return response(baseResponse.DB_ERROR);
     },
-    updateSeason : async(params) =>{
+    updatePoster : async(params) =>{
         const connection = await pool.getConnection(async conn => conn);
-        const updateResult = await posterDao.updateSeason(connection,params);
+        const updateResult = await posterDao.updatePoster(connection,params);
         connection.release();
         if(updateResult.affectedRows === 1){
             return "success";
         }
         else return "fail";
-
-
     },
-    updateNumber : async(params) =>{
+    updateChinese : async(params) =>{
         const connection = await pool.getConnection(async conn => conn);
-        const updateResult = await posterDao.updateNumber(connection, params);
+        const updateResult = await posterDao.updateChinese(connection,params);
         connection.release();
         if(updateResult.affectedRows === 1){
             return "success";
         }
         else return "fail";
-
-    },
-    updateDate : async(params) =>{
-        const connection = await pool.getConnection(async conn => conn);
-        const updateResult = await posterDao.updateDate(connection, params);
-        connection.release();
-        if(updateResult.affectedRows === 1){
-            return "success";
-        }
-        else return "fail";
-
-    },
-    updateImportant : async(params) =>{
-        const connection = await pool.getConnection(async conn => conn);
-        const updateResult = await posterDao.updateImporant(connection,params);
-        connection.release();
-        if(updateResult.affectedRows === 1){
-            return "success";
-        }
-        else return "fail";
-
     }
 };
 
