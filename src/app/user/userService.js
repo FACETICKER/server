@@ -330,6 +330,8 @@ export const nqnaService = { //n문n답 관련 서비스
 };
 
 export const mainpageService = async(userIdFromJWT,user_id) =>{
+    const check = await userProvider.retrieveUser(user_id);
+    if(!check) return response(baseResponse.USER_USERID_NOT_EXIST);
     const poster = await posterProvider.poster(user_id);
     const sticker = await stickerProvider.userSticker(user_id);
     const newSticker = await stickerProvider.newStickers(user_id);

@@ -66,36 +66,34 @@ export const stickerDao = {
     },
     selectUserSticker : async(connection,user_id) =>{ //호스트 스티커 조회
         const selectUserStickerQuery = `
-            SELECT user_id, image_url
-            FROM final_image
-            JOIN user_sticker ON final_image.final_image_id = user_sticker.final_image_id
-            WHERE user_sticker.user_id = ?;
+            SELECT final_image_url
+            FROM user_sticker
+            WHERE user_id = ?;
         `
         const [selectUserStickerRow] = await connection.query(selectUserStickerQuery,user_id);
         return selectUserStickerRow;
     },
     selectVisitorStickers : async(connection, user_id) =>{ //모든 방문자 스티커 조회
         const selectVisitorStickersQuery = `
-            SELECT visitor_sticker_id, image_url, seen, location_x, location_y
-            FROM final_image
-            JOIN visitor_sticker on final_image.final_image_id = visitor_sticker.final_image_id
-            WHERE visitor_sticker.host_id = ?;
+            SELECT visitor_sticker_id, final_image_url, location_x, location_y, seen
+            FROM visitor_sticker
+            WHERE host_id = ?;
         `
         const [selectVisitorStickersRow] = await connection.query(selectVisitorStickersQuery,user_id);
         return selectVisitorStickersRow;
     },
     createUserSticker : async(connection, params) =>{ //호스트 스티커 등록
         const insertUserStickerQuery = `
-            INSERT INTO user_sticker(user_id, face_id, nose_id, eyes_id, mouth_id, arm_id, foot_id, accessory_id)
-            VALUES(?,?,?,?,?,?,?,?);
+            INSERT INTO user_sticker(user_id, face_id, nose_id, eyes_id, mouth_id, arm_id, foot_id, accessory_id, final_image_url)
+            VALUES(?,?,?,?,?,?,?,?,?);
         `
         const [insertUserStickerRow] = await connection.query(insertUserStickerQuery,params);
         return insertUserStickerRow;
     },
     createVisitorSticker : async(connection,params) =>{ //방문자 스티커 등록
         const insertVisitorStickerQuery = `
-            INSERT INTO visitor_sticker(host_id, visitor_id, face_id, nose_id, eyes_id, mouth_id, arm_id, foot_id, accessory_id)
-            VALUES(?,?,?,?,?,?,?,?,?);
+            INSERT INTO visitor_sticker(host_id, visitor_id, face_id, nose_id, eyes_id, mouth_id, arm_id, foot_id, accessory_id,fianl_image_url)
+            VALUES(?,?,?,?,?,?,?,?,?,?);
         `
         const [insertVisitorStickerRow] = await connection.query(insertVisitorStickerQuery,params);
         return insertVisitorStickerRow;
