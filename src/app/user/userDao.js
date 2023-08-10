@@ -144,77 +144,14 @@ export const stickerDao = {
         const [selectUserStickerDetailsRow] = await connection.query(selectUserStickerDetailsQuery,userId);
         return selectUserStickerDetailsRow;
     },
-    updateFace : async(connection, params) =>{
-        const updateFaceQuery = `
+    updateUserSticker : async(connection, params)=>{
+        const updateUserStickerQuery = `
             UPDATE user_sticker
-            SET face_id = ?
+            SET face_id = ?, eyes_id = ?, nose_id = ?, mouth_id = ?, arm_id = ?, foot_id = ?, accessory_id = ?, final_image_url = ?
             WHERE user_id = ?;
         `
-        const [updateFaceRow] = await connection.query(updateFaceQuery,params);
-        return updateFaceRow;
-    },
-    updateEyes : async(connection, params)=>{
-        const updateEyesQuery = `
-            UPDATE user_sticker
-            SET eyes_id = ?
-            WHERE user_id = ?;
-        `
-        const [updateEyesRow] = await connection.query(updateEyesQuery,params);
-        return updateEyesRow;
-    },
-    updateNose : async(connection, params)=>{
-        const updateNoseQuery = `
-            UPDATE user_sticker
-            SET nose_id = ?
-            WHERE user_id = ?;
-        `
-        const [udpateNoseRow] = await connection.query(updateNoseQuery,params);
-        return udpateNoseRow;
-    },
-    updateMouth : async(connection, params) =>{
-        const updateMouthQuery = `
-            UPDATE user_sticker
-            SET mouth_id = ?
-            WHERE user_Id = ?;
-        `
-        const [updateMouthRow] = await connection.query(updateMouthQuery,params);
-        return updateMouthRow;
-    },
-    updateArm : async(connection, params) =>{
-        const updateArmQuery = `
-            UPDATE user_sticker
-            SET arm_id = ?
-            WHERE user_id = ?;
-        `
-        const [updateArmRow] = await connection.query(updateArmQuery,params);
-        return updateArmRow;
-    },
-    updateFoot : async(connection, params) =>{
-        const updateFootQuery = `
-            UPDATE user_sticker
-            SET foot_id = ?
-            WHERE user_id = ?;
-        `
-        const [updateFootRow] = await connection.query(updateFootQuery,params);
-        return updateFootRow;
-    },
-    updateAccessory : async(connection, params) =>{
-        const updateAccessoryQuery = `
-            UPDATE user_sticker
-            SET accessory_id = ?
-            WHERE user_id = ?;
-        `
-        const [updateAccessoryRow] = await connection.query(updateAccessoryQuery,params);
-        return updateAccessoryRow;
-    },
-    updateVisitorName : async(connection,id,name) =>{
-        const updateVisitorNameQuery = `
-            UPDATE visitor_sticker
-            SET name = ?
-            WHERE visitor_sticker_id = ?;
-        `
-        const [updateVisitorNameRow] = await connection.query(updateVisitorNameQuery,[name,id]);
-        return updateVisitorNameRow;
+        const [updateUserStickerRow] = await connection.query(updateUserStickerQuery, params);
+        return updateUserStickerRow;
     },
     selectHostMessage : async(connection, id) =>{
         const selectHostMessageQuery = `
