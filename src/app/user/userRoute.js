@@ -381,6 +381,12 @@ userRouter.post(  "/:user_id/sticker",  jwtMiddleware,  stickerController.postSt
  *      description: 악세사리 스티커 번호
  *      schema:
  *        type: integer
+ *    - in: body
+ *      name: final
+ *      required: true
+ *      description: 최종 이미지 base64 인코딩 문자열
+ *      schema:
+ *        type: integer
  *    responses:
  *      '200':
  *        description: 등록 성공
