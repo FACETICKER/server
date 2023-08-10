@@ -20,7 +20,7 @@ export const loginController = {
                 data: ({
                     grant_type: 'authorization_code',
                     client_id: process.env.KAKAO_ID,
-                    redirect_uri: 'http://localhost:3000/app/login/kakao',
+                    redirect_uri: 'http://localhost:3007/oauth',
                     code: code,
                 })
             });
