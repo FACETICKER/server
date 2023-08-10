@@ -8,5 +8,5 @@ app.listen(process.env.SERVER_PORT, () => {
 
 // 배포 메세지 출력
 app.get("/", (req, res) => {
-  res.json({ result: "Deploy success!" });
+  res.json({ result: "this message is success to https req" });
 });
