@@ -1038,7 +1038,7 @@ userRouter.delete("/:user_id/nqna/:nQnA_id/question",jwtMiddleware,nqnaControlle
  *   delete:
  *    summary : 질문 삭제
  *    tags: [N문 N답]
- *    description: 특정 답변 삭제
+ *    description: 특정 질문 삭제
  *    parameters:
  *    - in: path
  *      name: nQnA_id
