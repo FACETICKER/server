@@ -66,36 +66,34 @@ export const stickerDao = {
     },
     selectUserSticker : async(connection,user_id) =>{ //호스트 스티커 조회
         const selectUserStickerQuery = `
-            SELECT user_id, image_url
-            FROM final_image
-            JOIN user_sticker ON final_image.final_image_id = user_sticker.final_image_id
-            WHERE user_sticker.user_id = ?;
+            SELECT final_image_url
+            FROM user_sticker
+            WHERE user_id = ?;
         `
         const [selectUserStickerRow] = await connection.query(selectUserStickerQuery,user_id);
         return selectUserStickerRow;
     },
     selectVisitorStickers : async(connection, user_id) =>{ //모든 방문자 스티커 조회
         const selectVisitorStickersQuery = `
-            SELECT visitor_sticker_id, image_url, seen, location_x, location_y
-            FROM final_image
-            JOIN visitor_sticker on final_image.final_image_id = visitor_sticker.final_image_id
-            WHERE visitor_sticker.host_id = ?;
+            SELECT visitor_sticker_id, final_image_url, location_x, location_y, seen
+            FROM visitor_sticker
+            WHERE host_id = ?;
         `
         const [selectVisitorStickersRow] = await connection.query(selectVisitorStickersQuery,user_id);
         return selectVisitorStickersRow;
     },
     createUserSticker : async(connection, params) =>{ //호스트 스티커 등록
         const insertUserStickerQuery = `
-            INSERT INTO user_sticker(user_id, face_id, nose_id, eyes_id, mouth_id, arm_id, foot_id, accessory_id)
-            VALUES(?,?,?,?,?,?,?,?);
+            INSERT INTO user_sticker(user_id, face_id, nose_id, eyes_id, mouth_id, arm_id, foot_id, accessory_id, final_image_url)
+            VALUES(?,?,?,?,?,?,?,?,?);
         `
         const [insertUserStickerRow] = await connection.query(insertUserStickerQuery,params);
         return insertUserStickerRow;
     },
     createVisitorSticker : async(connection,params) =>{ //방문자 스티커 등록
         const insertVisitorStickerQuery = `
-            INSERT INTO visitor_sticker(host_id, visitor_id, face_id, nose_id, eyes_id, mouth_id, arm_id, foot_id, accessory_id)
-            VALUES(?,?,?,?,?,?,?,?,?);
+            INSERT INTO visitor_sticker(host_id, visitor_id, face_id, nose_id, eyes_id, mouth_id, arm_id, foot_id, accessory_id,fianl_image_url)
+            VALUES(?,?,?,?,?,?,?,?,?,?);
         `
         const [insertVisitorStickerRow] = await connection.query(insertVisitorStickerQuery,params);
         return insertVisitorStickerRow;
@@ -110,7 +108,7 @@ export const stickerDao = {
         const [selectNewStickerRow] = await connection.query(selectNewStickerQuery,user_id);
         return selectNewStickerRow;
     },
-    insertUserMessage : async(connection,userId, message) =>{ //방문자에게 보여줄 한 마디 등록
+    updateUserMessage : async(connection,userId, message) =>{ //방문자에게 보여줄 한 마디 등록
         const insertUserMessageQuery = `
             UPDATE user_sticker
             SET message = ?
@@ -119,10 +117,10 @@ export const stickerDao = {
         const [insertUserMessageRow] = await connection.query(insertUserMessageQuery,[message,userId]);
         return insertUserMessageRow;
     },
-    insertVisitorMessage : async(connection,params)=>{ //방문자 메세지 등록
+    updateVisitorMessage : async(connection,params)=>{ //방문자 메세지 등록
         const insertVisitorMessageQuery = `
             UPDATE visitor_sticker
-            SET name = ? , message = ?
+            SET message = ?
             WHERE visitor_sticker_id = ?;
         `
         const [insertVisitorMessageRow] = await connection.query(insertVisitorMessageQuery,params);
@@ -146,78 +144,24 @@ export const stickerDao = {
         const [selectUserStickerDetailsRow] = await connection.query(selectUserStickerDetailsQuery,userId);
         return selectUserStickerDetailsRow;
     },
-    updateFace : async(connection, params) =>{
-        const updateFaceQuery = `
+    updateUserSticker : async(connection, params)=>{
+        const updateUserStickerQuery = `
             UPDATE user_sticker
-            SET face_id = ?
+            SET face_id = ?, eyes_id = ?, nose_id = ?, mouth_id = ?, arm_id = ?, foot_id = ?, accessory_id = ?, final_image_url = ?
             WHERE user_id = ?;
         `
-        const [updateFaceRow] = await connection.query(updateFaceQuery,params);
-        return updateFaceRow;
+        const [updateUserStickerRow] = await connection.query(updateUserStickerQuery, params);
+        return updateUserStickerRow;
     },
-    updateEyes : async(connection, params)=>{
-        const updateEyesQuery = `
-            UPDATE user_sticker
-            SET eyes_id = ?
+    selectHostMessage : async(connection, id) =>{
+        const selectHostMessageQuery = `
+            SELECT message
+            FROM user_sticker
             WHERE user_id = ?;
         `
-        const [updateEyesRow] = await connection.query(updateEyesQuery,params);
-        return updateEyesRow;
-    },
-    updateNose : async(connection, params)=>{
-        const updateNoseQuery = `
-            UPDATE user_sticker
-            SET nose_id = ?
-            WHERE user_id = ?;
-        `
-        const [udpateNoseRow] = await connection.query(updateNoseQuery,params);
-        return udpateNoseRow;
-    },
-    updateMouth : async(connection, params) =>{
-        const updateMouthQuery = `
-            UPDATE user_sticker
-            SET mouth_id = ?
-            WHERE user_Id = ?;
-        `
-        const [updateMouthRow] = await connection.query(updateMouthQuery,params);
-        return updateMouthRow;
-    },
-    updateArm : async(connection, params) =>{
-        const updateArmQuery = `
-            UPDATE user_sticker
-            SET arm_id = ?
-            WHERE user_id = ?;
-        `
-        const [updateArmRow] = await connection.query(updateArmQuery,params);
-        return updateArmRow;
-    },
-    updateFoot : async(connection, params) =>{
-        const updateFootQuery = `
-            UPDATE user_sticker
-            SET foot_id = ?
-            WHERE user_id = ?;
-        `
-        const [updateFootRow] = await connection.query(updateFootQuery,params);
-        return updateFootRow;
-    },
-    updateAccessory : async(connection, params) =>{
-        const updateAccessoryQuery = `
-            UPDATE user_sticker
-            SET accessory_id = ?
-            WHERE user_id = ?;
-        `
-        const [updateAccessoryRow] = await connection.query(updateAccessoryQuery,params);
-        return updateAccessoryRow;
-    },
-
-    deleteVisitorSticker : async(connection,visitor_sticker_id)=>{ //방문자 스티커 삭제
-        const deleteVisitorStickerQuery = `
-        DELETE FROM visitor_sticker
-        WHERE visitor_id = ?;
-        `
-        const [deleteVisitorStickerRow] = await connection.query(deleteVisitorStickerQuery,visitor_sticker_id);
-        return deleteVisitorStickerRow; 
-    },
+        const [selectHostMessageRow] = await connection.query(selectHostMessageQuery, id);
+        return selectHostMessageRow;
+    }
 }
 
 export const nqnaDao = {
@@ -261,19 +205,31 @@ export const nqnaDao = {
         return selectNQnARow;
     },
 
-    selectHostNQnA : async(connection,user_id)=>{ // 호스트 플로우 nQnA 전체 조회
+    selectHostNQnA : async(connection,user_id)=>{ // 호스트 플로우 답변 + 질문 조회
         const selectHostNQnAQuery = `
-            SELECT nQnA_id, question, question_type, question_hidden, answer, answer_hidden, created_at
+            SELECT nQnA_id, question, question_type, question_hidden, answer, answer_hidden
             FROM nQnA
+            ORDER BY answer_created
             WHERE user_id = ?;
         `
         const [selectHostNQnARow] = await connection.query(selectHostNQnAQuery,user_id);
         return selectHostNQnARow;
     },
 
+    selectHostQ : async(connection,user_id)=>{ // 호스트 플로우 미답변 질문 조회
+        const selectHostQQuery = `
+            SELECT nQnA_id, question, question_type, question_hidden
+            FROM nQnA
+            ORDER BY question_created
+            WHERE user_id = ?;
+        `
+        const [selectHostQRow] = await connection.query(selectHostQQuery,user_id);
+        return selectHostQRow;
+    },
+
     selectVisitorNQnA : async(connection,user_id)=>{ // 방문자 플로우 nQnA 전체 조회
         const selectVisitorNQnAQuery = `
-            SELECT nQnA_id, question, question_hidden, answer, answer_hidden, created_at
+            SELECT nQnA_id, question, question_hidden, answer, answer_hidden, question_created
             FROM nQnA
             WHERE user_id = ?;
         `
@@ -363,40 +319,31 @@ export const posterDao = {
             return err;
         }
     },
-    updateSeason : async(connection, params) =>{
-        const updateSeasonQuery = `
-            UPDATE user_poster
-            SET q_season = ?
+    selectImportant : async(connection, user_id)=>{
+        const selectImportantQuery = `
+            SELECT important
+            FROM user_poster
             WHERE user_id = ?;
         `
-        const [updateSeasonRow] = await connection.query(updateSeasonQuery,params);
-        return updateSeasonRow;
+        const [selectImportantRow] = await connection.query(selectImportantQuery,user_id);
+        return selectImportantRow;
     },
-    updateNumber : async(connection, params) =>{
-        const updateNumberQuery = `
+    updatePoster : async(connection, params)=>{
+        const updatePosterQuery = `
             UPDATE user_poster
-            SET q_number = ?
+            SET nickname = ?, q_season = ?, q_number = ?, q_date = ?
             WHERE user_id = ?;
         `
-        const [updateNumberRow] = await connection.query(updateNumberQuery, params);
-        return updateNumberRow;
+        const [updatePosterRow] = await connection.query(updatePosterQuery, params);
+        return updatePosterRow;
     },
-    updateDate : async(connection, params) =>{
-        const updateDateQuery = `
+    updateChinese : async(connection, params)=>{
+        const updateChineseQuery = `
             UPDATE user_poster
-            SET q_date = ?
+            SET chinese = ?, pronunciation = ?, meaning =?
             WHERE user_id = ?;
         `
-        const [updateDateRow] = await connection.query(updateDateQuery,params);
-        return updateDateRow;
-    },
-    updateImporant : async(connection, params) =>{
-        const updateImporantQuery = `
-            UPDATE user_poster
-            SET q_important = ?, chinese = ?, pronunciation = ?, meaning = ?
-            WHERE user_id = ?;
-        `
-        const [updateImporantRow] = await connection.query(updateImporantQuery, params);
-        return updateImporantRow;
+        const [updateChineseRow] = await connection.query(updateChineseQuery, params);
+        return updateChineseRow;
     }
 }

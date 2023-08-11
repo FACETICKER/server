@@ -3,7 +3,8 @@ import dotenv from "dotenv";
 import { response,errResponse } from "../../../config/response.js";
 import baseResponse from "../../../config/baseResponse.js";
 import {loginService, stickerService, nqnaService, mainpageService, posterService, chineseDict, dateFormat} from "./userService.js";
-import {stickerProvider, nqnaProvider, userProvider} from "./userProvider.js";
+import {stickerProvider, nqnaProvider, userProvider, posterProvider} from "./userProvider.js";
+import e from "express";
 dotenv.config();
 export const loginController = {
     kakao : async(req,res)=>{ //카카오
@@ -20,7 +21,7 @@ export const loginController = {
                 data: ({
                     grant_type: 'authorization_code',
                     client_id: process.env.KAKAO_ID,
-                    redirect_uri: 'http://localhost:3000',
+                    redirect_uri: 'http://localhost:3007/oauth',
                     code: code,
                 })
             });
@@ -121,14 +122,14 @@ export const stickerController = {
         try{ 
             const type = req.query.type; //type으로 Host, visitor 구분
             const userIdFromJWT = req.verifiedToken ? req.verifiedToken.user_id : null;
-            const {face, nose, eyes, mouth, arm, foot, accessory} = req.body;
             const user_id = req.params.user_id;
+            const {face, nose, eyes, mouth, arm, foot, accessory,final} = req.body;
             if(type === 'host'){ //호스트 스티커 등록
-                const params = [userIdFromJWT, face, nose, eyes, mouth, arm, foot, accessory];
+                const params = [userIdFromJWT, face, nose, eyes, mouth, arm, foot, accessory,final];
                 const insertResult = await stickerService.insertUserSticker(params);
                 return res.send(insertResult);
             }else if(type === 'visitor'){ //방문자 스티커 등록
-                const params = [user_id, userIdFromJWT, face, nose, eyes, mouth, arm, foot, accessory];
+                const params = [user_id, userIdFromJWT, face, nose, eyes, mouth, arm, foot, accessory,final];
                 const insertResult = await stickerService.insertVisitorSticker(params);
                 return res.send(insertResult);
             }
@@ -136,18 +137,13 @@ export const stickerController = {
             return res.status(500).send(err);
         }
     },
-    postMessage : async(req,res)=>{ //메세지 등록(Host, Visitor)
+    hostMessage : async(req,res)=>{ //호스트 메세지 등록
         try{
             const userIdFromJWT = req.verifiedToken ? req.verifiedToken.user_id : null;
+            const userId = req.params.user_id;
             const message = req.body.message;
-            const type = req.query.type;
-            if(type === 'host'){
-                const result = await stickerService.insertUserMessage(userIdFromJWT,message);
-                return res.send(result);
-            }else if(type ==='visitor'){
-                const sticker_id = req.query.id;
-                const sticker_name = req.body.name;
-                const result = await stickerService.insertVisitorMessage(sticker_id,sticker_name,message);
+            if(userId == userIdFromJWT){
+                const result = await stickerService.updateUserMessage(userIdFromJWT, message);
                 return res.send(result);
             }
         }catch(err){
@@ -182,11 +178,12 @@ export const stickerController = {
             const userIdFromJWT = req.verifiedToken ? req.verifiedToken.user_id : null;
             const userId = req.params.user_id;
             const reqBody = req.body;
-            if(userId === userIdFromJWT){
-                for(const[num, newPosition] of Object.entries(reqBody)){
-                    console.log(newPosition);
-                    const result = await stickerService.patchStickerLocation(newPosition);
-                    if(result == fail){
+            let params;
+            if(userId == userIdFromJWT){
+                for(const[id, newPosition] of Object.entries(reqBody)){
+                    params = [newPosition.x, newPosition.y, id];
+                    const result = await stickerService.patchStickerLocation(params);
+                    if(result == 'fail'){
                         return res.send(response(baseResponse.DB_ERROR));
                     }
                 }
@@ -200,37 +197,14 @@ export const stickerController = {
         try{
             const userIdFromJWT = req.verifiedToken ? req.verifiedToken.user_id : null;
             const userId = req.params.user_id;
-            const {face, nose, eyes, mouth, arm, foot, accessory} = req.body;
+            const {face, nose, eyes, mouth, arm, foot, accessory, final} = req.body;
             if(userId == userIdFromJWT){
-                if(face){
-                    const result = await stickerService.updateFace([face,userId]);
-                    if(result == 'fail') return res.status(200).send(response(baseResponse.SERVER_ERROR));
+                const params = [face,nose,eyes, mouth, arm, foot, accessory, final, userId];
+                const result = await stickerService.updateUserSticker(params);
+                if(result === 'success'){
+                    return res.status(200).send(response(baseResponse.SUCCESS));
                 }
-                if(nose){
-                    const result = await stickerService.updateNose([nose,userId]);
-                    if(result == 'fail') return res.status(200).send(response(baseResponse.SERVER_ERROR));
-                }
-                if(eyes){
-                    const result = await stickerService.updateEyes([eyes,userId]);
-                    if(result == 'fail') return res.status(200).send(response(baseResponse.SERVER_ERROR));
-                }
-                if(mouth){
-                    const result = await stickerService.updateMouth([mouth,userId]);
-                    if(result == 'fail') return res.status(200).send(response(baseResponse.SERVER_ERROR));
-                }
-                if(arm){
-                    const result = await stickerService.updateArm([arm,userId]);
-                    if(result == 'fail') return res.status(200).send(response(baseResponse.SERVER_ERROR));
-                }
-                if(foot){
-                    const result = await stickerService.updateFoot([foot,userId]);
-                    if(result == 'fail') return res.status(200).send(response(baseResponse.SERVER_ERROR));
-                }
-                if(accessory){
-                    const result = await stickerService.updateAccessory([accessory,userId]);
-                    if(result == 'fail') return res.status(200).send(response(baseResponse.SERVER_ERROR));
-                }
-                return res.status(200).send(response(baseResponse.SUCCESS));
+                else return res.status(200).send(response(baseResponse.DB_ERROR));
             }
         }catch(err){
             return res.status(500).send(err);
@@ -252,7 +226,42 @@ export const stickerController = {
         else{
             return res.status(400).json(errResponse(baseResponse.USER_USERID_USERIDFROMJWT_NOT_MATCH));
         }
-    }
+    },
+
+    visitorMessage : async (req,res) =>{
+        try{
+            const userId = req.params.user_id;
+            const visitorStickerId = req.query.id;
+            const message = req.body.message;
+            const result = await stickerService.updateVisitorMessage(visitorStickerId, message)
+            return res.status(200).send(result);
+        }catch(err){
+            return res.status(500).send(err);
+        }
+    },
+    visitorName : async(req,res)=>{
+        try{
+            const visitorStickerId = req.query.id;
+            const name = req.body.name;
+            const result = await stickerService.updateVisitorName(visitorStickerId, name);
+            return res.status(200).send(result);
+        }catch(err){
+            return res.status(500).send(err);
+        }
+    },
+    getHostMessage : async(req,res)=>{
+        try{
+            const userId = req.params.user_id;
+            const visitorStickerId = req.query.id;
+            if(visitorStickerId == userId){
+                const result = await stickerProvider.retrieveHostMessage(userId);
+                return res.send(reportErrorb(baseResponse.SUCCESS,result));
+            }
+        }catch(err){
+            return res.status(500).send(err);
+        }
+    } 
+
 };
 
 export const nqnaController = {
@@ -262,18 +271,23 @@ export const nqnaController = {
     */
     postDefaultQuestion : async(req,res) => {
 
-        
         try {
+            const userIdFromJWT = req.verifiedToken ? req.verifiedToken.user_id : null;
             const {question} = req.body;
             const {user_id} = req.params;
             const User = await userProvider.retrieveUser(user_id);
 
-            if (User) {     
-                const postDefaultQuestionResult = await nqnaService.createDefaultQuestion(user_id,question);
-                return res.status(200).json(response(baseResponse.SUCCESS, postDefaultQuestionResult));
+            if (userIdFromJWT == user_id) {     
+                if(User){
+                    const postDefaultQuestionResult = await nqnaService.createDefaultQuestion(user_id,question);
+                    return res.status(200).json(response(baseResponse.SUCCESS, postDefaultQuestionResult));
+                }
+                else{
+                    return res.status(404).json(errResponse(baseResponse.USER_USERID_NOT_EXIST));
+                }
             }
             else {
-                return res.status(404).json(response(baseResponse.USER_USERID_NOT_EXIST));
+                return res.status(400).json(errResponse(baseResponse.USER_USERID_USERIDFROMJWT_NOT_MATCH));
             }
         }
         catch(error){
@@ -323,25 +337,31 @@ export const nqnaController = {
     postAnswer : async(req,res) => {
         
         try{
-            
+            const userIdFromJWT = req.verifiedToken ? req.verifiedToken.user_id : null; // 로그인한 방문자의 ID
             const {answer} = req.body;
-            const {nQnA_id} = req.params;
+            console.log(answer); 
+            const {nQnA_id, user_id} = req.params;
             const nQnA = await nqnaProvider.retrieveNQnA(nQnA_id); // nQnA 개별 질문 조회
 
-            if(nQnA){
-                if(answer.length === 0){
-                    return res.status(400).json(errResponse(baseResponse.NQNA_ANSWER_EMPTY));
-                }
-                else if(answer.length > 100){
-                    return res.status(400).json(errResponse(baseResponse.NQNA_ANSWER_LENGTH));
+            if(userIdFromJWT == user_id){
+                if(nQnA){
+                    if(answer.length == 0){
+                        return res.status(400).json(errResponse(baseResponse.NQNA_ANSWER_EMPTY));
+                    }
+                    else if(answer.length > 100){
+                        return res.status(400).json(errResponse(baseResponse.NQNA_ANSWER_LENGTH));
+                    }
+                    else{
+                        const postAnswerResult = await nqnaService.createAnswer(answer, nQnA_id);
+                        return res.status(200).json(response(baseResponse.SUCCESS, postAnswerResult));
+                    }
                 }
                 else{
-                    const postAnswerResult = await nqnaService.createAnswer(answer, nQnA_id);
-                    return res.status(200).json(response(baseResponse.SUCCESS, postAnswerResult));
+                    return res.status(404).json(errResponse(baseResponse.NQNA_QUESTION_NOT_EXIST));
                 }
             }
             else{
-                return res.status(404).json(errResponse(baseResponse.NQNA_QUESTION_NOT_EXIST));
+                return res.status(400).json(errResponse(baseResponse.USER_USERID_USERIDFROMJWT_NOT_MATCH));
             }     
         }
         catch(error){
@@ -358,18 +378,29 @@ export const nqnaController = {
         
         try {
             const {user_id} = req.params; 
+            const {viewType} = req.body;
             //const type = req.query.type; //type으로 Host, visitor 구분 >>>> 일단 보류
             const userIdFromJWT = req.verifiedToken ? req.verifiedToken.user_id : null; // 토큰이 있을 때만 user_id를 가져오도록 수정
 
             if(user_id == userIdFromJWT){ //호스트 본인의 N문 N답 페이지일 때 (호스트 플로우)
-
-                const nQnA = await nqnaProvider.retrieveHostNQnA(user_id);
-                return res.status(200).json({
-                    isSuccess: true,
-                    code: 1000,
-                    message: "호스트 플로우 N문 N답 조회 성공",
-                    result: nQnA
-                });
+                if(viewType == "UnAnswered"){
+                    const nQnA = await nqnaProvider.retrieveHostQnA(user_id); 
+                    return res.status(200).json({
+                        isSuccess: true,
+                        code: 1000,
+                        message: "호스트 플로우 N문 N답 조회 성공 (답변 + 질문)",
+                        result: nQnA
+                    });
+                }
+                else if(viewType == "Answered"){
+                    const nQnA = await nqnaProvider.retrieveHostQ(user_id);
+                    return res.status(200).json({
+                        isSuccess: true,
+                        code: 1000,
+                        message: "호스트 플로우 N문 N답 조회 성공 (미답변 질문)",
+                        result: nQnA
+                    });
+                }
             }
             else{ //다른 호스트의 N문 N답 페이지일 때 (방문자 플로우) 
 
@@ -394,16 +425,22 @@ export const nqnaController = {
     patchQuestionHidden : async(req,res) => {
    
         try{
-            const {nQnA_id} = req.params;
+            const userIdFromJWT = req.verifiedToken ? req.verifiedToken.user_id : null; // 토큰이 있을 때만 user_id를 가져오도록 수정
+            const {nQnA_id, user_id} = req.params;
             const {question_hidden} = req.body;
             const nQnA = await nqnaProvider.retrieveNQnA(nQnA_id); // nQnA 개별 질문 조회
 
-            if(nQnA){ 
-                const patchQuestionHiddenResult = await nqnaService.editnQuestionHidden(nQnA_id, question_hidden);
-                return res.status(200).json(response(baseResponse.SUCCESS, patchQuestionHiddenResult));            
+            if(userIdFromJWT == user_id){ 
+                if(nQnA){
+                    const patchQuestionHiddenResult = await nqnaService.editnQuestionHidden(nQnA_id, question_hidden);
+                    return res.status(200).json(response(baseResponse.SUCCESS, patchQuestionHiddenResult));      
+                }
+                else{
+                    return res.status(404).json(errResponse(baseResponse.NQNA_QUESTION_NOT_EXIST));
+                }           
             }   
             else{
-                return res.status(404).json(errResponse(baseResponse.NQNA_QUESTION_NOT_EXIST));
+                return res.status(400).json(errResponse(baseResponse.USER_USERID_USERIDFROMJWT_NOT_MATCH));          
             }     
         }
         catch(error){
@@ -419,24 +456,29 @@ export const nqnaController = {
     patchAnswerHidden : async(req,res) => {
    
         try{
-            const {nQnA_id} = req.params;
+            const userIdFromJWT = req.verifiedToken ? req.verifiedToken.user_id : null; // 토큰이 있을 때만 user_id를 가져오도록 수정
+            const {nQnA_id,user_id} = req.params;
             const {answer_hidden} = req.body;
             const nQnA = await nqnaProvider.retrieveNQnA(nQnA_id); // nQnA 개별 질문 조회
 
-            if(nQnA){ // 질문이 존재한다면
-            
-                if(nQnA.answer !== null){ // 답변이 존재한다면
+            if(userIdFromJWT == user_id){
+                if(nQnA){ // 질문이 존재한다면
 
-                    const patchAnswerResult = await nqnaService.editnAnswerHidden(nQnA_id, answer_hidden);
-                    return res.status(200).json(response(baseResponse.SUCCESS, patchAnswerResult));            
-                }
+                    if(nQnA.answer != null){ // 답변이 존재한다면
+                        const patchAnswerResult = await nqnaService.editnAnswerHidden(nQnA_id, answer_hidden);
+                        return res.status(200).json(response(baseResponse.SUCCESS, patchAnswerResult));            
+                    }
+                    else{
+                        return res.status(404).json(errResponse(baseResponse.NQNA_ANSWER_NOT_EXIST));
+                    }
+                }   
                 else{
-                    return res.status(404).json(errResponse(baseResponse.NQNA_ANSWER_NOT_EXIST));
-                }
-            }   
+                    return res.status(404).json(errResponse(baseResponse.NQNA_QUESTION_NOT_EXIST));
+                }       
+            }
             else{
-                return res.status(404).json(errResponse(baseResponse.NQNA_QUESTION_NOT_EXIST));
-            }     
+                return res.status(400).json(errResponse(baseResponse.USER_USERID_USERIDFROMJWT_NOT_MATCH));
+            }      
         }
         catch(error){
             console.log(error);
@@ -451,16 +493,22 @@ export const nqnaController = {
     getEmptyAnswer : async(req,res) =>{
     
         try{
+            const userIdFromJWT = req.verifiedToken ? req.verifiedToken.user_id : null; // 토큰이 있을 때만 user_id를 가져오도록 수정
             const {user_id} = req.params;
             const User = await userProvider.retrieveUser(user_id);
 
-            if(User){
-                const getEmptyAnswerResult = await nqnaProvider.retrieveEmptyAnswer(user_id);
-                return res.status(200).json(response(baseResponse.SUCCESS, getEmptyAnswerResult)); 
+            if(userIdFromJWT == user_id){
+                if(User){
+                    const getEmptyAnswerResult = await nqnaProvider.retrieveEmptyAnswer(user_id);
+                    return res.status(200).json(response(baseResponse.SUCCESS, getEmptyAnswerResult)); 
+                }
+                else {
+                    return res.status(404).json(errResponse(baseResponse.USER_USERID_NOT_EXIST));
+               }
             }
-            else {
-                return res.status(404).json(errResponse(baseResponse.USER_USERID_NOT_EXIST));
-           }
+            else{
+                return res.status(400).json(errResponse(baseResponse.USER_USERID_USERIDFROMJWT_NOT_MATCH));
+            }        
         }catch(error){
             console.log(error);
             return res.status(500).json(errResponse(baseResponse.SERVER_ERROR));
@@ -586,30 +634,19 @@ export const posterController = {
                 const userIdFromJWT = req.verifiedToken ? req.verifiedToken.user_id : null; // 토큰이 있을 때만 user_id를 가져오도록 수정
                 const userId = req.params.user_id;
                 if(userIdFromJWT == userId){
-                const {season, number, date, important} = req.body;
-                let params;
-                if(season){
-                    params = [season, userId];
-                    const result = await posterService.updateSeason(params);
-                    if(result == 'fail') return res.status(200).send(response(baseResponse.SERVER_ERROR));
-                }
-                if(number){
-                    params = [number, userId];
-                    const result = await posterService.updateNumber(params);
-                    if(result == 'fail') return res.status(200).send(response(baseResponse.SERVER_ERROR));
-                }
-                if(date){
-                    const formattedDate = dateFormat(date);
-                    params = [formattedDate, userId];
-                    const result = await posterService.updateDate(params);
-                    if(result == 'fail') return res.status(200).send(response(baseResponse.SERVER_ERROR));
-                }
-                if(important){
+                const {nickname, season, number, date, important} = req.body;
+                const oldImportant = await posterProvider.retrieveImportant(userId);
+                const formattedDate = dateFormat(date);
+                const params = [nickname, season, number, formattedDate, userId];
+                let result;
+                if(oldImportant != important){
                     const random = chineseDict(important);
-                    params = [important, random.chinese, random.pronunciation, random.meaning, userId];
-                    const result = await posterService.updateImportant(params);
-                    if(result == 'fail') return res.status(200).send(response(baseResponse.SERVER_ERROR));
+                    const chineseParams = [random.chinese, random.pronunciation, random.meaning, userId];
+                    result = await posterService.updateChinese(chineseParams);
+                    if(result === 'fail') return res.send(response(baseResponse.DB_ERROR));
                 }
+                result = await posterService.updatePoster(params);
+                if(result === 'fail') return res.send(response(baseResponse.DB_ERROR));
                 return res.status(200).send(response(baseResponse.SUCCESS));
             }
         }catch(err){

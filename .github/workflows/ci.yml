@@ -44,6 +44,13 @@ jobs:
           cd deploy
           zip -r deploy.zip .
 
+      # nginx
+      #   - name: Copy Nginx config and reload
+      #     run: |
+      #         sudo cp .platform/nginx.conf/etc/nginx/sites-available/faceticker
+      #         sudo ln -s /etc/nginx/sites-available/faceticker/etc/nginx/sites-enabled/
+      #         sudo systemctl reload nginx
+
       - name: Beanstalk Deploy
         uses: einaregilsson/beanstalk-deploy@v21
         with:
