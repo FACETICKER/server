@@ -1118,12 +1118,12 @@ userRouter.post("/:user_id/poster", jwtMiddleware, posterController.postPoster);
  *              message:
  *                  type: string
  */
-userRouter.patch(  "/:user_id/poster/patch",  jwtMiddleware,  posterController.patchPoster); //포스터 수정
+userRouter.put(  "/:user_id/poster/put",  jwtMiddleware,  posterController.putPoster); //포스터 수정
 /**
  * @swagger
  * paths:
- *  /:user_id/poster/patch:
- *   patch:
+ *  /:user_id/poster/put:
+ *   put:
  *    summary : 포스터 정보 수정
  *    tags: [포스터]
  *    description: 호스트의 포스터 정보 수정
