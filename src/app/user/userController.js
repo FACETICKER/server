@@ -20,7 +20,7 @@ export const loginController = {
                 data: ({
                     grant_type: 'authorization_code',
                     client_id: process.env.KAKAO_ID,
-                    redirect_uri: 'http://localhost:3001/oauth',
+                    redirect_uri: 'http://localhost:3000',
                     code: code,
                 })
             });
@@ -234,6 +234,23 @@ export const stickerController = {
             }
         }catch(err){
             return res.status(500).send(err);
+        }
+    },
+
+    /**
+    * API Name: 방문자 스티커 삭제
+    * DELETE: /{user_id}/sticker/visitor/{visitor_sticker_id}
+    */
+    deleteVisitorSticker : async(req,res) =>{
+        const userIdFromJWT = req.verifiedToken ? req.verifiedToken.user_id : null; // 접속한 유저 ID
+        const {user_id, visitor_sticker_id} = req.params.user_id; // 호스트 ID
+
+        if(userIdFromJWT == user_id){ // 접속한 유저가 호스트라면
+            const deleteVisitorStickerResult = await stickerService.deleteVisitorSticker(visitor_sticker_id);
+            return res.status(200).json(response(baseResponse.SUCCESS, deleteVisitorStickerResult));
+        }
+        else{
+            return res.status(400).json(errResponse(baseResponse.USER_USERID_USERIDFROMJWT_NOT_MATCH));
         }
     }
 };
@@ -482,6 +499,54 @@ export const nqnaController = {
         }catch(error){
             console.log(error);
             return res.status(500).json(errResponse(baseResponse.SERVER_ERROR));
+        }
+    },
+
+     /**
+     * API Name: 답변 삭제 
+     * DELETE: /:user_id/nqna/:nQnA_id/answer
+     */
+    deleteAnswer : async(req,res) =>{
+    
+        const {user_id, nQnA_id} = req.params;
+        const userIdFromJWT = req.verifiedToken ? req.verifiedToken.user_id : null; // 접속자의 user_id
+        const User = await userProvider.retrieveUser(user_id);
+
+        if(userIdFromJWT == user_id){ // 접속자가 호스트라면
+            if(User){
+                const deleteAnswerResult = await nqnaService.deleteAnswer(nQnA_id);
+                return res.status(200).json(response(baseResponse.SUCCESS, deleteAnswerResult)); 
+            }
+            else {
+                return res.status(404).json(errResponse(baseResponse.USER_USERID_NOT_EXIST));
+            }
+        }
+        else{
+            return res.status(400).json(errResponse(baseResponse.USER_USERID_USERIDFROMJWT_NOT_MATCH));
+        }
+    },
+
+     /**
+     * API Name: 질문 삭제 
+     * DELETE: /:user_id/nqna/:nQnA_id/question
+     */
+    deleteQuestion : async(req,res) =>{
+    
+        const {user_id, nQnA_id} = req.params;
+        const userIdFromJWT = req.verifiedToken ? req.verifiedToken.user_id : null; // 접속자의 user_id
+        const User = await userProvider.retrieveUser(user_id);
+
+        if(userIdFromJWT == user_id){ // 접속자가 호스트라면
+            if(User){
+                const deleteQuestionResult = await nqnaService.deleteQuestion(nQnA_id);
+                return res.status(200).json(response(baseResponse.SUCCESS, deleteQuestionResult)); 
+            }
+            else {
+                return res.status(404).json(errResponse(baseResponse.USER_USERID_NOT_EXIST));
+            }
+        }
+        else{
+            return res.status(400).json(errResponse(baseResponse.USER_USERID_USERIDFROMJWT_NOT_MATCH));
         }
     },
 };
