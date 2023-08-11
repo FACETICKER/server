@@ -484,12 +484,12 @@ userRouter.get(  "/:user_id/sticker/detail",  jwtMiddleware,  stickerController.
  *                          type: integer
  */
 
-userRouter.patch(  "/:user_id/sticker/patch",  jwtMiddleware,  stickerController.patchSticker); //호스트 스티커 수정
+userRouter.put(  "/:user_id/sticker/put",  jwtMiddleware,  stickerController.putSticker); //호스트 스티커 수정
 /**
  * @swagger
  * paths:
- *  /:user_id/sticker/patch:
- *   patch:
+ *  /:user_id/sticker/put:
+ *   put:
  *    summary : 호스트 스티커 수정
  *    tags: [스티커]
  *    description: 스티커 수정
@@ -1038,7 +1038,7 @@ userRouter.delete("/:user_id/nqna/:nQnA_id/question",jwtMiddleware,nqnaControlle
  *   delete:
  *    summary : 질문 삭제
  *    tags: [N문 N답]
- *    description: 특정 답변 삭제
+ *    description: 특정 질문 삭제
  *    parameters:
  *    - in: path
  *      name: nQnA_id
@@ -1118,12 +1118,12 @@ userRouter.post("/:user_id/poster", jwtMiddleware, posterController.postPoster);
  *              message:
  *                  type: string
  */
-userRouter.patch(  "/:user_id/poster/patch",  jwtMiddleware,  posterController.patchPoster); //포스터 수정
+userRouter.put(  "/:user_id/poster/put",  jwtMiddleware,  posterController.putPoster); //포스터 수정
 /**
  * @swagger
  * paths:
- *  /:user_id/poster/patch:
- *   patch:
+ *  /:user_id/poster/put:
+ *   put:
  *    summary : 포스터 정보 수정
  *    tags: [포스터]
  *    description: 호스트의 포스터 정보 수정

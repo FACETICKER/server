@@ -193,18 +193,19 @@ export const stickerController = {
             return res.json(err).send(err);
         }
     },
-    patchSticker : async(req,res)=>{
+    putSticker : async(req,res)=>{
         try{
             const userIdFromJWT = req.verifiedToken ? req.verifiedToken.user_id : null;
             const userId = req.params.user_id;
-            const {face, nose, eyes, mouth, arm, foot, accessory, final} = req.body;
+            const {final} = req.body;
             if(userId == userIdFromJWT){
-                const params = [face,nose,eyes, mouth, arm, foot, accessory, final, userId];
+                const params = [final, userId];
                 const result = await stickerService.updateUserSticker(params);
                 if(result === 'success'){
-                    return res.status(200).send(response(baseResponse.SUCCESS));
+                    const putStickerResult = await stickerProvider.userSticker(userId)
+                    return res.status(200).send(response(baseResponse.SUCCESS, putStickerResult));
                 }
-                else return res.status(200).send(response(baseResponse.DB_ERROR));
+                else return res.status(400).send(response(baseResponse.DB_ERROR));
             }
         }catch(err){
             return res.status(500).send(err);
@@ -629,7 +630,7 @@ export const posterController = {
             return res.send(err);
         }
     },
-    patchPoster : async(req,res)=>{
+    putPoster : async(req,res)=>{
         try{
                 const userIdFromJWT = req.verifiedToken ? req.verifiedToken.user_id : null; // 토큰이 있을 때만 user_id를 가져오도록 수정
                 const userId = req.params.user_id;
@@ -647,7 +648,9 @@ export const posterController = {
                 }
                 result = await posterService.updatePoster(params);
                 if(result === 'fail') return res.send(response(baseResponse.DB_ERROR));
-                return res.status(200).send(response(baseResponse.SUCCESS));
+
+                const updatePosterResult = await posterProvider.poster(userId); //수정된 poster 내용 전체 조회
+                return res.status(200).send(response(baseResponse.SUCCESS, updatePosterResult));
             }
         }catch(err){
             return res.status(500).send(err);
