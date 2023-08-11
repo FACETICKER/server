@@ -175,8 +175,20 @@ export const stickerService = { //스티커 관련 서비스
         const updateResult = await stickerDao.updateVisitorName(connection,id,name);
         connection.release();
         if(updateResult.affectedRows === 1){
-            return response(baseResponse.SUCCESS);
-        }else return response(baseResponse.DB_ERROR);
+            return "success";
+        }
+        else return "fail";
+
+    },
+
+    deleteVisitorSticker : async(visitor_sticker_id) =>{ // 방문자 스티커 삭제
+
+        const connection = await pool.getConnection(async conn => conn);
+        const deleteVisitorStickerResult = await stickerDao.deleteVisitorSticker(connection,visitor_sticker_id);
+        console.log(deleteVisitorStickerResult);
+        connection.release();
+        
+        return response(baseResponse.SUCCESS);  
     }
 };
 
@@ -266,6 +278,26 @@ export const nqnaService = { //n문n답 관련 서비스
             console.log(error);
             return errResponse(baseResponse.DB_ERROR)
         }
+    },
+
+    deleteAnswer : async(nQnA_id) =>{ // 답변 삭제
+        const connection = await pool.getConnection(async conn => conn);
+        const deleteAnswerResult = await nqnaDao.deleteAnswer(connection,nQnA_id);
+        console.log(deleteAnswerResult);
+        connection.release();
+        
+        return response(baseResponse.SUCCESS);
+        
+    },
+
+    deleteQuestion : async(nQnA_id) =>{ // 질문 삭제
+        const connection = await pool.getConnection(async conn => conn);
+        const deleteQuestionResult = await nqnaDao.deleteQuestion(connection,nQnA_id);
+        console.log(deleteQuestionResult);
+        connection.release();
+        
+        return response(baseResponse.SUCCESS);
+        
     },
 };
 

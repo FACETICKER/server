@@ -269,12 +269,31 @@ export const nqnaDao = {
 
     selectVisitorQuestion : async(connection,selectVisitorQuestionParms)=>{ // (방문자 플로우) 로그인한 방문자가 남긴 질문 조회
         const selectVisitorQuestionQuery = `
-        SELECT nQnA_id, question, visitor_id
-        FROM nQnA
-        WHERE user_id = ? AND visitor_id = ?;
+            SELECT nQnA_id, question, visitor_id
+            FROM nQnA
+            WHERE user_id = ? AND visitor_id = ?;
         `
-        const [selectVisitorQuestionQueryRow] = await connection.query(selectVisitorQuestionQuery,selectVisitorQuestionParms);
-        return selectVisitorQuestionQueryRow; 
+        const [selectVisitorQuestionRow] = await connection.query(selectVisitorQuestionQuery,selectVisitorQuestionParms);
+        return selectVisitorQuestionRow; 
+    },
+
+    deleteAnswer : async(connection,nQnA_id)=>{ // 답변 삭제
+        const deleteAnswerQuery = `
+            UPDATE nQnA 
+            SET answer= null
+            WHERE nQnA_id =?;
+        `
+        const [deleteAnswerRow] = await connection.query(deleteAnswerQuery,nQnA_id);
+        return deleteAnswerRow; 
+    },
+
+    deleteQuestion: async(connection,nQnA_id)=>{ // 질문 삭제
+        const deleteAnswerQuery = `
+            DELETE FROM nQnA
+            WHERE nQnA_id =?;
+        `
+        const [deleteAnswerRow] = await connection.query(deleteAnswerQuery,nQnA_id);
+        return deleteAnswerRow; 
     },
 }
 

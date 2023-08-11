@@ -561,6 +561,35 @@ userRouter.patch(  "/:user_id/sticker/patch",  jwtMiddleware,  stickerController
  *                  type: string
  */
 
+userRouter.delete("/:user_id/sticker/visitor/:visitor_sticker_id",jwtMiddleware,stickerController.deleteVisitorSticker); //방문자 스티커 삭제
+/**
+ * @swagger
+ * paths:
+ *  /:user_id/sticker/visitor/:visitor_sticker_id:
+ *   get:
+ *    summary : 방문자 스티커 삭제
+ *    tags: [메인 페이지]
+ *    description: 특정 방문자 스티커 삭제
+ *    parameters:
+ *    - in: path
+ *      name: visitor_sticker_id
+ *      required: true
+ *      description: 방문자 스티커 ID
+ *      schema:
+ *        type: integer
+ *    responses:
+ *      '200':
+ *        description: 삭제 성공
+ *        schema:
+ *          properties:
+ *              isSuccess:
+ *                  type: boolean
+ *              code:
+ *                  type: integer
+ *              message:
+ *                  type: string
+ */
+
 userRouter.patch(  "/:user_id/sticker/visitor/message",  jwtMiddleware,  stickerController.visitorMessage); //방문자 스티커 메세지 등록
 /**
  * @swagger
@@ -680,7 +709,8 @@ userRouter.post(  "/:user_id/nqna/question/default",  nqnaController.postDefault
  *              message:
  *                  type: string
  */
-userRouter.post(  "/:user_id/nqna/question/visitor",  jwtMiddleware,  nqnaController.postVisitorQuestion); //visitor 질문 등록 API
+
+userRouter.post("/:user_id/nqna/question/visitor",jwtMiddleware,nqnaController.postVisitorQuestion); //visitor 질문 등록 API
 /**
  * @swagger
  * paths:
@@ -828,7 +858,7 @@ userRouter.get("/:user_id/nqna", jwtMiddleware, nqnaController.getnQnA); //N문 
  *                                  type: string
  *                                  format: date-time
  */
-userRouter.patch(  "/:user_id/nqna/:nQnA_id/question/hidden",  nqnaController.patchQuestionHidden); //질문 공개 여부 수정 API
+userRouter.patch("/:user_id/nqna/:nQnA_id/question/hidden",nqnaController.patchQuestionHidden); //질문 공개 여부 수정 API
 /**
  * @swagger
  * paths:
@@ -862,7 +892,7 @@ userRouter.patch(  "/:user_id/nqna/:nQnA_id/question/hidden",  nqnaController.pa
  *              message:
  *                  type: string
  */
-userRouter.patch(  "/:user_id/nqna/:nQnA_id/answer/hidden",  nqnaController.patchAnswerHidden); //답변 공개 여부 수정 API
+userRouter.patch("/:user_id/nqna/:nQnA_id/answer/hidden",nqnaController.patchAnswerHidden); //답변 공개 여부 수정 API
 /**
  * @swagger
  * paths:
@@ -896,7 +926,7 @@ userRouter.patch(  "/:user_id/nqna/:nQnA_id/answer/hidden",  nqnaController.patc
  *              message:
  *                  type: string
  */
-userRouter.get(  "/:user_id/nqna/question/emptyanswer",  nqnaController.getEmptyAnswer); //미답변 질문 개수 조회 API
+userRouter.get("/:user_id/nqna/question/emptyanswer",nqnaController.getEmptyAnswer); //미답변 질문 개수 조회 API
 /**
  * @swagger
  * paths:
@@ -932,7 +962,7 @@ userRouter.get(  "/:user_id/nqna/question/emptyanswer",  nqnaController.getEmpty
  *                              emptyanswer:
  *                                  type: integer
  */
-userRouter.get(  "/:user_id/nqna/question/visitor",  jwtMiddleware,  nqnaController.getVisitorQuestion); //(방문자 플로우) 로그인한 방문자가 남긴 질문 조회 API
+userRouter.get("/:user_id/nqna/question/visitor",jwtMiddleware,nqnaController.getVisitorQuestion); //(방문자 플로우) 로그인한 방문자가 남긴 질문 조회 API
 /**
  * @swagger
  * paths:
@@ -971,6 +1001,62 @@ userRouter.get(  "/:user_id/nqna/question/visitor",  jwtMiddleware,  nqnaControl
  *                                  type: string
  *                              visitor_id:
  *                                  type: integer
+ */
+userRouter.delete("/:user_id/nqna/:nQnA_id/answer",jwtMiddleware,nqnaController.deleteAnswer);// 답변 삭제
+/**
+ * @swagger
+ * paths:
+ *  /:user_id/nqna/:nQnA_id/answer:
+ *   delete:
+ *    summary : 답변 삭제
+ *    tags: [N문 N답]
+ *    description: 특정 답변 삭제
+ *    parameters:
+ *    - in: path
+ *      name: nQnA_id
+ *      required: true
+ *      description: nQnA ID
+ *      schema:
+ *        type: integer
+ *    responses:
+ *      '200':
+ *        description: 삭제 성공
+ *        schema:
+ *          properties:
+ *              isSuccess:
+ *                  type: boolean
+ *              code:
+ *                  type: integer
+ *              message:
+ *                  type: string
+ */
+userRouter.delete("/:user_id/nqna/:nQnA_id/question",jwtMiddleware,nqnaController.deleteQuestion);// 질문 삭제
+/**
+ * @swagger
+ * paths:
+ *  /:user_id/nqna/:nQnA_id/answer:
+ *   delete:
+ *    summary : 질문 삭제
+ *    tags: [N문 N답]
+ *    description: 특정 답변 삭제
+ *    parameters:
+ *    - in: path
+ *      name: nQnA_id
+ *      required: true
+ *      description: nQnA ID
+ *      schema:
+ *        type: integer
+ *    responses:
+ *      '200':
+ *        description: 삭제 성공
+ *        schema:
+ *          properties:
+ *              isSuccess:
+ *                  type: boolean
+ *              code:
+ *                  type: integer
+ *              message:
+ *                  type: string
  */
 
 //포스터 관련
