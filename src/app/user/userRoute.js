@@ -484,12 +484,12 @@ userRouter.get(  "/:user_id/sticker/detail",  jwtMiddleware,  stickerController.
  *                          type: integer
  */
 
-userRouter.patch(  "/:user_id/sticker/patch",  jwtMiddleware,  stickerController.patchSticker); //호스트 스티커 수정
+userRouter.put(  "/:user_id/sticker/put",  jwtMiddleware,  stickerController.putSticker); //호스트 스티커 수정
 /**
  * @swagger
  * paths:
- *  /:user_id/sticker/patch:
- *   patch:
+ *  /:user_id/sticker/put:
+ *   put:
  *    summary : 호스트 스티커 수정
  *    tags: [스티커]
  *    description: 스티커 수정

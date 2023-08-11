@@ -193,18 +193,19 @@ export const stickerController = {
             return res.json(err).send(err);
         }
     },
-    patchSticker : async(req,res)=>{
+    putSticker : async(req,res)=>{
         try{
             const userIdFromJWT = req.verifiedToken ? req.verifiedToken.user_id : null;
             const userId = req.params.user_id;
-            const {face, nose, eyes, mouth, arm, foot, accessory, final} = req.body;
+            const {final} = req.body;
             if(userId == userIdFromJWT){
-                const params = [face,nose,eyes, mouth, arm, foot, accessory, final, userId];
+                const params = [final, userId];
                 const result = await stickerService.updateUserSticker(params);
                 if(result === 'success'){
-                    return res.status(200).send(response(baseResponse.SUCCESS));
+                    const putStickerResult = await stickerProvider.userSticker(userId)
+                    return res.status(200).send(response(baseResponse.SUCCESS, putStickerResult));
                 }
-                else return res.status(200).send(response(baseResponse.DB_ERROR));
+                else return res.status(400).send(response(baseResponse.DB_ERROR));
             }
         }catch(err){
             return res.status(500).send(err);
