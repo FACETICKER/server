@@ -136,22 +136,13 @@ export const nqnaProvider = { //n문n답
         }
         },
 
-     retrieveHostnQnA : async(user_id) =>{ //호스트 플로우 답변 + 질문 조회
+     retrieveHostnQnA : async(user_id) =>{ //호스트 플로우 nQnA 전체 조회
   
         const connection = await pool.getConnection(async conn => conn);
         const hostNQnAResult = await nqnaDao.selectHostNQnA(connection,user_id);
         connection.release();
     
         return hostNQnAResult;
-    },
-
-    retrieveHostQ : async(user_id) =>{ //호스트 플로우 미답변 질문 조회
-        
-        const connection = await pool.getConnection(async conn => conn);
-        const hostQResult = await nqnaDao.selectHostQ(connection,user_id);
-        connection.release();
-    
-        return hostQResult;
     },
     
     retrieveVisitorNQnA : async(user_id) =>{ //방문자 플로우 nQnA 전체 조회

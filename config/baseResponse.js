@@ -4,9 +4,8 @@ const baseResponse = {
     SUCCESS : {"isSuccess": true,"code":1000, "message":"성공"},
     HOST: {"isSuccess": true, "code":1001, "message":"호스트입니다"},
     VISITOR: {"isSuccess":true, "code":1002, "message":"방문자입니다"},
-    HOST_NQNA_ANSWERED: {"isSuccess":true, "code":1003, "message":"호스트 플로우 N문 N답 조회 성공 (답변 + 질문)"},
-    HOST_NQNA_UNANSWERED: {"isSuccess":true, "code":1004, "message":"호스트 플로우 N문 N답 조회 성공 (미답변 질문)"},
-    VISITOR_NQNA: {"isSuccess":true, "code":1005, "message":"방문자 플로우 N문 N답 조회 성공"},
+    HOST_NQNA: {"isSuccess":true, "code":1003, "message":"호스트 플로우 N문 N답 조회 성공"},
+    VISITOR_NQNA: {"isSuccess":true, "code":1004, "message":"방문자 플로우 N문 N답 조회 성공"},
 
     //로그인 2000번
     SIGNUP_KAKAO_EXUSER : {"isSuccess":true, "code":2000, "message":"이미 가입된 사용자입니다"},
