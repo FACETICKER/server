@@ -66,7 +66,7 @@ export const stickerDao = {
     },
     selectUserSticker : async(connection,user_id) =>{ //호스트 스티커 조회
         const selectUserStickerQuery = `
-            SELECT final_image_url
+            SELECT user_sticker_id, user_id, message, final_image_url
             FROM user_sticker
             WHERE user_id = ?;
         `
