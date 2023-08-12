@@ -383,34 +383,14 @@ export const nqnaController = {
         const userIdFromJWT = req.verifiedToken ? req.verifiedToken.user_id : null; // 토큰이 있을 때만 user_id를 가져오도록 수정
 
         if(user_id == userIdFromJWT){ //호스트 본인의 N문 N답 페이지일 때 (호스트 플로우)
-            if(viewType == "Answered"){
-                const nQnA = await nqnaProvider.retrieveHostnQnA(user_id); 
-                return res.status(200).json({
-                    isSuccess: true,
-                    code: 1000,
-                    message: "호스트 플로우 N문 N답 조회 성공 (답변 + 질문)",
-                    result: nQnA
-                });
-            }
-            else if(viewType == "UnAnswered"){
-                const nQnA = await nqnaProvider.retrieveHostQ(user_id);
-                return res.status(200).json({
-                    isSuccess: true,
-                    code: 1000,
-                    message: "호스트 플로우 N문 N답 조회 성공 (미답변 질문)",
-                    result: nQnA
-                });
-            }
+          
+            const nQnA = await nqnaProvider.retrieveHostnQnA(user_id);       
+            return res.status(200).json(response(baseResponse.HOST_NQNA, nQnA));
         }
         else{ //다른 호스트의 N문 N답 페이지일 때 (방문자 플로우) 
 
             const nQnA = await nqnaProvider.retrieveVisitorNQnA(user_id);
-            return res.status(200).json({
-                isSuccess: true,
-                code: 1000,
-                message: "방문자 플로우 N문 N답 조회 성공",
-                result: nQnA
-            });
+            return res.status(200).json(response(baseResponse.VISITOR_NQNA, nQnA));
         }         
     },
 
