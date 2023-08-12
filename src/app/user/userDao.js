@@ -209,8 +209,8 @@ export const nqnaDao = {
         const selectHostNQnAQuery = `
             SELECT nQnA_id, question, question_type, question_hidden, answer, answer_hidden
             FROM nQnA
-            ORDER BY answer_created
-            WHERE user_id = ?;
+            WHERE user_id = ?
+            ORDER BY answer_created;
         `
         const [selectHostNQnARow] = await connection.query(selectHostNQnAQuery,user_id);
         return selectHostNQnARow;
@@ -220,8 +220,8 @@ export const nqnaDao = {
         const selectHostQQuery = `
             SELECT nQnA_id, question, question_type, question_hidden
             FROM nQnA
-            ORDER BY question_created
-            WHERE user_id = ?;
+            WHERE user_id = ?
+            ORDER BY question_created;
         `
         const [selectHostQRow] = await connection.query(selectHostQQuery,user_id);
         return selectHostQRow;
