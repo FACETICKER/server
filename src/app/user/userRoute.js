@@ -484,12 +484,12 @@ userRouter.get(  "/:user_id/sticker/detail",  jwtMiddleware,  stickerController.
  *                          type: integer
  */
 
-userRouter.put(  "/:user_id/sticker/put",  jwtMiddleware,  stickerController.putSticker); //호스트 스티커 수정
+userRouter.patch(  "/:user_id/sticker/patch",  jwtMiddleware,  stickerController.patchSticker); //호스트 스티커 수정
 /**
  * @swagger
  * paths:
  *  /:user_id/sticker/put:
- *   put:
+ *   patch:
  *    summary : 호스트 스티커 수정
  *    tags: [스티커]
  *    description: 스티커 수정
@@ -1118,12 +1118,12 @@ userRouter.post("/:user_id/poster", jwtMiddleware, posterController.postPoster);
  *              message:
  *                  type: string
  */
-userRouter.put(  "/:user_id/poster/put",  jwtMiddleware,  posterController.putPoster); //포스터 수정
+userRouter.patch(  "/:user_id/poster/patch",  jwtMiddleware,  posterController.patchPoster); //포스터 수정
 /**
  * @swagger
  * paths:
  *  /:user_id/poster/put:
- *   put:
+ *   patch:
  *    summary : 포스터 정보 수정
  *    tags: [포스터]
  *    description: 호스트의 포스터 정보 수정

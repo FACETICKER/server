@@ -193,7 +193,7 @@ export const stickerController = {
             return res.json(err).send(err);
         }
     },
-    putSticker : async(req,res)=>{
+    patchSticker : async(req,res)=>{
         try{
             const userIdFromJWT = req.verifiedToken ? req.verifiedToken.user_id : null;
             const userId = req.params.user_id;
@@ -630,7 +630,7 @@ export const posterController = {
             return res.send(err);
         }
     },
-    putPoster : async(req,res)=>{
+    patchPoster : async(req,res)=>{
         try{
                 const userIdFromJWT = req.verifiedToken ? req.verifiedToken.user_id : null; // 토큰이 있을 때만 user_id를 가져오도록 수정
                 const userId = req.params.user_id;
