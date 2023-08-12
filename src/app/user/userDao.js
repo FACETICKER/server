@@ -205,33 +205,23 @@ export const nqnaDao = {
         return selectNQnARow;
     },
 
-    selectHostNQnA : async(connection,user_id)=>{ // 호스트 플로우 답변 + 질문 조회
+    selectHostNQnA : async(connection,user_id)=>{ // 호스트 플로우 nQnA 전체 조회
         const selectHostNQnAQuery = `
-            SELECT nQnA_id, question, question_type, question_hidden, answer, answer_hidden
+            SELECT *
             FROM nQnA
-            ORDER BY answer_created
-            WHERE user_id = ?;
+            WHERE user_id = ?
+            ORDER BY answer_created;
         `
         const [selectHostNQnARow] = await connection.query(selectHostNQnAQuery,user_id);
         return selectHostNQnARow;
-    },
-
-    selectHostQ : async(connection,user_id)=>{ // 호스트 플로우 미답변 질문 조회
-        const selectHostQQuery = `
-            SELECT nQnA_id, question, question_type, question_hidden
-            FROM nQnA
-            ORDER BY question_created
-            WHERE user_id = ?;
-        `
-        const [selectHostQRow] = await connection.query(selectHostQQuery,user_id);
-        return selectHostQRow;
     },
 
     selectVisitorNQnA : async(connection,user_id)=>{ // 방문자 플로우 nQnA 전체 조회
         const selectVisitorNQnAQuery = `
             SELECT nQnA_id, question, question_hidden, answer, answer_hidden, question_created
             FROM nQnA
-            WHERE user_id = ?;
+            WHERE user_id = ?
+            ORDER BY question_created;
         `
         const [selectVisitorNQnARow] = await connection.query(selectVisitorNQnAQuery,user_id);
         return selectVisitorNQnARow;

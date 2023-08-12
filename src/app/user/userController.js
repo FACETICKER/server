@@ -377,46 +377,21 @@ export const nqnaController = {
      */
     getnQnA : async(req,res)=>{
         
-        try {
-            const {user_id} = req.params; 
-            const {viewType} = req.body;
-            //const type = req.query.type; //type으로 Host, visitor 구분 >>>> 일단 보류
-            const userIdFromJWT = req.verifiedToken ? req.verifiedToken.user_id : null; // 토큰이 있을 때만 user_id를 가져오도록 수정
+        const {user_id} = req.params; 
+        const {viewType} = req.body;
 
-            if(user_id == userIdFromJWT){ //호스트 본인의 N문 N답 페이지일 때 (호스트 플로우)
-                if(viewType == "UnAnswered"){
-                    const nQnA = await nqnaProvider.retrieveHostQnA(user_id); 
-                    return res.status(200).json({
-                        isSuccess: true,
-                        code: 1000,
-                        message: "호스트 플로우 N문 N답 조회 성공 (답변 + 질문)",
-                        result: nQnA
-                    });
-                }
-                else if(viewType == "Answered"){
-                    const nQnA = await nqnaProvider.retrieveHostQ(user_id);
-                    return res.status(200).json({
-                        isSuccess: true,
-                        code: 1000,
-                        message: "호스트 플로우 N문 N답 조회 성공 (미답변 질문)",
-                        result: nQnA
-                    });
-                }
-            }
-            else{ //다른 호스트의 N문 N답 페이지일 때 (방문자 플로우) 
+        const userIdFromJWT = req.verifiedToken ? req.verifiedToken.user_id : null; // 토큰이 있을 때만 user_id를 가져오도록 수정
 
-                const nQnA = await nqnaProvider.retrieveVisitorNQnA(user_id);
-                return res.status(200).json({
-                    isSuccess: true,
-                    code: 1000,
-                    message: "방문자 플로우 N문 N답 조회 성공",
-                    result: nQnA
-                });
-            }         
-        } catch (error) {
-            console.log(error);
-            return res.status(500).json(errResponse(baseResponse.SERVER_ERROR));
+        if(user_id == userIdFromJWT){ //호스트 본인의 N문 N답 페이지일 때 (호스트 플로우)
+          
+            const nQnA = await nqnaProvider.retrieveHostnQnA(user_id);       
+            return res.status(200).json(response(baseResponse.HOST_NQNA, nQnA));
         }
+        else{ //다른 호스트의 N문 N답 페이지일 때 (방문자 플로우) 
+
+            const nQnA = await nqnaProvider.retrieveVisitorNQnA(user_id);
+            return res.status(200).json(response(baseResponse.VISITOR_NQNA, nQnA));
+        }         
     },
 
     /**

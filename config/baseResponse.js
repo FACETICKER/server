@@ -4,6 +4,8 @@ const baseResponse = {
     SUCCESS : {"isSuccess": true,"code":1000, "message":"성공"},
     HOST: {"isSuccess": true, "code":1001, "message":"호스트입니다"},
     VISITOR: {"isSuccess":true, "code":1002, "message":"방문자입니다"},
+    HOST_NQNA: {"isSuccess":true, "code":1003, "message":"호스트 플로우 N문 N답 조회 성공"},
+    VISITOR_NQNA: {"isSuccess":true, "code":1004, "message":"방문자 플로우 N문 N답 조회 성공"},
 
     //로그인 2000번
     SIGNUP_KAKAO_EXUSER : {"isSuccess":true, "code":2000, "message":"이미 가입된 사용자입니다"},
@@ -31,6 +33,7 @@ const baseResponse = {
     NQNA_QUESTION_LENGTH : { "isSuccess": false, "code": 5004, "message":"질문은 100자리 미만으로 입력해주세요." },
     NQNA_ANSWER_LENGTH : { "isSuccess": false, "code": 5005, "message":"답변은 100자리 미만으로 입력해주세요." },
     NQNA_VISITOR_QUESTION_NOT_EXIST : { "isSuccess": false, "code": 5000, "message": "방문자의 질문이 존재하지 않습니다." },
+
 
 
     //토큰 6000번
