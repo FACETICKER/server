@@ -164,7 +164,7 @@ export const stickerService = { //스티커 관련 서비스
     },
     updateUserSticker : async(params) =>{
         const connection = await pool.getConnection(async conn => conn);
-        const udpateResult = await stickerDao.updateUserSticker(connection,params);
+        const updateResult = await stickerDao.updateUserSticker(connection,params);
         connection.release();
         if(updateResult.affectedRows === 1){
             return "success";

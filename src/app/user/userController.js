@@ -197,9 +197,9 @@ export const stickerController = {
         try{
             const userIdFromJWT = req.verifiedToken ? req.verifiedToken.user_id : null;
             const userId = req.params.user_id;
-            const {final} = req.body;
+            const {face,eyes,nose,mouth,arm,foot,accessory,final} = req.body;
             if(userId == userIdFromJWT){
-                const params = [final, userId];
+                const params = [face,eyes,nose,mouth,arm,foot,accessory,final, userId];
                 const result = await stickerService.updateUserSticker(params);
                 if(result === 'success'){
                     const putStickerResult = await stickerProvider.userSticker(userId)
