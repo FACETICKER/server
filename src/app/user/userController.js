@@ -302,32 +302,18 @@ export const nqnaController = {
     * POST: /:user_id/nqna/question/visitor
     */
     postVisitorQuestion : async(req,res) => {
-        try {
-            const {question} = req.body;
-            console.log(question); 
-            const {user_id} = req.params; 
-            const userIdFromJWT = req.verifiedToken ? req.verifiedToken.user_id : null; // 로그인한 방문자의 ID
+        
+        const {question} = req.body;
+        const {user_id} = req.params; 
+        const userIdFromJWT = req.verifiedToken ? req.verifiedToken.user_id : null;
 
-            const User = await userProvider.retrieveUser(user_id);
-            if (User) {
-                if(question.length === 0){
-                    return res.status(400).json(errResponse(baseResponse.NQNA_QUESTION_EMPTY));
-                }
-                else if(question.length > 100){
-                    return res.status(400).json(errResponse(baseResponse.NQNA_QUESTION_LENGTH));
-                }
-                else{
-                    const postVisitorQuestionResult = await nqnaService.createVisitorQuestion(user_id, question, userIdFromJWT);
-                    return res.status(200).json(response(baseResponse.SUCCESS, postVisitorQuestionResult));
-                }
-            } 
-            else {
-                return res.status(404).json(errResponse(baseResponse.USER_USERID_NOT_EXIST));
-            }
-        }
-        catch(error){
-            console.log(error);
-            return res.status(500).json(errResponse(baseResponse.SERVER_ERROR));
+        const User = await userProvider.retrieveUser(user_id);
+        if (User) {
+            const postVisitorQuestionResult = await nqnaService.createVisitorQuestion(user_id, question,userIdFromJWT);
+            return res.status(200).json(response(baseResponse.SUCCESS, postVisitorQuestionResult));
+        } 
+        else {
+            return res.status(404).json(errResponse(baseResponse.USER_USERID_NOT_EXIST));
         }
     },
 
@@ -378,7 +364,6 @@ export const nqnaController = {
     getnQnA : async(req,res)=>{
         
         const {user_id} = req.params; 
-        const {viewType} = req.body;
 
         const userIdFromJWT = req.verifiedToken ? req.verifiedToken.user_id : null; // 토큰이 있을 때만 user_id를 가져오도록 수정
 

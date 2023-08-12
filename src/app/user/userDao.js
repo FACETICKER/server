@@ -177,9 +177,8 @@ export const nqnaDao = {
 
     insertVisitorQuestion : async(connection, insertDefaultQuestionParams) => { // visitor 질문 생성
         const postVisitorQuestionQuery = `
-            INSERT INTO nQnA(user_id, question, question_type,visitor_id) 
+            INSERT INTO nQnA(user_id, question, question_type, visitor_id) 
             VALUES (?,?,"visitor",?);
-    
         `
         const insertVisitorQuestionRow = await connection.query(postVisitorQuestionQuery, insertDefaultQuestionParams);
         return insertVisitorQuestionRow;
@@ -261,7 +260,7 @@ export const nqnaDao = {
         const selectVisitorQuestionQuery = `
             SELECT nQnA_id, question, visitor_id
             FROM nQnA
-            WHERE user_id = ? AND visitor_id = ?;
+            WHERE user_id = ? AND visitor_id;
         `
         const [selectVisitorQuestionRow] = await connection.query(selectVisitorQuestionQuery,selectVisitorQuestionParms);
         return selectVisitorQuestionRow; 

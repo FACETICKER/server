@@ -672,10 +672,10 @@ userRouter.patch(  "/:user_id/sticker/visitor/name",  jwtMiddleware,  stickerCon
  *                  type: string
  */
 
-userRouter.get(  "/:user_id/sticker/message",  jwtMiddleware,  stickerController.getHostMessage);
+userRouter.get(  "/:user_id/sticker/message", jwtMiddleware, stickerController.getHostMessage);
 
 // nQnA 관련
-userRouter.post(  "/:user_id/nqna/question/default",  nqnaController.postDefaultQuestion); //default 질문 등록 API
+userRouter.post(  "/:user_id/nqna/question/default", jwtMiddleware, nqnaController.postDefaultQuestion); //default 질문 등록 API
 /**
  * @swagger
  * paths:
@@ -709,7 +709,6 @@ userRouter.post(  "/:user_id/nqna/question/default",  nqnaController.postDefault
  *              message:
  *                  type: string
  */
-
 userRouter.post("/:user_id/nqna/question/visitor",jwtMiddleware,nqnaController.postVisitorQuestion); //visitor 질문 등록 API
 /**
  * @swagger
@@ -858,7 +857,7 @@ userRouter.get("/:user_id/nqna", jwtMiddleware, nqnaController.getnQnA); //N문 
  *                                  type: string
  *                                  format: date-time
  */
-userRouter.patch("/:user_id/nqna/:nQnA_id/question/hidden",nqnaController.patchQuestionHidden); //질문 공개 여부 수정 API
+userRouter.patch("/:user_id/nqna/:nQnA_id/question/hidden",jwtMiddleware,nqnaController.patchQuestionHidden); //질문 공개 여부 수정 API
 /**
  * @swagger
  * paths:
@@ -892,7 +891,7 @@ userRouter.patch("/:user_id/nqna/:nQnA_id/question/hidden",nqnaController.patchQ
  *              message:
  *                  type: string
  */
-userRouter.patch("/:user_id/nqna/:nQnA_id/answer/hidden",nqnaController.patchAnswerHidden); //답변 공개 여부 수정 API
+userRouter.patch("/:user_id/nqna/:nQnA_id/answer/hidden",jwtMiddleware,nqnaController.patchAnswerHidden); //답변 공개 여부 수정 API
 /**
  * @swagger
  * paths:
@@ -926,7 +925,7 @@ userRouter.patch("/:user_id/nqna/:nQnA_id/answer/hidden",nqnaController.patchAns
  *              message:
  *                  type: string
  */
-userRouter.get("/:user_id/nqna/question/emptyanswer",nqnaController.getEmptyAnswer); //미답변 질문 개수 조회 API
+userRouter.get("/:user_id/nqna/question/emptyanswer",jwtMiddleware,nqnaController.getEmptyAnswer); //미답변 질문 개수 조회 API
 /**
  * @swagger
  * paths:
@@ -1034,7 +1033,7 @@ userRouter.delete("/:user_id/nqna/:nQnA_id/question",jwtMiddleware,nqnaControlle
 /**
  * @swagger
  * paths:
- *  /:user_id/nqna/:nQnA_id/answer:
+ *  /:user_id/nqna/:nQnA_id/question:
  *   delete:
  *    summary : 질문 삭제
  *    tags: [N문 N답]
