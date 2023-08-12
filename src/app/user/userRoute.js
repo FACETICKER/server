@@ -488,7 +488,7 @@ userRouter.patch(  "/:user_id/sticker/patch",  jwtMiddleware,  stickerController
 /**
  * @swagger
  * paths:
- *  /:user_id/sticker/patch:
+ *  /:user_id/sticker/put:
  *   patch:
  *    summary : 호스트 스티커 수정
  *    tags: [스티커]
@@ -1122,7 +1122,7 @@ userRouter.patch(  "/:user_id/poster/patch",  jwtMiddleware,  posterController.p
 /**
  * @swagger
  * paths:
- *  /:user_id/poster/patch:
+ *  /:user_id/poster/put:
  *   patch:
  *    summary : 포스터 정보 수정
  *    tags: [포스터]

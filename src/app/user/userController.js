@@ -197,14 +197,15 @@ export const stickerController = {
         try{
             const userIdFromJWT = req.verifiedToken ? req.verifiedToken.user_id : null;
             const userId = req.params.user_id;
-            const {face, nose, eyes, mouth, arm, foot, accessory, final} = req.body;
+            const {face,eyes,nose,mouth,arm,foot,accessory,final} = req.body;
             if(userId == userIdFromJWT){
-                const params = [face,nose,eyes, mouth, arm, foot, accessory, final, userId];
+                const params = [face,eyes,nose,mouth,arm,foot,accessory,final, userId];
                 const result = await stickerService.updateUserSticker(params);
                 if(result === 'success'){
-                    return res.status(200).send(response(baseResponse.SUCCESS));
+                    const putStickerResult = await stickerProvider.userSticker(userId)
+                    return res.status(200).send(response(baseResponse.SUCCESS, putStickerResult));
                 }
-                else return res.status(200).send(response(baseResponse.DB_ERROR));
+                else return res.status(400).send(response(baseResponse.DB_ERROR));
             }
         }catch(err){
             return res.status(500).send(err);
@@ -647,7 +648,9 @@ export const posterController = {
                 }
                 result = await posterService.updatePoster(params);
                 if(result === 'fail') return res.send(response(baseResponse.DB_ERROR));
-                return res.status(200).send(response(baseResponse.SUCCESS));
+
+                const updatePosterResult = await posterProvider.poster(userId); //수정된 poster 내용 전체 조회
+                return res.status(200).send(response(baseResponse.SUCCESS, updatePosterResult));
             }
         }catch(err){
             return res.status(500).send(err);

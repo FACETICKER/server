@@ -66,7 +66,7 @@ export const stickerDao = {
     },
     selectUserSticker : async(connection,user_id) =>{ //호스트 스티커 조회
         const selectUserStickerQuery = `
-            SELECT final_image_url
+            SELECT user_sticker_id, user_id, message, final_image_url
             FROM user_sticker
             WHERE user_id = ?;
         `
@@ -147,7 +147,7 @@ export const stickerDao = {
     updateUserSticker : async(connection, params)=>{
         const updateUserStickerQuery = `
             UPDATE user_sticker
-            SET face_id = ?, eyes_id = ?, nose_id = ?, mouth_id = ?, arm_id = ?, foot_id = ?, accessory_id = ?, final_image_url = ?
+            SET face_id = ?, eyes_id = ?, nose_id = ?, mouth_id=?, arm_id = ?, foot_id = ? accessory_id = ?, final_image_url = ?
             WHERE user_id = ?;
         `
         const [updateUserStickerRow] = await connection.query(updateUserStickerQuery, params);
