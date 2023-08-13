@@ -49,7 +49,7 @@ userRouter.post("/login/google", loginController.google); //구글 로그인 API
 /**
  * @swagger
  * paths:
- *  /auth/google/callback:
+ *  /login/google:
  *   post:
  *    summary : 로그인하여 토큰 발급
  *    tags: [로그인]

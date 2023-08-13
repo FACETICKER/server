@@ -57,7 +57,7 @@ export const loginController = {
                     code: code,
                     client_id: process.env.GOOGLE_ID,
                     client_secret: process.env.GOOGLE_SECRET,
-                    redirect_uri: 'https://faceticker.site/app/auth/google/callback',
+                    redirect_uri: 'http://localhost:3000/oauth',
                     grant_type : 'authorization_code'
                 },
             });
