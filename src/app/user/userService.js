@@ -112,7 +112,7 @@ export const stickerService = { //스티커 관련 서비스
             const createVisitorStickerResult = await stickerDao.createVisitorSticker(connection,params);
             connection.release();
             if(createVisitorStickerResult.affectedRows === 1){
-                return response(baseResponse.SUCCESS,{'visitor_id':createVisitorStickerResult.insertId});
+                return response(baseResponse.SUCCESS,{'visitor_sticker_id':createVisitorStickerResult.insertId});
             }else return response(baseResponse.DB_ERROR);
         }catch(err){
             console.error(err);
