@@ -167,6 +167,8 @@ export const stickerController = {
             if(userIdFromJWT==userid){
                 const result = await stickerProvider.retrieveStickerDeatils(userid);
                 return res.status(200).send(response(baseResponse.SUCCESS,result));
+            }else{
+                return res.send(response(baseResponse.USER_NOT_HOST));
             }
         }catch(err){
             return res.status(500).send(errResponse(baseResponse.SERVER_ERROR));
