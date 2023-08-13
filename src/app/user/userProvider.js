@@ -171,9 +171,9 @@ export const nqnaProvider = { //n문n답
         }
         },
     
-    retrieveVisitorQuestion : async(user_id, userIdFromJWT) =>{ //(방문자 플로우) 로그인한 방문자가 남긴 질문 조회
+    retrieveVisitorQuestion : async(user_id,userIdFromJWT) =>{ //(방문자 플로우) 로그인한 방문자가 남긴 질문 조회
         try{ 
-            const selectVisitorQuestionParms = [user_id, userIdFromJWT];
+            const selectVisitorQuestionParms = [user_id,userIdFromJWT];
 
             const connection = await pool.getConnection(async conn => conn);
             const VisitorQuestionResult = await nqnaDao.selectVisitorQuestion(connection,selectVisitorQuestionParms);
