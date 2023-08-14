@@ -256,11 +256,28 @@ export const stickerController = {
         try{
             const userId = req.params.user_id;
             const visitorStickerId = req.query.id;
-            //if(visitorStickerId == userId){
+            if(visitorStickerId == userId){
                 const result = await stickerProvider.retrieveHostMessage(userId);
-                console.log(result);
                 return res.send(response(baseResponse.SUCCESS,result));
-            //}
+            }
+        }catch(err){
+            return res.status(500).send(err);
+        }
+    },
+    getVisitorName : async(req,res)=>{
+        try{
+            const visitorStickerId = req.query.id;
+            const result = await stickerProvider.retrieveVisitorName(visitorStickerId);
+            return res.send(response(baseResponse.SUCCESS,result));
+        }catch(err){
+            return res.status(500).send(err);
+        }
+    },
+    getVisitorMessage : async(req,res)=>{
+        try{
+            const visitorStickerId = req.query.id;
+            const result = await stickerProvider.retrieveVisitorMessage(visitorStickerId);
+            return res.send(response(baseResponse.SUCCESS,result));
         }catch(err){
             return res.status(500).send(err);
         }

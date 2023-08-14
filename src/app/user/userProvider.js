@@ -86,7 +86,7 @@ export const stickerProvider = { //스티커
         connection.release();
         return newStickersResult;
     },
-    retrieveStickerInfo : async()=>{
+    retrieveStickerInfo : async()=>{ //스티커 정보 조회
         const connection = await pool.getConnection(async conn => conn);
         const faceResult = await stickerDao.selectFace(connection);
         const eyesResult = await stickerDao.selectEyes(connection);
@@ -107,15 +107,27 @@ export const stickerProvider = { //스티커
         };
         return retrieveStickerInfoResult;
     },
-    retrieveStickerDeatils : async(userId) =>{
+    retrieveStickerDeatils : async(userId) =>{  
         const connection = await pool.getConnection(async conn => conn);
         const detailsResult = await stickerDao.selectUserStickerDetails(connection,userId);
         connection.release();
         return detailsResult;
     },
-    retrieveHostMessage : async(userId) =>{
+    retrieveHostMessage : async(userId) =>{ //호스트 스티커 메세지 조회
         const connection = await pool.getConnection(async conn => conn);
         const retrieveResult = await stickerDao.selectHostMessage(connection,userId);
+        connection.release();
+        return retrieveResult;
+    },
+    retrieveVisitorName: async(visitorStickerId) =>{
+        const connection = await pool.getConnection(async conn => conn);
+        const retrieveResult = await stickerDao.selectVisitorName(connection,visitorStickerId);
+        connection.release();
+        return retrieveResult;
+    },
+    retrieveVisitorMessage: async(visitorStickerId)=>{
+        const connection = await pool.getConnection(async conn => conn);
+        const retrieveResult = await stickerDao.selectVisitorMessage(connection, visitorStickerId);
         connection.release();
         return retrieveResult;
     }
