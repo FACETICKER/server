@@ -246,7 +246,8 @@ export const stickerController = {
             const visitorStickerId = req.query.id;
             const name = req.body.name;
             const result = await stickerService.updateVisitorName(visitorStickerId, name);
-            return res.status(200).send(result);
+            if(result === 'success') return res.status(200).send(response(baseResponse.SUCCESS));
+            else return res.send(response(baseResponse.DB_ERROR));
         }catch(err){
             return res.status(500).send(err);
         }
@@ -257,8 +258,26 @@ export const stickerController = {
             const visitorStickerId = req.query.id;
             if(visitorStickerId == userId){
                 const result = await stickerProvider.retrieveHostMessage(userId);
-                return res.send(reportErrorb(baseResponse.SUCCESS,result));
+                return res.send(response(baseResponse.SUCCESS,result));
             }
+        }catch(err){
+            return res.status(500).send(err);
+        }
+    },
+    getVisitorName : async(req,res)=>{
+        try{
+            const visitorStickerId = req.query.id;
+            const result = await stickerProvider.retrieveVisitorName(visitorStickerId);
+            return res.send(response(baseResponse.SUCCESS,result));
+        }catch(err){
+            return res.status(500).send(err);
+        }
+    },
+    getVisitorMessage : async(req,res)=>{
+        try{
+            const visitorStickerId = req.query.id;
+            const result = await stickerProvider.retrieveVisitorMessage(visitorStickerId);
+            return res.send(response(baseResponse.SUCCESS,result));
         }catch(err){
             return res.status(500).send(err);
         }

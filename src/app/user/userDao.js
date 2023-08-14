@@ -159,8 +159,35 @@ export const stickerDao = {
             FROM user_sticker
             WHERE user_id = ?;
         `
-        const [selectHostMessageRow] = await connection.query(selectHostMessageQuery, id);
-        return selectHostMessageRow;
+        const selectHostMessageRow = await connection.query(selectHostMessageQuery, id);
+        return selectHostMessageRow[0];
+    },
+    updateVisitorName: async(connection, params) =>{
+        const updateVisitorNameQuery = `
+            UPDATE visitor_sticker
+            SET name = ?
+            WHERE visitor_sticker_id = ?;
+        `
+        const [updateVisitorNameRow] = await connection.query(updateVisitorNameQuery, params);
+        return updateVisitorNameRow;
+    },
+    selectVisitorName : async(connection, id) =>{
+        const selectVisitorNameQuery = `
+            SELECT name
+            FROM visitor_sticker
+            WHERE visitor_sticker_id = ?;
+        `
+        const [selectVisitorNameRow] = await connection.query(selectVisitorNameQuery, id);
+        return selectVisitorNameRow;
+    },
+    selectVisitorMessage : async(connection, id)=>{
+        const selectVisitorMessageQuery = `
+            SELECT message
+            FROM visitor_sticker
+            WHERE visitor_sticker_id = ?;
+        `
+        const [selectVisitorMessageRow] = await connection.query(selectVisitorMessageQuery, id);
+        return selectVisitorMessageRow;
     }
 }
 
