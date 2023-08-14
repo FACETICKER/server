@@ -151,7 +151,7 @@ userRouter.get("/:user_id", jwtMiddleware, mainController.getAll); //메인 페�
  *                                  count:
  *                                      type: integer
  */
-userRouter.patch(  "/:user_id/sticker/message",  jwtMiddleware,  stickerController.hostMessage); //스티커 호스트 메세지 등록
+userRouter.patch("/:user_id/sticker/message",  jwtMiddleware,  stickerController.hostMessage); //스티커 호스트 메세지 등록
 /**
  * @swagger
  * paths:
@@ -185,7 +185,7 @@ userRouter.patch(  "/:user_id/sticker/message",  jwtMiddleware,  stickerControll
  *              message:
  *                  type: string
  */
-userRouter.get(  "/:user_id/sticker/visitor/:visitor_sticker_id",  stickerController.getSticker); //방문자 기록 visitor_sticker_id로 상세 조회 API
+userRouter.get("/:user_id/sticker/visitor/:visitor_sticker_id",  stickerController.getSticker); //방문자 기록 visitor_sticker_id로 상세 조회 API
 /**
  * @swagger
  * paths:
@@ -228,7 +228,7 @@ userRouter.get(  "/:user_id/sticker/visitor/:visitor_sticker_id",  stickerContro
  *                                  type: integer
  */
 
-userRouter.get(  "/:user_id/sticker/all",  jwtMiddleware,  stickerController.getStickers); //방문자 기록 페이지 조회
+userRouter.get("/:user_id/sticker/all",  jwtMiddleware,  stickerController.getStickers); //방문자 기록 페이지 조회
 /**
  * @swagger
  * paths:
@@ -279,7 +279,7 @@ userRouter.get(  "/:user_id/sticker/all",  jwtMiddleware,  stickerController.get
  *                              location_y:
  *                                  type: integer
  */
-userRouter.patch(  "/:user_id/sticker/all/location",  jwtMiddleware,  stickerController.patchStickerLocation); //스티커 위치 수정
+userRouter.patch("/:user_id/sticker/all/location",  jwtMiddleware,  stickerController.patchStickerLocation); //스티커 위치 수정
 /**
  * @swagger
  * paths:
@@ -321,7 +321,7 @@ userRouter.patch(  "/:user_id/sticker/all/location",  jwtMiddleware,  stickerCon
  */
 
 // 스티커 관련
-userRouter.post(  "/:user_id/sticker",  jwtMiddleware,  stickerController.postSticker); //스티커 등록(Host,Visitor)
+userRouter.post("/:user_id/sticker",  jwtMiddleware,  stickerController.postSticker); //스티커 등록(Host,Visitor)
 /**
  * @swagger
  * paths:
@@ -397,7 +397,7 @@ userRouter.post(  "/:user_id/sticker",  jwtMiddleware,  stickerController.postSt
  *              message:
  *                  type: string
  */
-userRouter.patch(  "/:user_id/sticker/attach",  jwtMiddleware,  stickerController.attachSticker); //스티커 부착
+userRouter.patch("/:user_id/sticker/attach",  jwtMiddleware,  stickerController.attachSticker); //스티커 부착
 /**
  * @swagger
  * paths:
@@ -438,7 +438,7 @@ userRouter.patch(  "/:user_id/sticker/attach",  jwtMiddleware,  stickerControlle
  *                  type: string
  */
 
-userRouter.get(  "/:user_id/sticker/detail",  jwtMiddleware,  stickerController.getStickerDetails); //스티커 상세 정보
+userRouter.get("/:user_id/sticker/detail",  jwtMiddleware,  stickerController.getStickerDetails); //스티커 상세 정보
 /**
  * @swagger
  * paths:
@@ -484,7 +484,7 @@ userRouter.get(  "/:user_id/sticker/detail",  jwtMiddleware,  stickerController.
  *                          type: integer
  */
 
-userRouter.patch(  "/:user_id/sticker/patch",  jwtMiddleware,  stickerController.patchSticker); //호스트 스티커 수정
+userRouter.patch("/:user_id/sticker/patch",  jwtMiddleware,  stickerController.patchSticker); //호스트 스티커 수정
 /**
  * @swagger
  * paths:
@@ -590,7 +590,7 @@ userRouter.delete("/:user_id/sticker/visitor/:visitor_sticker_id",jwtMiddleware,
  *                  type: string
  */
 
-userRouter.patch(  "/:user_id/sticker/visitor/message",  jwtMiddleware,  stickerController.visitorMessage); //방문자 스티커 메세지 등록
+userRouter.patch("/:user_id/sticker/visitor/message",  jwtMiddleware,  stickerController.visitorMessage); //방문자 스티커 메세지 등록
 /**
  * @swagger
  * paths:
@@ -631,7 +631,7 @@ userRouter.patch(  "/:user_id/sticker/visitor/message",  jwtMiddleware,  sticker
  *                  type: string
  */
 
-userRouter.patch(  "/:user_id/sticker/visitor/name",  jwtMiddleware,  stickerController.visitorName); //방문자 스티커 닉네임 등록
+userRouter.patch("/:user_id/sticker/visitor/name",  jwtMiddleware,  stickerController.visitorName); //방문자 스티커 닉네임 등록
 /**
  * @swagger
  * paths:
@@ -672,7 +672,7 @@ userRouter.patch(  "/:user_id/sticker/visitor/name",  jwtMiddleware,  stickerCon
  *                  type: string
  */
 
-userRouter.get(  "/:user_id/sticker/message", jwtMiddleware, stickerController.getHostMessage); //호스트 메세지 조회
+userRouter.get("/:user_id/sticker/message", jwtMiddleware, stickerController.getHostMessage); //호스트 메세지 조회
 /**
  * @swagger
  * paths:
@@ -690,7 +690,75 @@ userRouter.get(  "/:user_id/sticker/message", jwtMiddleware, stickerController.g
  *        type: string
  *    responses:
  *      '200':
- *        description: 스티커 닉네임 등록 성공
+ *        description: 조회 성공
+ *        schema:
+ *          properties:
+ *              isSuccess:
+ *                  type: boolean
+ *              code:
+ *                  type: integer
+ *              message:
+ *                  type: string
+ *              result:
+ *                  type: object
+ *                  properties:
+ *                      message:
+ *                          type: string
+ */
+
+userRouter.get("/sticker/visitor/name",jwtMiddleware, stickerController.getVisitorName); //방문자 스티커 닉네임 조회
+/**
+ * @swagger
+ * paths:
+ *  /sticker/visitor/name:
+ *   get:
+ *    summary : 방문자 스티커 닉네임 조회
+ *    tags: [스티커]
+ *    description: 닉네임 조회
+ *    parameters:
+ *    - in: query
+ *      name: id
+ *      required: true
+ *      description: 방문자 스티커 ID
+ *      schema:
+ *        type: integer
+ *    responses:
+ *      '200':
+ *        description: 조회 성공
+ *        schema:
+ *          properties:
+ *              isSuccess:
+ *                  type: boolean
+ *              code:
+ *                  type: integer
+ *              message:
+ *                  type: string
+ *              result:
+ *                  type: object
+ *                  properties:
+ *                      name:
+ *                          type: string
+ */
+
+userRouter.get("/sticker/visitor/message",jwtMiddleware,stickerController.getVisitorMessage); //방문자 스티커 메세지 조회
+/**
+ * @swagger
+ * paths:
+ *  /sticker/visitor/message:
+ *   get:
+ *    summary : 방문자 스티커 메세지 조회
+ *    tags: [스티커]
+ *    description: 메세지 조회
+ *    parameters:
+ *    - in: query
+ *      name: id
+ *      required: true
+ *      description: 방문자 스티커 ID
+ *      schema:
+ *        type: integer
+ *    responses:
+ *      '200':
+ *        description: 조회 성공
  *        schema:
  *          properties:
  *              isSuccess:
