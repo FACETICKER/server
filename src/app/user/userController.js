@@ -246,7 +246,8 @@ export const stickerController = {
             const visitorStickerId = req.query.id;
             const name = req.body.name;
             const result = await stickerService.updateVisitorName(visitorStickerId, name);
-            return res.status(200).send(result);
+            if(result === 'success') return res.status(200).send(response(baseResponse.SUCCESS));
+            else return res.send(response(baseResponse.DB_ERROR));
         }catch(err){
             return res.status(500).send(err);
         }
@@ -255,10 +256,11 @@ export const stickerController = {
         try{
             const userId = req.params.user_id;
             const visitorStickerId = req.query.id;
-            if(visitorStickerId == userId){
+            //if(visitorStickerId == userId){
                 const result = await stickerProvider.retrieveHostMessage(userId);
-                return res.send(reportErrorb(baseResponse.SUCCESS,result));
-            }
+                console.log(result);
+                return res.send(response(baseResponse.SUCCESS,result));
+            //}
         }catch(err){
             return res.status(500).send(err);
         }
