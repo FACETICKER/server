@@ -566,7 +566,7 @@ userRouter.delete("/:user_id/sticker/visitor/:visitor_sticker_id",jwtMiddleware,
  * @swagger
  * paths:
  *  /:user_id/sticker/visitor/:visitor_sticker_id:
- *   get:
+ *   delete:
  *    summary : 방문자 스티커 삭제
  *    tags: [메인 페이지]
  *    description: 특정 방문자 스티커 삭제
