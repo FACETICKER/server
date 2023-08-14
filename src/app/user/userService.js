@@ -112,7 +112,7 @@ export const stickerService = { //스티커 관련 서비스
             const createVisitorStickerResult = await stickerDao.createVisitorSticker(connection,params);
             connection.release();
             if(createVisitorStickerResult.affectedRows === 1){
-                return response(baseResponse.SUCCESS,{'visitor_id':createVisitorStickerResult.insertId});
+                return response(baseResponse.SUCCESS,{'visitor_sticker_id':createVisitorStickerResult.insertId});
             }else return response(baseResponse.DB_ERROR);
         }catch(err){
             console.error(err);
@@ -172,7 +172,8 @@ export const stickerService = { //스티커 관련 서비스
     },
     updateVisitorName : async(id,name)=>{
         const connection = await pool.getConnection(async conn => conn);
-        const updateResult = await stickerDao.updateVisitorName(connection,id,name);
+        const params = [name,id];
+        const updateResult = await stickerDao.updateVisitorName(connection,params);
         connection.release();
         if(updateResult.affectedRows === 1){
             return "success";
@@ -187,107 +188,65 @@ export const stickerService = { //스티커 관련 서비스
         const deleteVisitorStickerResult = await stickerDao.deleteVisitorSticker(connection,visitor_sticker_id);
         console.log(deleteVisitorStickerResult);
         connection.release();
-        
-        return response(baseResponse.SUCCESS);  
     }
 };
 
 export const nqnaService = { //n문n답 관련 서비스
     createDefaultQuestion : async(user_id,question) =>{ // default 질문 생성
-        try{
-            
-            const insertDefaultQuestionParams =[user_id,question]; 
-        
-            const connection = await pool.getConnection(async conn => conn);
-            const createDefaultQuestionResult = await nqnaDao.insertDefaultQuestion(connection,insertDefaultQuestionParams);
-            console.log(createDefaultQuestionResult);
-            connection.release();
-            
-            return response(baseResponse.SUCCESS);
-        }
-        catch(error){
-            console.log(error);
-            return errResponse(baseResponse.DB_ERROR)
-        }
+
+        const insertDefaultQuestionParams =[user_id,question]; 
+    
+        const connection = await pool.getConnection(async conn => conn);
+        const createDefaultQuestionResult = await nqnaDao.insertDefaultQuestion(connection,insertDefaultQuestionParams);
+        console.log(createDefaultQuestionResult);
+        connection.release();
     },
 
     createVisitorQuestion : async(user_id,question,userIdFromJWT) =>{ // visitor 질문 생성
-        try{
-            const insertVisitorQuestionParams =[user_id,question,userIdFromJWT]; 
-            const connection = await pool.getConnection(async conn => conn);
-            const createVisitorQuestionResult = await nqnaDao.insertVisitorQuestion(connection,insertVisitorQuestionParams);
-            console.log(createVisitorQuestionResult);
-            connection.release();
-            return response(baseResponse.SUCCESS);
-        }
-        catch(error){
-            console.log(error);
-            return errResponse(baseResponse.DB_ERROR)
-        }
+
+        const insertVisitorQuestionParams =[user_id,question,userIdFromJWT]; 
+        const connection = await pool.getConnection(async conn => conn);
+        const createVisitorQuestionResult = await nqnaDao.insertVisitorQuestion(connection,insertVisitorQuestionParams);
+        console.log(createVisitorQuestionResult);
+        connection.release();
     },
 
     createAnswer : async(answer,nQnA_id) =>{ // 답변 등록 + 수정
 
-        try{
-            const insertAnswerParams =[answer,nQnA_id]; 
-        
-            const connection = await pool.getConnection(async conn => conn);
-            const createAnswerResult = await nqnaDao.insertAnswer(connection,insertAnswerParams);
-            console.log(createAnswerResult);
-            connection.release();
-            
-            return response(baseResponse.SUCCESS);
-        }
-        catch(error){
-            console.log(error);
-            return errResponse(baseResponse.DB_ERROR)
-        }
+        const insertAnswerParams =[answer,nQnA_id]; 
+    
+        const connection = await pool.getConnection(async conn => conn);
+        const createAnswerResult = await nqnaDao.insertAnswer(connection,insertAnswerParams);
+        console.log(createAnswerResult);
+        connection.release();
     },
 
     editnQuestionHidden : async(nQnA_id, question_hidden) =>{ // 질문 공개 여부 수정 
 
-        try{    
-            const updateQuestionHiddenParams = [question_hidden, nQnA_id];
+        const updateQuestionHiddenParams = [question_hidden, nQnA_id];
 
-            const connection = await pool.getConnection(async conn => conn);
-            const editQuestionHiddenResult = await nqnaDao.updateQuestionHidden(connection,updateQuestionHiddenParams);
-            console.log(editQuestionHiddenResult);
-            connection.release();
-            
-            return response(baseResponse.SUCCESS);
-        }
-        catch(error){
-            console.log(error);
-            return errResponse(baseResponse.DB_ERROR)
-        }
+        const connection = await pool.getConnection(async conn => conn);
+        const editQuestionHiddenResult = await nqnaDao.updateQuestionHidden(connection,updateQuestionHiddenParams);
+        console.log(editQuestionHiddenResult);
+        connection.release();
     },
 
     editnAnswerHidden : async(nQnA_id, answer_hidden) =>{ // 답변 공개 여부 수정 
 
-        try{    
-            const updateAnswerHiddenParams = [answer_hidden, nQnA_id];
+        const updateAnswerHiddenParams = [answer_hidden, nQnA_id];
 
-            const connection = await pool.getConnection(async conn => conn);
-            const editnAnswerHiddenResult = await nqnaDao.updateAnswerHidden(connection,updateAnswerHiddenParams);
-            console.log(editnAnswerHiddenResult);
-            connection.release();
-            
-            return response(baseResponse.SUCCESS);
-        }
-        catch(error){
-            console.log(error);
-            return errResponse(baseResponse.DB_ERROR)
-        }
+        const connection = await pool.getConnection(async conn => conn);
+        const editnAnswerHiddenResult = await nqnaDao.updateAnswerHidden(connection,updateAnswerHiddenParams);
+        console.log(editnAnswerHiddenResult);
+        connection.release();
     },
 
     deleteAnswer : async(nQnA_id) =>{ // 답변 삭제
+
         const connection = await pool.getConnection(async conn => conn);
         const deleteAnswerResult = await nqnaDao.deleteAnswer(connection,nQnA_id);
         console.log(deleteAnswerResult);
         connection.release();
-        
-        return response(baseResponse.SUCCESS);
-        
     },
 
     deleteQuestion : async(nQnA_id) =>{ // 질문 삭제
@@ -295,9 +254,6 @@ export const nqnaService = { //n문n답 관련 서비스
         const deleteQuestionResult = await nqnaDao.deleteQuestion(connection,nQnA_id);
         console.log(deleteQuestionResult);
         connection.release();
-        
-        return response(baseResponse.SUCCESS);
-        
     },
 };
 

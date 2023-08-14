@@ -92,7 +92,7 @@ export const stickerDao = {
     },
     createVisitorSticker : async(connection,params) =>{ //방문자 스티커 등록
         const insertVisitorStickerQuery = `
-            INSERT INTO visitor_sticker(host_id, visitor_id, face_id, nose_id, eyes_id, mouth_id, arm_id, foot_id, accessory_id,fianl_image_url)
+            INSERT INTO visitor_sticker(host_id, visitor_id, face_id, nose_id, eyes_id, mouth_id, arm_id, foot_id, accessory_id,final_image_url)
             VALUES(?,?,?,?,?,?,?,?,?,?);
         `
         const [insertVisitorStickerRow] = await connection.query(insertVisitorStickerQuery,params);
@@ -159,16 +159,25 @@ export const stickerDao = {
             FROM user_sticker
             WHERE user_id = ?;
         `
-        const [selectHostMessageRow] = await connection.query(selectHostMessageQuery, id);
-        return selectHostMessageRow;
+        const selectHostMessageRow = await connection.query(selectHostMessageQuery, id);
+        return selectHostMessageRow[0];
+    },
+    updateVisitorName: async(connection, params) =>{
+        const updateVisitorNameQuery = `
+            UPDATE visitor_sticker
+            SET name = ?
+            WHERE visitor_sticker_id = ?;
+        `
+        const [updateVisitorNameRow] = await connection.query(updateVisitorNameQuery, params);
+        return updateVisitorNameRow;
     }
 }
 
 export const nqnaDao = {
     insertDefaultQuestion : async(connection, insertDefaultQuestionParams) => { // default 질문 생성
         const postDefaultQuestionQuery = `
-            INSERT INTO nQnA(user_id, question, question_type) 
-            VALUES (?,?,"default");
+            INSERT INTO nQnA(user_id, question, question_type,question_created) 
+            VALUES (?,?,"default", now());
     
         `;
         const insertDefaultQuestionRow = await connection.query(postDefaultQuestionQuery, insertDefaultQuestionParams);
@@ -177,8 +186,8 @@ export const nqnaDao = {
 
     insertVisitorQuestion : async(connection, insertDefaultQuestionParams) => { // visitor 질문 생성
         const postVisitorQuestionQuery = `
-            INSERT INTO nQnA(user_id, question, question_type, visitor_id) 
-            VALUES (?,?,"visitor",?);
+            INSERT INTO nQnA(user_id, question, question_type, visitor_id,question_created) 
+            VALUES (?,?,"visitor",?,now());
         `
         const insertVisitorQuestionRow = await connection.query(postVisitorQuestionQuery, insertDefaultQuestionParams);
         return insertVisitorQuestionRow;
@@ -187,7 +196,7 @@ export const nqnaDao = {
     insertAnswer : async(connection, insertAnswerParams) => { // 답변 생성 + 수정
         const postAnswerQuery = `
             UPDATE nQnA 
-            SET answer= ?
+            SET answer= ?, answer_created = now()
             WHERE nQnA_id =?;
         `;
         const insertAnswerRow = await connection.query(postAnswerQuery, insertAnswerParams);

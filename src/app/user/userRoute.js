@@ -49,7 +49,7 @@ userRouter.post("/login/google", loginController.google); //구글 로그인 API
 /**
  * @swagger
  * paths:
- *  /auth/google/callback:
+ *  /login/google:
  *   post:
  *    summary : 로그인하여 토큰 발급
  *    tags: [로그인]
@@ -438,7 +438,7 @@ userRouter.patch(  "/:user_id/sticker/attach",  jwtMiddleware,  stickerControlle
  *                  type: string
  */
 
-userRouter.get(  "/:user_id/sticker/detail",  jwtMiddleware,  stickerController.getStickerDetails);
+userRouter.get(  "/:user_id/sticker/detail",  jwtMiddleware,  stickerController.getStickerDetails); //스티커 상세 정보
 /**
  * @swagger
  * paths:
@@ -672,7 +672,39 @@ userRouter.patch(  "/:user_id/sticker/visitor/name",  jwtMiddleware,  stickerCon
  *                  type: string
  */
 
-userRouter.get(  "/:user_id/sticker/message", jwtMiddleware, stickerController.getHostMessage);
+userRouter.get(  "/:user_id/sticker/message", jwtMiddleware, stickerController.getHostMessage); //호스트 메세지 조회
+/**
+ * @swagger
+ * paths:
+ *  /:user_id/sticker/message:
+ *   get:
+ *    summary : 호스트 메세지 조회
+ *    tags: [스티커]
+ *    description: 호스트 default/임시 저장/최종 메세지 조회
+ *    parameters:
+ *    - in: path
+ *      name: user_id
+ *      required: true
+ *      description: 호스트 ID
+ *      schema:
+ *        type: string
+ *    responses:
+ *      '200':
+ *        description: 스티커 닉네임 등록 성공
+ *        schema:
+ *          properties:
+ *              isSuccess:
+ *                  type: boolean
+ *              code:
+ *                  type: integer
+ *              message:
+ *                  type: string
+ *              result:
+ *                  type: object
+ *                  properties:
+ *                      message:
+ *                          type: string
+ */
 
 // nQnA 관련
 userRouter.post(  "/:user_id/nqna/question/default", jwtMiddleware, nqnaController.postDefaultQuestion); //default 질문 등록 API

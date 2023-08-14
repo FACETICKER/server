@@ -57,7 +57,7 @@ export const loginController = {
                     code: code,
                     client_id: process.env.GOOGLE_ID,
                     client_secret: process.env.GOOGLE_SECRET,
-                    redirect_uri: 'https://faceticker.site/app/auth/google/callback',
+                    redirect_uri: 'http://localhost:3000/oauth',
                     grant_type : 'authorization_code'
                 },
             });
@@ -120,15 +120,14 @@ export const stickerController = {
     },
     postSticker : async (req,res)=>{  //스티커 등록
         try{ 
-            const type = req.query.type; //type으로 Host, visitor 구분
             const userIdFromJWT = req.verifiedToken ? req.verifiedToken.user_id : null;
             const user_id = req.params.user_id;
             const {face, nose, eyes, mouth, arm, foot, accessory,final} = req.body;
-            if(type === 'host'){ //호스트 스티커 등록
+            if(userIdFromJWT == user_id){ //호스트 스티커 등록
                 const params = [userIdFromJWT, face, nose, eyes, mouth, arm, foot, accessory,final];
                 const insertResult = await stickerService.insertUserSticker(params);
                 return res.send(insertResult);
-            }else if(type === 'visitor'){ //방문자 스티커 등록
+            }else{ //방문자 스티커 등록
                 const params = [user_id, userIdFromJWT, face, nose, eyes, mouth, arm, foot, accessory,final];
                 const insertResult = await stickerService.insertVisitorSticker(params);
                 return res.send(insertResult);
@@ -168,6 +167,8 @@ export const stickerController = {
             if(userIdFromJWT==userid){
                 const result = await stickerProvider.retrieveStickerDeatils(userid);
                 return res.status(200).send(response(baseResponse.SUCCESS,result));
+            }else{
+                return res.send(response(baseResponse.USER_NOT_HOST));
             }
         }catch(err){
             return res.status(500).send(errResponse(baseResponse.SERVER_ERROR));
@@ -245,7 +246,8 @@ export const stickerController = {
             const visitorStickerId = req.query.id;
             const name = req.body.name;
             const result = await stickerService.updateVisitorName(visitorStickerId, name);
-            return res.status(200).send(result);
+            if(result === 'success') return res.status(200).send(response(baseResponse.SUCCESS));
+            else return res.send(response(baseResponse.DB_ERROR));
         }catch(err){
             return res.status(500).send(err);
         }
@@ -254,10 +256,11 @@ export const stickerController = {
         try{
             const userId = req.params.user_id;
             const visitorStickerId = req.query.id;
-            if(visitorStickerId == userId){
+            //if(visitorStickerId == userId){
                 const result = await stickerProvider.retrieveHostMessage(userId);
-                return res.send(reportErrorb(baseResponse.SUCCESS,result));
-            }
+                console.log(result);
+                return res.send(response(baseResponse.SUCCESS,result));
+            //}
         }catch(err){
             return res.status(500).send(err);
         }
