@@ -413,6 +413,12 @@ userRouter.patch("/:user_id/sticker/attach",  jwtMiddleware,  stickerController.
  *      description: 사용자 ID
  *      schema:
  *        type: integer
+ *    - in: query
+ *      name: visitor_sticker_id
+ *      required: true
+ *      description: 방문자 스티커 아이디
+ *      schema:
+ *        type: integer
  *    - in: body
  *      name: x
  *      required: true
