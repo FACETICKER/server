@@ -300,6 +300,7 @@ export const nqnaController = {
             if (userIdFromJWT == user_id) {     
                 if(User){
                     const postDefaultQuestionResult = await nqnaService.createDefaultQuestion(user_id,question);
+                    console.log(postDefaultQuestionResult);
                     return res.status(200).json(response(baseResponse.SUCCESS, postDefaultQuestionResult));
                 }
                 else{
