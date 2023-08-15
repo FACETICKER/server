@@ -197,18 +197,19 @@ export const nqnaService = { //n문n답 관련 서비스
         const insertDefaultQuestionParams =[user_id,question]; 
     
         const connection = await pool.getConnection(async conn => conn);
-        const createDefaultQuestionResult = await nqnaDao.insertDefaultQuestion(connection,insertDefaultQuestionParams);
-        console.log(createDefaultQuestionResult);
+        const [createDefaultQuestionResult] = await nqnaDao.insertDefaultQuestion(connection,insertDefaultQuestionParams);
         connection.release();
+        return(createDefaultQuestionResult.insertId);
     },
 
     createVisitorQuestion : async(user_id,question,userIdFromJWT) =>{ // visitor 질문 생성
 
         const insertVisitorQuestionParams =[user_id,question,userIdFromJWT]; 
         const connection = await pool.getConnection(async conn => conn);
-        const createVisitorQuestionResult = await nqnaDao.insertVisitorQuestion(connection,insertVisitorQuestionParams);
-        console.log(createVisitorQuestionResult);
+        const [createVisitorQuestionResult] = await nqnaDao.insertVisitorQuestion(connection,insertVisitorQuestionParams);
         connection.release();
+        return(createVisitorQuestionResult.insertId);
+
     },
 
     createAnswer : async(answer,nQnA_id) =>{ // 답변 등록 + 수정
