@@ -55,14 +55,12 @@ export const loginDao = {
 export const stickerDao = {
     selectVisitorStickerById : async(connection, visitor_sticker_id)=>{ //방문자 스티커 개별 조회
         const selectVisitorStickerIdQuery = `
-            SELECT final_image.image_url, visitor_sticker.name, visitor_sticker.message, visitor_sticker.visitor_id
+            SELECT visitor_id, name, message, final_image_url
             FROM visitor_sticker
-            INNER JOIN final_image
-            ON visitor_sticker.final_image_id = final_image.final_image_id
             WHERE visitor_sticker_id = ?;
-        `;
-        const [userRow] = await connection.query(selectVisitorStickerIdQuery, visitor_sticker_id);
-        return userRow;
+        `
+        const [selectVisitorStickerByIdRow] = await connection.query(selectVisitorStickerIdQuery, visitor_sticker_id);
+        return selectVisitorStickerByIdRow;
     },
     selectUserSticker : async(connection,user_id) =>{ //호스트 스티커 조회
         const selectUserStickerQuery = `

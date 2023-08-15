@@ -88,16 +88,15 @@ export const stickerController = {
      * GET: /:user_id/sticker/visitor/:visitor_sticker_id
      */
     getSticker : async(req,res)=>{ //호스트가 방문자의 기록(페이스티커, 캐릭터 네임, 메세지)을 상세 조회
-    
-        const {params:{visitor_sticker_id}} = req;
         try {
+            const userIdFromJWT = req.verifiedToken ? req.verifiedToken.user_id : null; // 토큰이 있을 때만 user_id를 가져오도록 수정
+            const userId = req.params.user_id;
+            //if(userIdFromJWT!=userId) return res.send(baseResponse.USER_NOT_HOST);
+            const visitor_sticker_id = req.params.visitor_sticker_id;
             const visitorStickerById = await stickerProvider.VisitorStickerById(visitor_sticker_id);
             if (visitorStickerById) {
                 return res.status(200).json(response(baseResponse.SUCCESS,visitorStickerById));
-            } else {
-                return res.status(404).json(errResponse(baseResponse.STICKER_STICKERID_NOT_EXIST));
-            }
-
+            } else return res.status(404).json(errResponse(baseResponse.STICKER_STICKERID_NOT_EXIST));
         } catch (error) {
             return res.status(500).json(errResponse(baseResponse.SERVER_ERROR));
         }

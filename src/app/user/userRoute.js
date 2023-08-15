@@ -185,7 +185,7 @@ userRouter.patch("/:user_id/sticker/message",  jwtMiddleware,  stickerController
  *              message:
  *                  type: string
  */
-userRouter.get("/:user_id/sticker/visitor/:visitor_sticker_id",  stickerController.getSticker); //방문자 기록 visitor_sticker_id로 상세 조회 API
+userRouter.get("/:user_id/sticker/visitor/:visitor_sticker_id",jwtMiddleware,stickerController.getSticker); //방문자 기록 visitor_sticker_id로 상세 조회 API
 /**
  * @swagger
  * paths:
@@ -195,6 +195,12 @@ userRouter.get("/:user_id/sticker/visitor/:visitor_sticker_id",  stickerControll
  *    tags: [메인 페이지]
  *    description: 방문자 기록 페이지에서 스티커 클릭 시 나타나는 스티커 정보 상세 조회
  *    parameters:
+ *    - in: path
+ *      name: user_id
+ *      required: true
+ *      description: 호스트 ID
+ *      schema:
+ *        type: integer
  *    - in: path
  *      name: visitor_sticker_id
  *      required: true
@@ -215,17 +221,14 @@ userRouter.get("/:user_id/sticker/visitor/:visitor_sticker_id",  stickerControll
  *              result:
  *                  type: object
  *                  properties:
- *                      visitorStickerResult:
- *                          type: object
- *                          properties:
- *                              image_url:
- *                                  type: integer
- *                              name:
- *                                  type: string
- *                              message:
- *                                  type: string
- *                              visitor_id:
- *                                  type: integer
+ *                      visitor_id:
+ *                          type: integer
+ *                      name:
+ *                          type: string
+ *                      message:
+ *                          type: string
+ *                      final_image_url:
+ *                          type: string
  */
 
 userRouter.get("/:user_id/sticker/all",  jwtMiddleware,  stickerController.getStickers); //방문자 기록 페이지 조회
