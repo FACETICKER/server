@@ -48,16 +48,10 @@ export const userProvider = {
 
 export const stickerProvider = { //스티커
     VisitorStickerById : async(visitor_sticker_id) =>{ //개별 스티커 조회
-        try{
         const connection = await pool.getConnection(async conn => conn);
         const visitorStickerResult = await stickerDao.selectVisitorStickerById(connection,visitor_sticker_id);
-    
         connection.release();
-    
         return visitorStickerResult[0];
-        }catch(err){
-            console.error(err);
-        }
     },
     StickerCollections : async(user_id) =>{ //회원 번호로 전체 스티커 조회
         try{
