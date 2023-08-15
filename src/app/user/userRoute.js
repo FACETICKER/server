@@ -570,7 +570,7 @@ userRouter.patch("/:user_id/sticker/patch",  jwtMiddleware,  stickerController.p
  *                  type: string
  */
 
-userRouter.delete("/:user_id/sticker/visitor/:visitor_sticker_id",jwtMiddleware,stickerController.deleteVisitorSticker); //방문자 스티커 삭제
+userRouter.delete("/:user_id/sticker/visitor/:visitor_sticker_id",stickerController.deleteVisitorSticker); //방문자 스티커 삭제
 /**
  * @swagger
  * paths:
