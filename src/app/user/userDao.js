@@ -75,7 +75,7 @@ export const stickerDao = {
     },
     selectVisitorStickers : async(connection, user_id) =>{ //모든 방문자 스티커 조회
         const selectVisitorStickersQuery = `
-            SELECT visitor_sticker_id, final_image_url, location_x, location_y, seen
+            SELECT visitor_sticker_id, name, final_image_url, location_x, location_y, seen
             FROM visitor_sticker
             WHERE host_id = ?;
         `
