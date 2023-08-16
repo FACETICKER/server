@@ -344,7 +344,7 @@ export const posterDao = {
     },
     selectImportant : async(connection, user_id)=>{
         const selectImportantQuery = `
-            SELECT important
+            SELECT q_important
             FROM user_poster
             WHERE user_id = ?;
         `

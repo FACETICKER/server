@@ -611,25 +611,24 @@ export const posterController = {
     },
     patchPoster : async(req,res)=>{
         try{
-                const userIdFromJWT = req.verifiedToken ? req.verifiedToken.user_id : null; // 토큰이 있을 때만 user_id를 가져오도록 수정
-                const userId = req.params.user_id;
-                if(userIdFromJWT == userId){
+            const userIdFromJWT = req.verifiedToken ? req.verifiedToken.user_id : null; // 토큰이 있을 때만 user_id를 가져오도록 수정
+            const userId = req.params.user_id;
+            if(userIdFromJWT == userId){
                 const {nickname, season, number, date, important} = req.body;
                 const oldImportant = await posterProvider.retrieveImportant(userId);
                 const formattedDate = dateFormat(date);
                 const params = [nickname, season, number, formattedDate, userId];
-                let result;
-                if(oldImportant != important){
-                    const random = chineseDict(important);
-                    const chineseParams = [random.chinese, random.pronunciation, random.meaning, userId];
-                    result = await posterService.updateChinese(chineseParams);
-                    if(result === 'fail') return res.send(response(baseResponse.DB_ERROR));
-                }
-                result = await posterService.updatePoster(params);
+            let result;
+            if(oldImportant != important){
+                const random = chineseDict(important);
+                const chineseParams = [random.chinese, random.pronunciation, random.meaning, userId];
+                result = await posterService.updateChinese(chineseParams);
                 if(result === 'fail') return res.send(response(baseResponse.DB_ERROR));
-
-                const updatePosterResult = await posterProvider.poster(userId); //수정된 poster 내용 전체 조회
-                return res.status(200).send(response(baseResponse.SUCCESS, updatePosterResult));
+            }
+            result = await posterService.updatePoster(params);
+            if(result === 'fail') return res.send(response(baseResponse.DB_ERROR));
+            const updatePosterResult = await posterProvider.poster(userId); //수정된 poster 내용 전체 조회
+            return res.status(200).send(response(baseResponse.SUCCESS, updatePosterResult));
             }
         }catch(err){
             return res.status(500).send(err);
