@@ -621,8 +621,7 @@ export const posterController = {
             if(userIdFromJWT == userId){
                 const {nickname, season, number, date, important} = req.body;
                 const oldImportant = await posterProvider.retrieveImportant(userId);
-                const formattedDate = dateFormat(date);
-                const params = [nickname, season, number, formattedDate, userId];
+                const params = [nickname, season, number, date, userId];
             let result;
             if(oldImportant != important){
                 const random = chineseDict(important);
