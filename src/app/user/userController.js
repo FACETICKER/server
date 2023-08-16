@@ -328,8 +328,13 @@ export const nqnaController = {
 
         const User = await userProvider.retrieveUser(user_id);
         if (User) {
-            const postVisitorQuestionResult = await nqnaService.createVisitorQuestion(user_id, question,userIdFromJWT);
-            return res.status(200).json(response(baseResponse.SUCCESS, postVisitorQuestionResult));
+            if(userIdFromJWT == user_id){
+                return res.status(400).json(errResponse(baseResponse.NQNA_HOST_SELF_QUESTION_ERROR));
+            }
+            else{
+                const postVisitorQuestionResult = await nqnaService.createVisitorQuestion(user_id, question,userIdFromJWT);
+                return res.status(200).json(response(baseResponse.SUCCESS, postVisitorQuestionResult));
+            }
         } 
         else {
             return res.status(404).json(errResponse(baseResponse.USER_USERID_NOT_EXIST));
