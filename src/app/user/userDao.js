@@ -202,7 +202,7 @@ export const nqnaDao = {
     insertDefaultQuestion : async(connection, insertDefaultQuestionParams) => { // default 질문 생성
         const postDefaultQuestionQuery = `
             INSERT INTO nQnA(user_id, question, question_type,question_created) 
-            VALUES (?,?,"default", now());
+            VALUES (?,?,"default", current_timestamp(6));
     
         `;
         const insertDefaultQuestionRow = await connection.query(postDefaultQuestionQuery, insertDefaultQuestionParams);
@@ -212,7 +212,7 @@ export const nqnaDao = {
     insertVisitorQuestion : async(connection, insertDefaultQuestionParams) => { // visitor 질문 생성
         const postVisitorQuestionQuery = `
             INSERT INTO nQnA(user_id, question, question_type, visitor_id,question_created) 
-            VALUES (?,?,"visitor",?,now());
+            VALUES (?,?,"visitor",?,current_timestamp(6));
         `
         const insertVisitorQuestionRow = await connection.query(postVisitorQuestionQuery, insertDefaultQuestionParams);
         return insertVisitorQuestionRow;
@@ -221,7 +221,7 @@ export const nqnaDao = {
     insertAnswer : async(connection, insertAnswerParams) => { // 답변 생성 + 수정
         const postAnswerQuery = `
             UPDATE nQnA 
-            SET answer= ?, answer_created = now()
+            SET answer= ?, answer_created = current_timestamp(6)
             WHERE nQnA_id =?;
         `;
         const insertAnswerRow = await connection.query(postAnswerQuery, insertAnswerParams);

@@ -32,7 +32,8 @@ const baseResponse = {
     NQNA_ANSWER_EMPTY : { "isSuccess": false, "code": 5003, "message":"답변을 입력해주세요" },
     NQNA_QUESTION_LENGTH : { "isSuccess": false, "code": 5004, "message":"질문은 100자리 미만으로 입력해주세요." },
     NQNA_ANSWER_LENGTH : { "isSuccess": false, "code": 5005, "message":"답변은 100자리 미만으로 입력해주세요." },
-    NQNA_VISITOR_QUESTION_NOT_EXIST : { "isSuccess": false, "code": 5000, "message": "방문자의 질문이 존재하지 않습니다." },
+    NQNA_VISITOR_QUESTION_NOT_EXIST : { "isSuccess": false, "code": 5006, "message": "방문자의 질문이 존재하지 않습니다." },
+    NQNA_HOST_SELF_QUESTION_ERROR : { "isSuccess": false, "code": 5007, "message": "호스트 스스로 질문을 남길 수 없습니다." },
 
 
 
