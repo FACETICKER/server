@@ -253,8 +253,8 @@ export const stickerController = {
     getHostMessage : async(req,res)=>{
         try{
             const userId = req.params.user_id;
-            const visitorStickerId = req.query.id;
-            if(visitorStickerId == userId){
+            const userIdFromJWT = req.verifiedToken ? req.verifiedToken.user_id : null; // 접속한 유저 ID
+            if(userIdFromJWT == userId){
                 const result = await stickerProvider.retrieveHostMessage(userId);
                 return res.send(response(baseResponse.SUCCESS,result));
             }
