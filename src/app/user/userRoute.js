@@ -1230,7 +1230,7 @@ userRouter.patch(  "/:user_id/poster/patch",  jwtMiddleware,  posterController.p
 /**
  * @swagger
  * paths:
- *  /:user_id/poster/put:
+ *  /:user_id/poster/patch:
  *   patch:
  *    summary : 포스터 정보 수정
  *    tags: [포스터]

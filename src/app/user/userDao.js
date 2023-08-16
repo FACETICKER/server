@@ -186,7 +186,16 @@ export const stickerDao = {
         `
         const [selectVisitorMessageRow] = await connection.query(selectVisitorMessageQuery, id);
         return selectVisitorMessageRow;
-    }
+    },
+
+    deleteVisitorSticker : async(connection, visitor_sticker_id)=>{
+        const deleteVisitorStickerQuery = `
+            DELETE FROM visitor_sticker
+            WHERE visitor_sticker_id =?;
+        `
+        const [deleteVisitorStickerRow] = await connection.query(deleteVisitorStickerQuery, visitor_sticker_id);
+        return deleteVisitorStickerRow;
+    },
 }
 
 export const nqnaDao = {

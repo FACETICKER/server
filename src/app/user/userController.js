@@ -218,7 +218,7 @@ export const stickerController = {
     */
     deleteVisitorSticker : async(req,res) =>{
         const userIdFromJWT = req.verifiedToken ? req.verifiedToken.user_id : null; // 접속한 유저 ID
-        const {user_id, visitor_sticker_id} = req.params.user_id; // 호스트 ID
+        const {user_id, visitor_sticker_id} = req.params; // 호스트 ID
 
         if(userIdFromJWT == user_id){ // 접속한 유저가 호스트라면
             const deleteVisitorStickerResult = await stickerService.deleteVisitorSticker(visitor_sticker_id);
@@ -300,6 +300,7 @@ export const nqnaController = {
             if (userIdFromJWT == user_id) {     
                 if(User){
                     const postDefaultQuestionResult = await nqnaService.createDefaultQuestion(user_id,question);
+                    console.log(postDefaultQuestionResult);
                     return res.status(200).json(response(baseResponse.SUCCESS, postDefaultQuestionResult));
                 }
                 else{
