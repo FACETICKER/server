@@ -202,8 +202,7 @@ export const stickerController = {
                 const params = [face,eyes,nose,mouth,arm,foot,accessory,final, userId];
                 const result = await stickerService.updateUserSticker(params);
                 if(result === 'success'){
-                    const putStickerResult = await stickerProvider.userSticker(userId)
-                    return res.status(200).send(response(baseResponse.SUCCESS, putStickerResult));
+                    return res.status(200).send(response(baseResponse.SUCCESS));
                 }
                 else return res.status(400).send(response(baseResponse.DB_ERROR));
             }
