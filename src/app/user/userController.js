@@ -604,7 +604,8 @@ export const posterController = {
             const userId = req.params.user_id;
             if(userId == userIdFromJWT){
                 const {nickname, season, number, date, important} = req.body;
-                const params = [userIdFromJWT, nickname,season,number,date,important,random.chinese, random.pronunciation, random.meaning];
+                const random = chineseDict(important);
+                const params = [userId, nickname,season,number,date,important,random.chinese, random.pronunciation, random.meaning];
                 const result = await posterService.insertPoster(params);
                 return res.send(result);
             }else return res.send(response(baseResponse.USER_NOT_HOST));
