@@ -604,7 +604,6 @@ export const posterController = {
             const userId = req.params.user_id;
             if(userId == userIdFromJWT){
                 const {nickname, season, number, date, important} = req.body;
-                const formattedDate = dateFormat(date);
                 const params = [userIdFromJWT, nickname,season,number,date,important,random.chinese, random.pronunciation, random.meaning];
                 const result = await posterService.insertPoster(params);
                 return res.send(result);
