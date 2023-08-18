@@ -210,21 +210,22 @@ export const stickerController = {
             return res.status(500).send(err);
         }
     },
-
     /**
     * API Name: 방문자 스티커 삭제
     * DELETE: /{user_id}/sticker/visitor/{visitor_sticker_id}
     */
     deleteVisitorSticker : async(req,res) =>{
-        const userIdFromJWT = req.verifiedToken ? req.verifiedToken.user_id : null; // 접속한 유저 ID
-        const {user_id, visitor_sticker_id} = req.params; // 호스트 ID
-
-        if(userIdFromJWT == user_id){ // 접속한 유저가 호스트라면
-            const deleteVisitorStickerResult = await stickerService.deleteVisitorSticker(visitor_sticker_id);
-            return res.status(200).json(response(baseResponse.SUCCESS, deleteVisitorStickerResult));
-        }
-        else{
-            return res.status(400).json(errResponse(baseResponse.USER_USERID_USERIDFROMJWT_NOT_MATCH));
+        try{
+            const userIdFromJWT = req.verifiedToken ? req.verifiedToken.user_id : null; // 접속한 유저 ID
+            const {user_id, visitor_sticker_id} = req.params; // 호스트 ID
+            if(userIdFromJWT == user_id){ // 접속한 유저가 호스트라면
+                const deleteVisitorStickerResult = await stickerService.deleteVisitorSticker(visitor_sticker_id);
+                if(deleteVisitorStickerResult == 'success'){
+                    return res.status(200).json(response(baseResponse.SUCCESS));
+                }else return res.send(response(baseResponse.DB_ERROR));
+            }else return res.status(400).json(errResponse(baseResponse.USER_NOT_HOST));
+        }catch(err){
+            return res.status(500).send(err);
         }
     },
 
@@ -279,7 +280,22 @@ export const stickerController = {
         }catch(err){
             return res.status(500).send(err);
         }
-    } 
+    },
+    postStickerSeen : async(req,res)=>{
+        try{
+            const userIdFromJWT = req.verifiedToken ? req.verifiedToken.user_id : null; // 접속한 유저 ID
+            const userId = req.params.user_id;
+            const visitorStickerId = req.query.id;
+            //if(userId == userIdFromJWT){
+                const result = await stickerService.updateStickerSeen(visitorStickerId);
+                if(result == 'success'){
+                    return res.send(response(baseResponse.SUCCESS));
+                }else return res.send(response(baseResponse.DB_ERROR));
+            //}
+        }catch(err){
+            return res.status(500).send(err);
+        }
+    }
 
 };
 

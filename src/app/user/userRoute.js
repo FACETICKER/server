@@ -143,7 +143,7 @@ userRouter.get("/:user_id", jwtMiddleware, mainController.getAll); //메인 페�
  *                                      type: integer
  *                                  image_url:
  *                                      type: string
- *                      hostnewSticer:
+ *                      hostnewSticker:
  *                          type: array
  *                          items:
  *                              type: object
@@ -782,6 +782,42 @@ userRouter.get("/sticker/visitor/message",jwtMiddleware,stickerController.getVis
  *                      message:
  *                          type: string
  */
+
+userRouter.post('/:user_id/visitor/sticker/seen',jwtMiddleware,stickerController.postStickerSeen); //스티커 읽음 처리
+/**
+ * @swagger
+ * paths:
+ *  /:user_id/visitor/sticker/seen:
+ *   get:
+ *    summary : 스티커 읽음 처리
+ *    tags: [스티커]
+ *    description: 스티커 읽음
+ *    parameters:
+ *    - in: path
+ *      name: user_id
+ *      required: true
+ *      description: 사용자 ID
+ *      schema:
+ *        type: integer
+ *    - in: query
+ *      name: id
+ *      required: true
+ *      description: 방문자 스티커 아이디
+ *      schema:
+ *        type: integer
+ *    responses:
+ *      '200':
+ *        description: 성공
+ *        schema:
+ *          properties:
+ *              isSuccess:
+ *                  type: boolean
+ *              code:
+ *                  type: integer
+ *              message:
+ *                  type: string
+ */
+
 
 // nQnA 관련
 userRouter.post(  "/:user_id/nqna/question/default", jwtMiddleware, nqnaController.postDefaultQuestion); //default 질문 등록 API

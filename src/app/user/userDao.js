@@ -196,6 +196,16 @@ export const stickerDao = {
         const [deleteVisitorStickerRow] = await connection.query(deleteVisitorStickerQuery, visitor_sticker_id);
         return deleteVisitorStickerRow;
     },
+
+    updateSeen : async(connection, visitorStickerId)=>{
+        const updateSeenQuery = `
+            UPDATE visitor_sticker
+            SET seen = TRUE
+            WHERE visitor_sticker_id = ?;
+        `
+        const [updateSeenRow] = await connection.query(updateSeenQuery, visitorStickerId);
+        return updateSeenRow;
+    }
 }
 
 export const nqnaDao = {
