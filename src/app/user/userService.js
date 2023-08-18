@@ -179,15 +179,26 @@ export const stickerService = { //스티커 관련 서비스
             return "success";
         }
         else return "fail";
-
     },
 
     deleteVisitorSticker : async(visitor_sticker_id) =>{ // 방문자 스티커 삭제
-
         const connection = await pool.getConnection(async conn => conn);
         const deleteVisitorStickerResult = await stickerDao.deleteVisitorSticker(connection,visitor_sticker_id);
-        console.log(deleteVisitorStickerResult);
         connection.release();
+        if(deleteVisitorStickerResult.affectedRows === 1){
+            return "success";
+        }
+        else return "fail";
+    },
+    updateStickerSeen : async(visitorStickerId) =>{
+        const connection = await pool.getConnection(async conn => conn);
+        const updateResult = await stickerDao.updateSeen(connection,visitorStickerId);
+        connection.release();
+        if(updateResult.affectedRows === 1){
+            return "success";
+        }
+        else return "fail";
+
     }
 };
 
