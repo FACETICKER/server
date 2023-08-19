@@ -286,12 +286,12 @@ export const stickerController = {
             const userIdFromJWT = req.verifiedToken ? req.verifiedToken.user_id : null; // 접속한 유저 ID
             const userId = req.params.user_id;
             const visitorStickerId = req.query.id;
-            //if(userId == userIdFromJWT){
+            if(userId == userIdFromJWT){
                 const result = await stickerService.updateStickerSeen(visitorStickerId);
                 if(result == 'success'){
                     return res.send(response(baseResponse.SUCCESS));
                 }else return res.send(response(baseResponse.DB_ERROR));
-            //}
+            }
         }catch(err){
             return res.status(500).send(err);
         }
