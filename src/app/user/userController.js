@@ -21,7 +21,7 @@ export const loginController = {
                 data: ({
                     grant_type: 'authorization_code',
                     client_id: process.env.KAKAO_ID,
-                    redirect_uri: 'http://localhost:3000/oauth',
+                    redirect_uri: 'http://faceticker.site/oauth',
                     code: code,
                 })
             });
@@ -57,7 +57,7 @@ export const loginController = {
                     code: code,
                     client_id: process.env.GOOGLE_ID,
                     client_secret: process.env.GOOGLE_SECRET,
-                    redirect_uri: 'http://localhost:3000/auth',
+                    redirect_uri: 'https://faceticker.site/auth',
                     grant_type : 'authorization_code'
                 },
             });
