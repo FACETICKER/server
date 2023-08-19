@@ -788,7 +788,7 @@ userRouter.post('/:user_id/visitor/sticker/seen',jwtMiddleware,stickerController
  * @swagger
  * paths:
  *  /:user_id/visitor/sticker/seen:
- *   get:
+ *   post:
  *    summary : 스티커 읽음 처리
  *    tags: [스티커]
  *    description: 스티커 읽음
