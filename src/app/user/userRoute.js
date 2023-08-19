@@ -139,8 +139,12 @@ userRouter.get("/:user_id", jwtMiddleware, mainController.getAll); //메인 페�
  *                          items:
  *                              type: object
  *                              properties:
+ *                                  user_sticker_id:
+ *                                      type: integer
  *                                  user_id:
  *                                      type: integer
+ *                                  message:
+ *                                      type: string
  *                                  image_url:
  *                                      type: string
  *                      hostnewSticker:
