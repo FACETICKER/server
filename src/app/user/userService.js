@@ -272,26 +272,26 @@ export const nqnaService = { //n문n답 관련 서비스
 export const mainpageService = async(userIdFromJWT,user_id) =>{
     const check = await userProvider.retrieveUser(user_id);
     if(!check) return response(baseResponse.USER_USERID_NOT_EXIST);
-    const poster = await posterProvider.poster(user_id);
-    const sticker = await stickerProvider.userSticker(user_id);
-    const newSticker = await stickerProvider.newStickers(user_id);
-    const newQuestion = await nqnaProvider.retrieveEmptyAnswer(user_id);
-    if(userIdFromJWT == user_id){ //사용자가 본인 페이지에 들어갔을 경우
-        const result = {
-            poster:poster,
-            sticker:sticker,
-            newSticker:newSticker,
-            newQuestion: newQuestion,
-        };
-        return response(baseResponse.HOST,result); 
-    }else{ //방문자가 다른 사용자 페이지에 방문했을 경우
-        const result = {
-            userId: userIdFromJWT, //본인 프로필으로 돌아갈 경우를 위해
-            hostPoster: poster,
-            hostSticker:sticker,
-            hostnewSticer : newSticker,
-            howtnewQuestion : newQuestion
-        };
+        const poster = await posterProvider.poster(user_id);
+        const sticker = await stickerProvider.userSticker(user_id);
+        const newSticker = await stickerProvider.newStickers(user_id);
+        const newQuestion = await nqnaProvider.retrieveEmptyAnswer(user_id);
+        if(userIdFromJWT == user_id){ //사용자가 본인 페이지에 들어갔을 경우
+            const result = {
+                poster:poster,
+                sticker:sticker,
+                newSticker:newSticker,
+                newQuestion: newQuestion,
+            };
+            return response(baseResponse.HOST,result); 
+        }else{ //방문자가 다른 사용자 페이지에 방문했을 경우
+            const result = {
+                userId: userIdFromJWT, //본인 프로필으로 돌아갈 경우를 위해
+                hostPoster: poster,
+                hostSticker:sticker,
+                hostnewSticer : newSticker,
+                howtnewQuestion : newQuestion
+            };
         return response(baseResponse.VISITOR,result);
     }
 };
