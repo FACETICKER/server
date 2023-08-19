@@ -291,7 +291,7 @@ export const stickerController = {
                 if(result == 'success'){
                     return res.send(response(baseResponse.SUCCESS));
                 }else return res.send(response(baseResponse.DB_ERROR));
-            }
+            }else return res.send(baseResponse.USER_NOT_HOST);
         }catch(err){
             return res.status(500).send(err);
         }
