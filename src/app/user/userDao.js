@@ -205,6 +205,15 @@ export const stickerDao = {
         `
         const [updateSeenRow] = await connection.query(updateSeenQuery, visitorStickerId);
         return updateSeenRow;
+    },
+    insertUserImage : async(connection, params) =>{
+        const insertUserImageQuery = `
+            UPDATE user_sticker
+            SET final_image_url = ?
+            WHERE user_sticker_id = ?;
+        `
+        const [insertUserImageRow] = await connection.query(insertUserImageQuery, params);
+        return insertUserImageRow;
     }
 }
 
