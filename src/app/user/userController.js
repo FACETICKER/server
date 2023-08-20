@@ -44,6 +44,7 @@ export const loginController = {
             return res.status(500).json({ error: 'Failed to process Kakao callback' });
         }
     },
+    
     google: async(req,res)=>{ //구글
         const code = req.query.code; //구글 인가 코드
         try{
