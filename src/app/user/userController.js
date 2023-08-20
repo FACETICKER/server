@@ -44,7 +44,7 @@ export const loginController = {
             return res.status(500).json({ error: 'Failed to process Kakao callback' });
         }
     },
-    
+
     google: async(req,res)=>{ //구글
         const code = req.query.code; //구글 인가 코드
         try{
@@ -123,9 +123,9 @@ export const stickerController = {
             const userIdFromJWT = req.verifiedToken ? req.verifiedToken.user_id : null;
             const user_id = req.params.user_id;
             const {face, nose, eyes, mouth, arm, foot, accessory,final} = req.body;
-            const imageUrl = await imageUpload(user_id,final);
+            //const imageUrl = await imageUpload(user_id,final);
             if(userIdFromJWT == user_id){ //호스트 스티커 등록
-                const params = [userIdFromJWT, face, nose, eyes, mouth, arm, foot, accessory,imageUrl];
+                const params = [userIdFromJWT, face, nose, eyes, mouth, arm, foot, accessory,final];
                 const insertResult = await stickerService.insertUserSticker(params);
                 return res.send(insertResult);
             }else{ //방문자 스티커 등록
