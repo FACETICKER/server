@@ -127,15 +127,15 @@ export const stickerController = {
                 const params = [user_id, face, nose, eyes, mouth, arm, foot, accessory];
                 const insertResult = await stickerService.insertUserSticker(params);
                 const imageUrl = await imageUpload(user_id,insertResult,final);
-                const imageResult = await stickerService.insertUserImage(imageResult,imageUrl);
-                if(imageResult == "succes") return res.send(response(baseResponse.SUCCESS));
+                const imageResult = await stickerService.insertUserImage(insertResult,imageUrl);
+                if(imageResult == "success") return res.send(response(baseResponse.SUCCESS));
                 else return res.send(response(baseResponse.DB_ERROR));
             }else{ //방문자 스티커 등록
                 const params = [user_id, userIdFromJWT, face, nose, eyes, mouth, arm, foot, accessory];
                 const insertResult = await stickerService.insertVisitorSticker(params);
                 const imageUrl = await imageUpload(user_id,insertResult,final);
-                const imageResult = await stickerService.insertVisitorImage(imageResult,imageUrl);
-                if(imageResult == "succes") return res.send(response(baseResponse.SUCCESS,{"visitor_sticker_id":insertResult}));
+                const imageResult = await stickerService.insertVisitorImage(insertResult,imageUrl);
+                if(imageResult == "success") return res.send(response(baseResponse.SUCCESS,{"visitor_sticker_id":insertResult}));
                 else return res.send(response(baseResponse.DB_ERROR));
             }
         }catch(err){
