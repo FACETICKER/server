@@ -2,7 +2,7 @@ import axios from "axios";
 import dotenv from "dotenv";
 import { response,errResponse } from "../../../config/response.js";
 import baseResponse from "../../../config/baseResponse.js";
-import {loginService, stickerService, nqnaService, mainpageService, posterService, chineseDict, dateFormat, imageUpload} from "./userService.js";
+import {loginService, stickerService, nqnaService, mainpageService, posterService, chineseDict, dateFormat, imageUpload, imageDelete} from "./userService.js";
 import {stickerProvider, nqnaProvider, userProvider, posterProvider} from "./userProvider.js";
 import e from "express";
 dotenv.config();
@@ -21,7 +21,7 @@ export const loginController = {
                 data: ({
                     grant_type: 'authorization_code',
                     client_id: process.env.KAKAO_ID,
-                    redirect_uri: 'http://faceticker.site/oauth',
+                    redirect_uri: 'http://localhost:3000/oauth',
                     code: code,
                 })
             });
@@ -58,7 +58,7 @@ export const loginController = {
                     code: code,
                     client_id: process.env.GOOGLE_ID,
                     client_secret: process.env.GOOGLE_SECRET,
-                    redirect_uri: 'https://faceticker.site/auth',
+                    redirect_uri: 'https://localhost:3000/auth',
                     grant_type : 'authorization_code'
                 },
             });
@@ -123,11 +123,13 @@ export const stickerController = {
             const userIdFromJWT = req.verifiedToken ? req.verifiedToken.user_id : null;
             const user_id = req.params.user_id;
             const {face, nose, eyes, mouth, arm, foot, accessory,final} = req.body;
-            //const imageUrl = await imageUpload(user_id,final);
             if(userIdFromJWT == user_id){ //호스트 스티커 등록
-                const params = [userIdFromJWT, face, nose, eyes, mouth, arm, foot, accessory,final];
+                const params = [user_id, face, nose, eyes, mouth, arm, foot, accessory];
                 const insertResult = await stickerService.insertUserSticker(params);
-                return res.send(insertResult);
+                const imageUrl = await imageUpload(user_id,insertResult,final);
+                const imageResult = await stickerService.insertUserImage(imageResult,imageUrl);
+                if(imageResult == "succes") return res.send(response(baseResponse.SUCCESS));
+                else return res.send(response(baseResponse.DB_ERROR));
             }else{ //방문자 스티커 등록
                 const params = [user_id, userIdFromJWT, face, nose, eyes, mouth, arm, foot, accessory,imageUrl];
                 const insertResult = await stickerService.insertVisitorSticker(params);
@@ -200,14 +202,15 @@ export const stickerController = {
             const userIdFromJWT = req.verifiedToken ? req.verifiedToken.user_id : null;
             const userId = req.params.user_id;
             const {face,eyes,nose,mouth,arm,foot,accessory,final} = req.body;
-            if(userId == userIdFromJWT){
-                const params = [face,eyes,nose,mouth,arm,foot,accessory,final, userId];
+            const imageUrl = await imageUpload(userId,final);
+            //if(userId == userIdFromJWT){
+                const params = [face,eyes,nose,mouth,arm,foot,accessory,imageUrl, userId];
                 const result = await stickerService.updateUserSticker(params);
                 if(result === 'success'){
                     return res.status(200).send(response(baseResponse.SUCCESS));
                 }
                 else return res.status(400).send(response(baseResponse.DB_ERROR));
-            }
+            //}
         }catch(err){
             return res.status(500).send(err);
         }
@@ -305,6 +308,15 @@ export const stickerController = {
             const base64 = req.body.image;
             const result = await imageUpload(userId, base64);
             return res.send(response(baseResponse.SUCCESS,result));
+        }catch(err){
+            return res.send(err);
+        }
+    },
+    imageDelete: async(req,res)=>{
+        try{
+            const userId = req.params.user_id;
+            const result = await imageDelete(userId);
+            return res.send(response(baseResponse.SUCCESS, result));
         }catch(err){
             return res.send(err);
         }

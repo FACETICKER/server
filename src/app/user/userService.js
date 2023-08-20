@@ -99,7 +99,7 @@ export const stickerService = { //스티커 관련 서비스
             const insertUserStickerResult = await stickerDao.createUserSticker(connection,params);
             connection.release();
             if(insertUserStickerResult.affectedRows === 1){
-                return response(baseResponse.SUCCESS);
+                return insertUserStickerResult.insertId;
             }else{
                 return response(baseResponse.DB_ERROR);
             }
@@ -200,6 +200,15 @@ export const stickerService = { //스티커 관련 서비스
         }
         else return "fail";
 
+    },
+    insertUserImage : async(stickerId, imageUrl) =>{
+        const connection = await pool.getConnection(async conn => conn);
+        const insertResult = await stickerDao.insertUserImage(connection,[imageUrl,stickerId]);
+        connection.release();
+        if(updateResult.affectedRows === 1){
+            return "success";
+        }
+        else return "fail";
     }
 };
 
@@ -404,18 +413,17 @@ export const chineseDict = (important) =>{ //사자성어 생성
 // }
 
 
-// export const imageUpload = async (userId,final) =>{
+// export const imageUpload = async (userId,stickerId,final) =>{
 //     const aws_access_key = process.env.AWS_ACCESS_KEY;
 //     const aws_secret_access_key = process.env.AWS_SECRET_ACCESS_KEY;
 
 //     const bucketName= 'faceticker';
-//     const objectKey = `${userId}.png`;
+//     const objectKey = `${userId}-${stickerId}.png`;
 //     const base64EncodedData = `${final}`;
 //     const s3 = new AWS.S3({
 //         accessKeyId: aws_access_key,
 //         secretAccessKey: aws_secret_access_key
 //     });
-
 //     const uploadToS3 = async (base64Data, bucket, key) => {
 //         const params = {
 //             Bucket: bucket,
@@ -434,5 +442,33 @@ export const chineseDict = (important) =>{ //사자성어 생성
 //     };
 
 //     const data = await uploadToS3(base64EncodedData, bucketName, objectKey);
+//     return data;
+// };
+
+
+// export const imageDelete = async (userId,final) =>{
+//     const aws_access_key = process.env.AWS_ACCESS_KEY;
+//     const aws_secret_access_key = process.env.AWS_SECRET_ACCESS_KEY;
+
+//     const bucketName= 'faceticker';
+//     const objectKey = `${userId}.png`;
+//     const s3 = new AWS.S3({
+//         accessKeyId: aws_access_key,
+//         secretAccessKey: aws_secret_access_key
+//     });
+//     const deleteFromS3 = async (bucket, key) => {
+//         const params = {
+//             Bucket: bucket,
+//             Key: key
+//         };
+//         try {
+//             const data = await s3.deleteObject(params).promise();
+//             console.log("Object deleted successfully:", data);
+//         } catch (err) {
+//             console.error("Error deleting object:", err);
+//         }
+//     };
+
+//     const data = deleteFromS3(bucketName,objectKey);
 //     return data;
 // };
