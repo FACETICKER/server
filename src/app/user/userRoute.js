@@ -1325,4 +1325,9 @@ userRouter.patch(  "/:user_id/poster/patch",  jwtMiddleware,  posterController.p
  *                  type: string
  */
 
+
+
+userRouter.post("/:user_id/image",stickerController.image);
+
+
 export default userRouter;

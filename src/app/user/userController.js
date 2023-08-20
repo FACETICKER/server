@@ -2,7 +2,7 @@ import axios from "axios";
 import dotenv from "dotenv";
 import { response,errResponse } from "../../../config/response.js";
 import baseResponse from "../../../config/baseResponse.js";
-import {loginService, stickerService, nqnaService, mainpageService, posterService, chineseDict, dateFormat} from "./userService.js";
+import {loginService, stickerService, nqnaService, mainpageService, posterService, chineseDict, dateFormat, imageUpload} from "./userService.js";
 import {stickerProvider, nqnaProvider, userProvider, posterProvider} from "./userProvider.js";
 import e from "express";
 dotenv.config();
@@ -294,6 +294,17 @@ export const stickerController = {
             }else return res.send(baseResponse.USER_NOT_HOST);
         }catch(err){
             return res.status(500).send(err);
+        }
+    },
+
+    image: async(req,res)=>{
+        try{
+            const userId = req.params.user_id;
+            const base64 = req.body.image;
+            const result = await imageUpload(userId, base64);
+            return res.send(response(baseResponse.SUCCESS,result));
+        }catch(err){
+            return res.send(err);
         }
     }
 
