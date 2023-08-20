@@ -21,7 +21,7 @@ export const loginController = {
                 data: ({
                     grant_type: 'authorization_code',
                     client_id: process.env.KAKAO_ID,
-                    redirect_uri: 'http://faceticker.site/oauth',
+                    redirect_uri: 'http://localhost:3000/oauth',
                     code: code,
                 })
             });
@@ -58,7 +58,7 @@ export const loginController = {
                     code: code,
                     client_id: process.env.GOOGLE_ID,
                     client_secret: process.env.GOOGLE_SECRET,
-                    redirect_uri: 'https://faceticker.site/auth',
+                    redirect_uri: 'https://localhost:3000/auth',
                     grant_type : 'authorization_code'
                 },
             });
@@ -126,7 +126,7 @@ export const stickerController = {
             if(userIdFromJWT == user_id){ //호스트 스티커 등록
                 const params = [user_id, face, nose, eyes, mouth, arm, foot, accessory];
                 const insertResult = await stickerService.insertUserSticker(params);
-                const imageUrl = await imageUpload(user_id,insertResult,final);
+                const imageUrl = await imageUpload(user_id,'host',final);
                 const imageResult = await stickerService.insertUserImage(insertResult,imageUrl);
                 if(imageResult == "success") return res.send(response(baseResponse.SUCCESS));
                 else return res.send(response(baseResponse.DB_ERROR));
