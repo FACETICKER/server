@@ -122,12 +122,13 @@ export const stickerController = {
             const userIdFromJWT = req.verifiedToken ? req.verifiedToken.user_id : null;
             const user_id = req.params.user_id;
             const {face, nose, eyes, mouth, arm, foot, accessory,final} = req.body;
+            const imageUrl = await imageUpload(user_id,final);
             if(userIdFromJWT == user_id){ //호스트 스티커 등록
-                const params = [userIdFromJWT, face, nose, eyes, mouth, arm, foot, accessory,final];
+                const params = [userIdFromJWT, face, nose, eyes, mouth, arm, foot, accessory,imageUrl];
                 const insertResult = await stickerService.insertUserSticker(params);
                 return res.send(insertResult);
             }else{ //방문자 스티커 등록
-                const params = [user_id, userIdFromJWT, face, nose, eyes, mouth, arm, foot, accessory,final];
+                const params = [user_id, userIdFromJWT, face, nose, eyes, mouth, arm, foot, accessory,imageUrl];
                 const insertResult = await stickerService.insertVisitorSticker(params);
                 return res.send(insertResult);
             }
