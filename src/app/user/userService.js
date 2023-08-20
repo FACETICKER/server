@@ -6,6 +6,7 @@ import pool from "../../../config/database.js";
 import jwt from "jsonwebtoken";
 import dotenv from "dotenv";
 import { nqnaController } from "./userController.js";
+import AWS from "aws-sdk";
 dotenv.config();
 
 export const loginService = { //로그인 서비스
@@ -401,3 +402,37 @@ export const chineseDict = (important) =>{ //사자성어 생성
 //     const formattedDate = `${year}-${monthMap[month]}-${day}`;
 //     return formattedDate;
 // }
+
+
+export const imageUpload = async (userId,final) =>{
+    const aws_access_key = process.env.AWS_ACCESS_KEY;
+    const aws_secret_access_key = process.env.AWS_SECRET_ACCESS_KEY;
+
+    const bucketName= 'faceticker';
+    const objectKey = `${userId}.png`;
+    const base64EncodedData = `${final}`;
+    const s3 = new AWS.S3({
+        accessKeyId: aws_access_key,
+        secretAccessKey: aws_secret_access_key
+    });
+
+    const uploadToS3 = async (base64Data, bucket, key) => {
+        const params = {
+            Bucket: bucket,
+            Key: key,
+            Body: Buffer.from(base64Data.split(',')[1], 'base64'),
+            ContentType: 'image/png'
+        };
+        try {
+            const data = await s3.upload(params).promise();
+            console.log("Upload Successful");
+            console.log("Object URL:", data.Location);
+            return data.Location;
+        } catch (err) {
+            console.error("Error uploading to S3:", err);
+        }
+    };
+
+    const data = await uploadToS3(base64EncodedData, bucketName, objectKey);
+    return data;
+};
