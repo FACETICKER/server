@@ -82,16 +82,16 @@ export const stickerDao = {
     },
     createUserSticker : async(connection, params) =>{ //호스트 스티커 등록
         const insertUserStickerQuery = `
-            INSERT INTO user_sticker(user_id, face_id, nose_id, eyes_id, mouth_id, arm_id, foot_id, accessory_id, final_image_url)
-            VALUES(?,?,?,?,?,?,?,?,?);
+            INSERT INTO user_sticker(user_id, face_id, nose_id, eyes_id, mouth_id, arm_id, foot_id, accessory_id)
+            VALUES(?,?,?,?,?,?,?,?);
         `
         const [insertUserStickerRow] = await connection.query(insertUserStickerQuery,params);
         return insertUserStickerRow;
     },
     createVisitorSticker : async(connection,params) =>{ //방문자 스티커 등록
         const insertVisitorStickerQuery = `
-            INSERT INTO visitor_sticker(host_id, visitor_id, face_id, nose_id, eyes_id, mouth_id, arm_id, foot_id, accessory_id,final_image_url)
-            VALUES(?,?,?,?,?,?,?,?,?,?);
+            INSERT INTO visitor_sticker(host_id, visitor_id, face_id, nose_id, eyes_id, mouth_id, arm_id, foot_id, accessory_id)
+            VALUES(?,?,?,?,?,?,?,?,?);
         `
         const [insertVisitorStickerRow] = await connection.query(insertVisitorStickerQuery,params);
         return insertVisitorStickerRow;
@@ -211,6 +211,15 @@ export const stickerDao = {
             UPDATE user_sticker
             SET final_image_url = ?
             WHERE user_sticker_id = ?;
+        `
+        const [insertUserImageRow] = await connection.query(insertUserImageQuery, params);
+        return insertUserImageRow;
+    },
+    insertVisitorImage : async(connection, params) =>{
+        const insertUserImageQuery = `
+            UPDATE visitor_sticker
+            SET final_image_url = ?
+            WHERE visitor_sticker_id = ?;
         `
         const [insertUserImageRow] = await connection.query(insertUserImageQuery, params);
         return insertUserImageRow;

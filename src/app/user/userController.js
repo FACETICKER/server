@@ -131,9 +131,12 @@ export const stickerController = {
                 if(imageResult == "succes") return res.send(response(baseResponse.SUCCESS));
                 else return res.send(response(baseResponse.DB_ERROR));
             }else{ //방문자 스티커 등록
-                const params = [user_id, userIdFromJWT, face, nose, eyes, mouth, arm, foot, accessory,imageUrl];
+                const params = [user_id, userIdFromJWT, face, nose, eyes, mouth, arm, foot, accessory];
                 const insertResult = await stickerService.insertVisitorSticker(params);
-                return res.send(insertResult);
+                const imageUrl = await imageUpload(user_id,insertResult,final);
+                const imageResult = await stickerService.insertVisitorImage(imageResult,imageUrl);
+                if(imageResult == "succes") return res.send(response(baseResponse.SUCCESS,{"visitor_sticker_id":insertResult}));
+                else return res.send(response(baseResponse.DB_ERROR));
             }
         }catch(err){
             return res.status(500).send(err);
