@@ -77,7 +77,7 @@ export const loginController = {
             return res.status(200).send(result);
         }catch(err){
             console.error(err);
-            return res.status(500).json({ error: 'Failed to process Kakao callback' });
+            return res.status(500).json(err);
         }
     },
 };
