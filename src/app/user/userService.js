@@ -453,12 +453,12 @@ export const imageUpload = async (userId,stickerId,final) =>{
 };
 
 
-export const imageDelete = async (userId,final) =>{
+export const imageDelete = async (userId,stickerId) =>{
     const aws_access_key = process.env.AWS_ACTION_ACCESS_KEY_ID;
     const aws_secret_access_key = process.env.AWS_ACTION_SECRET_ACCESS_KEY;
 
     const bucketName= 'faceticker';
-    const objectKey = `${userId}.png`;
+    const objectKey = `${userId}-${stickerId}.png`;
     const s3 = new AWS.S3({
         accessKeyId: aws_access_key,
         secretAccessKey: aws_secret_access_key

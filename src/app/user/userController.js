@@ -205,15 +205,15 @@ export const stickerController = {
             const userIdFromJWT = req.verifiedToken ? req.verifiedToken.user_id : null;
             const userId = req.params.user_id;
             const {face,eyes,nose,mouth,arm,foot,accessory,final} = req.body;
-            const imageUrl = await imageUpload(userId,final);
-            //if(userId == userIdFromJWT){
+            if(userId == userIdFromJWT){
+                const imageUrl = await imageUpload(userId,'host',final);
                 const params = [face,eyes,nose,mouth,arm,foot,accessory,imageUrl, userId];
                 const result = await stickerService.updateUserSticker(params);
                 if(result === 'success'){
                     return res.status(200).send(response(baseResponse.SUCCESS));
                 }
                 else return res.status(400).send(response(baseResponse.DB_ERROR));
-            //}
+            }
         }catch(err){
             return res.status(500).send(err);
         }
@@ -227,6 +227,8 @@ export const stickerController = {
             const userIdFromJWT = req.verifiedToken ? req.verifiedToken.user_id : null; // 접속한 유저 ID
             const {user_id, visitor_sticker_id} = req.params; // 호스트 ID
             if(userIdFromJWT == user_id){ // 접속한 유저가 호스트라면
+                const s3Result = await imageDelete(user_id,visitor_sticker_id);
+                console.log(s3Result);
                 const deleteVisitorStickerResult = await stickerService.deleteVisitorSticker(visitor_sticker_id);
                 if(deleteVisitorStickerResult == 'success'){
                     return res.status(200).json(response(baseResponse.SUCCESS));
