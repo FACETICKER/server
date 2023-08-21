@@ -21,7 +21,7 @@ export const loginController = {
                 data: ({
                     grant_type: 'authorization_code',
                     client_id: process.env.KAKAO_ID,
-                    redirect_uri: 'https://faceticker.site/oauth',
+                    redirect_uri: 'http://faceticker.site/oauth',
                     code: code,
                 })
             });
