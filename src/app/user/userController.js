@@ -9,6 +9,7 @@ dotenv.config();
 export const loginController = {
     kakao : async(req,res)=>{ //카카오
         const code = req.query.code;
+        let accessToken;
         try{
             const accessTokenResponse = await axios({ //카카오 API 호출해서 Access Token 받아오기
                 method: 'POST',
@@ -23,7 +24,7 @@ export const loginController = {
                     code: code,
                 }
             });
-            const accessToken = accessTokenResponse.data.access_token;
+            accessToken = accessTokenResponse.data.access_token;
             const userInfoResponse = await axios({ //카카오 API 호출해서 사용자 정보 불러오기
                 method: 'GET',
                 url:'https://kapi.kakao.com/v2/user/me',
@@ -38,8 +39,7 @@ export const loginController = {
             console.log("API END");
             return res.status(200).send(Result);
         }catch(err){
-            console.error(err);
-            return res.status(500).json(err);
+            return res.status(500).json(er, accessToken);
         }
     },
 
