@@ -8,9 +8,7 @@ import e from "express";
 dotenv.config();
 export const loginController = {
     kakao : async(req,res)=>{ //카카오
-        console.log('----------');
         const code = req.query.code;
-        console.log(code);
         try{
             const accessTokenResponse = await axios({ //카카오 API 호출해서 Access Token 받아오기
                 method: 'POST',
@@ -21,7 +19,7 @@ export const loginController = {
                 data: ({
                     grant_type: 'authorization_code',
                     client_id: process.env.KAKAO_ID,
-                    redirect_uri: 'http://faceticker.site/oauth',
+                    redirect_uri: 'https://faceticker.site/oauth',
                     code: code,
                 })
             });
