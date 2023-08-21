@@ -226,14 +226,14 @@ export const stickerController = {
         try{
             const userIdFromJWT = req.verifiedToken ? req.verifiedToken.user_id : null; // 접속한 유저 ID
             const {user_id, visitor_sticker_id} = req.params; // 호스트 ID
-            //if(userIdFromJWT == user_id){ // 접속한 유저가 호스트라면
+            if(userIdFromJWT == user_id){ // 접속한 유저가 호스트라면
                 const s3Result = await imageDelete(user_id,visitor_sticker_id);
                 console.log(s3Result);
                 const deleteVisitorStickerResult = await stickerService.deleteVisitorSticker(visitor_sticker_id);
                 if(deleteVisitorStickerResult == 'success'){
                     return res.status(200).json(response(baseResponse.SUCCESS));
                 }else return res.send(response(baseResponse.DB_ERROR));
-            //}else return res.status(400).json(errResponse(baseResponse.USER_NOT_HOST));
+            }else return res.status(400).json(errResponse(baseResponse.USER_NOT_HOST));
         }catch(err){
             return res.status(500).send(err);
         }
