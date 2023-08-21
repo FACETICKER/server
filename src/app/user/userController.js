@@ -16,12 +16,12 @@ export const loginController = {
                 headers:{
                     'content-type': 'application/x-www-form-urlencoded'
                 },
-                data: ({
+                data: {
                     grant_type: 'authorization_code',
                     client_id: process.env.KAKAO_ID,
                     redirect_uri: 'https://faceticker.site/oauth',
                     code: code,
-                })
+                }
             });
             const accessToken = accessTokenResponse.data.access_token;
             const userInfoResponse = await axios({ //카카오 API 호출해서 사용자 정보 불러오기
@@ -29,7 +29,7 @@ export const loginController = {
                 url:'https://kapi.kakao.com/v2/user/me',
                 headers:{
                     'Authorization':`Bearer ${accessToken}`,
-                    'content-type': 'application/x-www-form-urlencoded'
+                    'content-type': 'application/json'
                 }
             })
             const userInfo = userInfoResponse.data.kakao_account;
