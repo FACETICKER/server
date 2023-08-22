@@ -102,7 +102,7 @@ export const stickerDao = {
             FROM visitor_sticker
             WHERE seen = false
             AND host_id = ?
-            AND location_x is null;
+            AND location_x is not null;
         `
         const [selectNewStickerRow] = await connection.query(selectNewStickerQuery,user_id);
         return selectNewStickerRow;
