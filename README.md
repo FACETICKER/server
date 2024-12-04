@@ -3,4 +3,6 @@
 
 ## 🎥 Demo
 
-![나만의 포스터 만들기](https://github.com/user-attachments/assets/56d54328-70ce-4441-8681-e535c89ecb7a)
+
+https://github.com/user-attachments/assets/7f0d4c6b-45ec-4e29-843d-37d347ae67b0
+
